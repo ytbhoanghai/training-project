@@ -13,6 +13,7 @@ import { StoreManagementComponent } from './manager/store-management/store-manag
 import { ProductManagementComponent } from './manager/product-management/product-management.component';
 import { CategoryManagementComponent } from './manager/category-management/category-management.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     RoleManagementComponent,
     StoreManagementComponent,
     ProductManagementComponent,
-    CategoryManagementComponent
+    CategoryManagementComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
