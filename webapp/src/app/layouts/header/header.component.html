@@ -1,0 +1,158 @@
+<nav class="navbar navbar-dark navbar-expand-md bg-dark">
+  <a class="navbar-brand logo" routerLink="/">
+    <span class="logo-img"></span>
+    <span class="navbar-title">TPS Training Foundation</span>
+    <span class="navbar-version"></span>
+  </a>
+  <a
+    class="navbar-toggler d-lg-none"
+    href="javascript:void(0);"
+    data-toggle="collapse"
+    data-target="#navbarResponsive"
+    aria-controls="navbarResponsive"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <!-- <fa-icon icon="bars"></fa-icon> -->
+  </a>
+  <div class="navbar-collapse collapse" id="navbarResponsive">
+    <ul class="navbar-nav ml-auto">
+      <li
+        class="nav-item"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link" routerLink="/">
+          <span>
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+          </span>
+        </a>
+      </li>
+      <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
+      <li
+        ngbDropdown
+        class="nav-item dropdown pointer"
+        display="dynamic"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a
+          class="nav-link dropdown-toggle"
+          ngbDropdownToggle
+          href="javascript:void(0);"
+          id="admin-menu"
+        >
+          <span>
+            <i class="fas fa-wrench"></i>
+            <span>Management</span>
+          </span>
+        </a>
+        <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="manager/user-management"
+              routerLinkActive="active"
+            >
+              <i class="far fa-user fa-fw"></i>
+              <span>User manager</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="manager/role-management"
+              routerLinkActive="active"
+            >
+              <i class="fas fa-key fa-fw"></i>
+              <span>Role manager</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="manager/store-management"
+              routerLinkActive="active"
+            >
+              <i class="fas fa-store fa-fw"></i>
+              <span>Store manager</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="manager/product-management"
+              routerLinkActive="active"
+            >
+              <i class="fas fa-hashtag fa-fw"></i>
+              <span>Product manager</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="manager/category-management"
+              routerLinkActive="active"
+            >
+              <i class="fas fa-tag fa-fw"></i>
+              <span>Category manager</span>
+            </a>
+          </li>
+          <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
+        </ul>
+      </li>
+      <li
+        ngbDropdown
+        class="nav-item dropdown pointer"
+        display="dynamic"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a
+          class="nav-link dropdown-toggle"
+          ngbDropdownToggle
+          href="javascript:void(0);"
+          id="account-menu"
+        >
+          <span>
+            <i class="far fa-user"></i>
+            <span>
+              Account
+            </span>
+          </span>
+          <!-- <span>
+                      <img class="profile-image rounded-circle" alt="Avatar">
+                  </span> -->
+        </a>
+        <ul
+          class="dropdown-menu"
+          ngbDropdownMenu
+          aria-labelledby="account-menu"
+        >
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="account/settings"
+            >
+              <!-- <fa-icon icon="wrench" [fixedWidth]="true"></fa-icon> -->
+              <span>Settings</span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" id="logout" (click)='logout()'>
+              <!-- <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon> -->
+              <span>Sign out</span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" id="login" (click)='login()'>
+              <!-- <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon> -->
+              <span>Sign in</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
