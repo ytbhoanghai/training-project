@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.form.StaffForm;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,7 +24,7 @@ import java.util.Set;
 public class Staff {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
@@ -52,4 +53,12 @@ public class Staff {
             joinColumns = @JoinColumn(name = "id_staff"),
             inverseJoinColumns = @JoinColumn(name = "id_role"))
     private Set<Role> roles;
+
+    public static Staff updateData(Staff staff, StaffForm staffForm) {
+        staff.setName(staffForm.getName());
+        staff.setUsername(staffForm.getUsername());
+        staff.setEmail(staffForm.getEmail());
+        staff.setAddress(staffForm.getAddress());
+        return staff;
+    }
 }

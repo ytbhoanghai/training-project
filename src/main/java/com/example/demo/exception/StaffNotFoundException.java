@@ -8,6 +8,10 @@ public class StaffNotFoundException extends RuntimeException {
         super(message);
     }
 
+    public StaffNotFoundException(Integer id) {
+        super("Staff Not Found By ID " + id);
+    }
+
     public static String getMessageForExceptionNotFoundByUsername(String username) {
         return String.format(MESSAGE_FOR_EXCEPTION_NOT_FOUND_BY_USERNAME, username);
     }

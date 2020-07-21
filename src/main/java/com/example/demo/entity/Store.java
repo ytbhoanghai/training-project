@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.example.demo.form.StoreForm;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +19,7 @@ import java.util.Date;
 public class Store {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
@@ -34,9 +36,19 @@ public class Store {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
+    @JsonIgnore
     private Staff createdBy;
 
-    public enum  Status {
+    public enum Status {
         Open, Closed
+    }
+
+    public static Store updateData(Store store, StoreForm storeForm) {
+        store.setName(storeForm.getName());
+        store.setAddress(storeForm.getAddress());
+        store.setPhone(storeForm.getPhone());
+        store.setEmail(storeForm.getEmail());
+        store.setStatus(storeForm.getStatus());
+        return store;
     }
 }
