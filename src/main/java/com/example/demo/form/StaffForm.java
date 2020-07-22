@@ -1,10 +1,9 @@
 package com.example.demo.form;
 
 import com.example.demo.entity.Staff;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -17,6 +16,13 @@ import javax.validation.constraints.Size;
 @Builder
 public class StaffForm {
 
+    @Autowired
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private static BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @NotBlank
     @NotNull
     private String name;
@@ -24,6 +30,7 @@ public class StaffForm {
     @Size(min = 4, max = 40)
     private String username;
 
+    @Size(min = 4)
     private String password;
 
     @Email
@@ -32,12 +39,14 @@ public class StaffForm {
     private String address;
 
     public static Staff buildStaff(StaffForm staffForm) {
-       return Staff.builder()
-               .name(staffForm.getName())
-               .username(staffForm.getUsername())
-               .password(staffForm.getPassword())
-               .email(staffForm.getEmail())
-               .address(staffForm.getAddress())
-               .build();
+        String passwordHash = bCryptPasswordEncoder.encode(staffForm.getPassword());
+
+        return Staff.builder()
+                .name(staffForm.getName())
+                .username(staffForm.getUsername())
+                .password(passwordHash)
+                .email(staffForm.getEmail())
+                .address(staffForm.getAddress())
+                .build();
     }
 }

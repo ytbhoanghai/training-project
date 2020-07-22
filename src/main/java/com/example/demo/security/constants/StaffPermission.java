@@ -1,8 +1,6 @@
 package com.example.demo.security.constants;
 
-import javax.persistence.StoredProcedureQuery;
-
-public final class StorePermission {
+public final class StaffPermission {
 
     public static final String CREATE = "store_create";
 
@@ -12,6 +10,6 @@ public final class StorePermission {
 
     public static final String DELETE = "store_delete";
 
-    private StorePermission() { }
+    private StaffPermission() { }
 
 }

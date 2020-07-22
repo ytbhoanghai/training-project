@@ -5,6 +5,7 @@ import com.example.demo.exception.StaffNotFoundException;
 import com.example.demo.form.StaffForm;
 import com.example.demo.repository.StaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +14,12 @@ import java.util.List;
 public class StaffServiceImpl implements StaffService {
 
     private StaffRepository staffRepository;
+//    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public StaffServiceImpl(StaffRepository staffRepository) {
         this.staffRepository = staffRepository;
+//        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -41,17 +44,21 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public Staff save(StaffForm staffForm) {
-        return staffRepository.save(StaffForm.buildStaff(staffForm));
+        Staff staff = StaffForm.buildStaff(staffForm);
+//        Hash password and save to the object
+//        staff.setPassword(bCryptPasswordEncoder.encode(staff.getPassword()));
+        return staffRepository.save(staff);
     }
 
     @Override
     public Staff update(Integer id, StaffForm staffForm) {
         Staff staff = findById(id);
-        return null;
+        return staffRepository.save(Staff.updateData(staff, staffForm));
     }
 
     @Override
     public String delete(Integer id) {
-        return null;
+        staffRepository.deleteById(id);
+        return String.valueOf(id);
     }
 }

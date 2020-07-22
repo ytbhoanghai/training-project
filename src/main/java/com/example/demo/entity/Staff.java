@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import com.example.demo.form.StaffForm;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,6 +32,7 @@ public class Staff {
 
     private String username;
 
+    @JsonIgnore
     private String password;
 
     private String email;
@@ -39,14 +41,17 @@ public class Staff {
 
     private Date createdAt;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private Staff createdBy;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_store")
     private Store store;
 
+    @JsonIgnore
     @ManyToMany()
     @JoinTable(
             name = "staff_role",
