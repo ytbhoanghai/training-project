@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Store;
 import com.example.demo.form.StoreForm;
-import com.example.demo.response.Message;
+import com.example.demo.response.MessageResponse;
 import com.example.demo.security.constants.StorePermission;
 import com.example.demo.service.StoreServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +62,6 @@ public class StoreController {
     @PreAuthorize("hasAuthority(\"" + StorePermission.DELETE + "\")")
     public ResponseEntity<?> deleteStore(@PathVariable Integer storeId) {
         String id = storeService.deleteById(storeId);
-        return new ResponseEntity<>(new Message("Deleted id: " + id), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse("Deleted id: " + id), HttpStatus.OK);
     }
 }

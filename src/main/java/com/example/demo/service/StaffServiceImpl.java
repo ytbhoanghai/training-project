@@ -1,10 +1,17 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Staff;
+import com.example.demo.entity.Store;
 import com.example.demo.exception.StaffNotFoundException;
+import com.example.demo.exception.StoreNotFoundException;
+import com.example.demo.exception.WrongOldPasswordException;
 import com.example.demo.form.StaffForm;
+import com.example.demo.form.UpdatePasswordForm;
 import com.example.demo.repository.StaffRepository;
+import com.example.demo.repository.StoreRepository;
+import com.example.demo.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +21,14 @@ import java.util.List;
 public class StaffServiceImpl implements StaffService {
 
     private StaffRepository staffRepository;
-//    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private StoreRepository storeRepository;
+    private SecurityUtil securityUtil;
 
     @Autowired
-    public StaffServiceImpl(StaffRepository staffRepository) {
+    public StaffServiceImpl(StaffRepository staffRepository, SecurityUtil securityUtil, StoreRepository storeRepository) {
         this.staffRepository = staffRepository;
-//        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.securityUtil = securityUtil;
+        this.storeRepository = storeRepository;
     }
 
     @Override
@@ -44,10 +53,16 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public Staff save(StaffForm staffForm) {
-        Staff staff = StaffForm.buildStaff(staffForm);
+//        Get store from input id
+        Store ofStore = storeRepository.findById(staffForm.getStoreId())
+                .orElseThrow(() -> new StoreNotFoundException(staffForm.getStoreId()));
+
+//        Get current login staff and save
+        Staff createByStaff = findStaffByUsername(securityUtil.getCurrentPrincipal().getUsername());
+        Staff newStaff = StaffForm.buildStaff(staffForm, createByStaff, ofStore);
 //        Hash password and save to the object
-//        staff.setPassword(bCryptPasswordEncoder.encode(staff.getPassword()));
-        return staffRepository.save(staff);
+        newStaff.setPassword(new BCryptPasswordEncoder().encode(staffForm.getPassword()));
+        return staffRepository.save(newStaff);
     }
 
     @Override
@@ -57,8 +72,26 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public String delete(Integer id) {
-        staffRepository.deleteById(id);
+    public boolean updatePassword(UpdatePasswordForm updatePasswordForm) {
+        Staff currentStaff = findStaffByUsername(securityUtil.getCurrentPrincipal().getUsername());
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        Throw Error if password doesn't match
+        if (!passwordEncoder.matches(updatePasswordForm.getOldPass(), currentStaff.getPassword())) {
+            throw new WrongOldPasswordException();
+        }
+//        Set new hashed password to user
+        currentStaff.setPassword(passwordEncoder.encode(updatePasswordForm.getNewPass()));
+        staffRepository.save(currentStaff);
+        return true;
+    }
+
+    @Override
+    public String deleteById(Integer id) {
+        try {
+            staffRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new StaffNotFoundException(id);
+        }
         return String.valueOf(id);
     }
 }

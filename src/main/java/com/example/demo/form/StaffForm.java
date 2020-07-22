@@ -1,6 +1,7 @@
 package com.example.demo.form;
 
 import com.example.demo.entity.Staff;
+import com.example.demo.entity.Store;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -38,15 +40,21 @@ public class StaffForm {
 
     private String address;
 
-    public static Staff buildStaff(StaffForm staffForm) {
-        String passwordHash = bCryptPasswordEncoder.encode(staffForm.getPassword());
+    private int storeId;
+
+    public static Staff buildStaff(
+            StaffForm staffForm, Staff createByStaff, Store ofStore) {
 
         return Staff.builder()
                 .name(staffForm.getName())
                 .username(staffForm.getUsername())
-                .password(passwordHash)
+                .password(staffForm.getPassword())
                 .email(staffForm.getEmail())
                 .address(staffForm.getAddress())
+                .store(ofStore)
+                .createdAt(new Date())
+                .createdBy(createByStaff)
                 .build();
+
     }
 }
