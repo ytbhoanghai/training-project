@@ -29,11 +29,12 @@ public class RoleForm {
     @Size(min = 1)
     private Set<Integer> permissions;
 
-    public static Role buildRole(RoleForm roleForm, Staff createByStaff, Set<Permission> permissions) {
+    public static Role buildRole(String name, Staff createByStaff, Set<Permission> permissions) {
         return Role.builder()
-                .name(roleForm.getName())
+                .name(name)
                 .permissions(permissions)
                 .createdAt(new Date())
+                .grantable(true)
                 .createdBy(createByStaff)
                 .build();
     }

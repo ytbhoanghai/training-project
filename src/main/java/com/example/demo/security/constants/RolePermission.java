@@ -1,6 +1,7 @@
 package com.example.demo.security.constants;
 
-public class RolePermission {
+public final class RolePermission {
+
     public static final String CREATE = "role_create";
 
     public static final String READ = "role_read";

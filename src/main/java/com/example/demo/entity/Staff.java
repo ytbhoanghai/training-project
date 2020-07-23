@@ -24,6 +24,9 @@ import java.util.Set;
 })
 public class Staff {
 
+    public static final Type TYPE_DEFAULT = Type.OTHER;
+    public static final Type ROOT_ADMIN = Type.ADMIN;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -51,13 +54,19 @@ public class Staff {
     @JoinColumn(name = "id_store")
     private Store store;
 
+    private Type type;
+
     @JsonIgnore
-    @ManyToMany()
+    @ManyToMany
     @JoinTable(
             name = "staff_role",
             joinColumns = @JoinColumn(name = "id_staff"),
             inverseJoinColumns = @JoinColumn(name = "id_role"))
     private Set<Role> roles;
+
+    public enum Type {
+        ADMIN, OTHER
+    }
 
     public static Staff updateData(Staff staff, StaffForm staffForm) {
         staff.setName(staffForm.getName());
@@ -65,5 +74,14 @@ public class Staff {
         staff.setEmail(staffForm.getEmail());
         staff.setAddress(staffForm.getAddress());
         return staff;
+    }
+
+    public static Staff updateRole(Staff staff, Set<Role> roles) {
+        staff.setRoles(roles);
+        return staff;
+    }
+
+    public boolean isRootAdmin() {
+        return this.getType().equals(ROOT_ADMIN);
     }
 }

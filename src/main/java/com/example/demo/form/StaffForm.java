@@ -54,6 +54,7 @@ public class StaffForm {
                 .store(ofStore)
                 .createdAt(new Date())
                 .createdBy(createByStaff)
+                .type(Staff.TYPE_DEFAULT)
                 .build();
 
     }

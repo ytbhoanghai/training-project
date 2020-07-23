@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.example.demo.form.ProductForm;
+import com.example.demo.service.CategoryService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.net.PortUnreachableException;
 import java.util.Date;
 import java.util.Set;
 
@@ -38,4 +41,11 @@ public class Product {
             joinColumns = @JoinColumn(name = "id_product"),
             inverseJoinColumns = @JoinColumn(name = "id_category"))
     private Set<Category> categories;
+
+    public static Product updateData(Product product, ProductForm productForm, Set<Category> categorySet) {
+        product.setName(productForm.getName());
+        product.setPrice(productForm.getPrice());
+        product.setCategories(categorySet);
+        return product;
+    }
 }

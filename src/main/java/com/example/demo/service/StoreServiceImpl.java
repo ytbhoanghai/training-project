@@ -42,7 +42,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Store save(StoreForm storeForm) {
-        Staff staff = staffService.findStaffByUsername(securityUtil.getCurrentPrincipal().getUsername());
+        Staff staff = staffService.findByUsername(securityUtil.getCurrentPrincipal().getUsername());
         return storeRepository.save(StoreForm.buildStore(storeForm, staff));
     }
 

@@ -16,5 +16,6 @@ public interface RoleService {
 
     Role update(Integer id, RoleForm roleForm);
 
-    String delete(Integer id);
+    void delete(Integer id);
+
 }

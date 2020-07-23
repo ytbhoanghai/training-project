@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.form.CategoryForm;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,8 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "category")
+@NamedEntityGraph(name = "graph.Category.createdBy",
+    attributeNodes = { @NamedAttributeNode("createdBy") })
 public class Category {
 
     @Id
@@ -28,4 +31,8 @@ public class Category {
     @JoinColumn(name = "created_by")
     private Staff createdBy;
 
+    public static Category updateDate(Category category, CategoryForm categoryForm) {
+        category.setName(categoryForm.getName());
+        return category;
+    }
 }

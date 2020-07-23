@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Staff;
+import com.example.demo.form.AddRoleToStaffForm;
 import com.example.demo.form.StaffForm;
 import com.example.demo.form.UpdatePasswordForm;
 import com.example.demo.response.MessageResponse;
@@ -47,11 +48,17 @@ public class StaffController {
         return new ResponseEntity<>(newStaff, HttpStatus.OK);
     }
 
+    @PostMapping("/staffs/role")
+    public ResponseEntity<Staff> addRoleToStaff(@Valid @RequestBody AddRoleToStaffForm addRoleToStaffForm) {
+        Staff staff = staffService.addRoleToStaff(addRoleToStaffForm);
+        return new ResponseEntity<>(staff, HttpStatus.OK);
+    }
+
     @PutMapping("/staffs/{staffId}")
     @PreAuthorize("hasAuthority(\"" + StaffPermission.UPDATE + "\")")
-    public ResponseEntity<Staff> update(@PathVariable Integer staffId, @Valid @RequestBody StaffForm staffForm) {
-        Staff newStaff = staffService.update(staffId, staffForm);
-        return new ResponseEntity<>(newStaff, HttpStatus.OK);
+    public ResponseEntity<MessageResponse> update(@PathVariable Integer staffId, @Valid @RequestBody StaffForm staffForm) {
+        staffService.update(staffId, staffForm);
+        return new ResponseEntity<>(new MessageResponse("Update role successfully"), HttpStatus.OK);
     }
 
     @PutMapping("/staffs/password")

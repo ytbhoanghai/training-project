@@ -16,7 +16,8 @@ import java.util.Set;
 @Entity
 @Table(name = "role")
 @NamedEntityGraph(name = "graph.Role.Staff-Permissions",
-    attributeNodes = { @NamedAttributeNode("createdBy"), @NamedAttributeNode("permissions") })
+    attributeNodes = { @NamedAttributeNode("createdBy"), @NamedAttributeNode(value = "permissions", subgraph = "subGraph.permissions.resource") },
+    subgraphs = @NamedSubgraph(name = "subGraph.permissions.resource", attributeNodes = @NamedAttributeNode("resource")))
 public class Role {
 
     @Id
@@ -32,6 +33,8 @@ public class Role {
     @JoinColumn(name = "created_by")
     private Staff createdBy;
 
+    private Boolean grantable;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -39,6 +42,16 @@ public class Role {
             joinColumns = @JoinColumn(name = "id_role"),
             inverseJoinColumns = @JoinColumn(name = "id_permission"))
     private Set<Permission> permissions;
+
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "staff_role",
+            joinColumns = @JoinColumn(name = "id_role"),
+            inverseJoinColumns = @JoinColumn(name = "id_staff"))
+    private Set<Staff> staffs;
+
 
     public static Role updateData(Role role, RoleForm roleForm, Staff createByStaff, Set<Permission> permissions) {
         role.setName(roleForm.getName());
