@@ -28,7 +28,7 @@ public class StoreController {
     }
 
     @GetMapping("/stores")
-    @PreAuthorize("hasAuthority(\"" + StorePermission.READ + "\")")
+//    @PreAuthorize("hasAuthority(\"" + StorePermission.READ + "\")")
     public ResponseEntity<List<Store>> findAll() {
         System.out.println();
         List<Store> stores = storeService.findAll();

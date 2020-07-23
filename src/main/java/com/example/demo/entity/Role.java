@@ -40,11 +40,10 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "id_permission"))
     private Set<Permission> permissions;
 
-    public static Role updateData(RoleForm roleForm, Staff createByStaff, Set<Permission> permissions) {
-        return Role.builder()
-                .name(roleForm.getName())
-                .createdBy(createByStaff)
-                .permissions(permissions)
-                .build();
+    public static Role updateData(Role role, RoleForm roleForm, Staff createByStaff, Set<Permission> permissions) {
+        role.setName(roleForm.getName());
+        role.setCreatedBy(createByStaff);
+        role.setPermissions(permissions);
+        return role;
     }
 }

@@ -61,11 +61,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role update(Integer id, RoleForm roleForm) {
+        Role role = roleRepository.findById(id)
+                .orElseThrow(() -> new RoleNotFoundException(id));
         Staff createByStaff = staffService.findStaffByUsername(
                 securityUtil.getCurrentPrincipal().getUsername());
         Set<Permission> permissions = permissionService.findAllByIdIsIn(roleForm.getPermissions());
-        Role role = roleRepository.save(Role.updateData(roleForm, createByStaff, permissions));
-        return role;
+        return roleRepository.save(Role.updateData(role, roleForm, createByStaff, permissions));
     }
 
     @Override
