@@ -20,6 +20,7 @@ import { LoginModalComponent } from './modal/login-modal/login-modal.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ViewRoleDetailsManagementComponent } from './modal/view-role-details-management/view-role-details-management.component';
 import { ConfirmModalComponent } from './modal/confirm-modal/confirm-modal.component';
+import { RoleUpdateModalComponent } from './modal/role-update-modal/role-update-modal.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ConfirmModalComponent } from './modal/confirm-modal/confirm-modal.compo
     HomeComponent,
     LoginModalComponent,
     ViewRoleDetailsManagementComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    RoleUpdateModalComponent
   ],
     imports: [
         BrowserModule,

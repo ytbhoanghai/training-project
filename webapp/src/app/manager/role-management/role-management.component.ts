@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RoleManagementService } from "../../service/role-management.service";
 import {MDBModalRef, MDBModalService} from "ng-uikit-pro-standard";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import {ViewRoleDetailsManagementComponent} from "../../modal/view-role-details-management/view-role-details-management.component";
 import {ConfirmModalComponent} from "../../modal/confirm-modal/confirm-modal.component";
 
@@ -16,7 +17,8 @@ export class RoleManagementComponent implements OnInit {
 
   constructor(
     private roleManagementService: RoleManagementService,
-    private modalService: MDBModalService) { }
+    private modalService: MDBModalService,
+    private ngbService: NgbModal) { }
 
   ngOnInit(): void {
     this.roleManagementService.findAllRoles()
@@ -56,6 +58,10 @@ export class RoleManagementComponent implements OnInit {
       }
     })
   }
+
+  openModal(modalName): void {
+    this.ngbService.open(modalName);
+  }
 }
 
 export interface IResource {
@@ -69,6 +75,11 @@ export interface IRole {
   name: string;
   createdBy: number;
   permissions: IPermission[];
+}
+
+export interface IRoleBody {
+  name: string,
+  permissions: number[]
 }
 
 export interface IPermission {
