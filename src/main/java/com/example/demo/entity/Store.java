@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.form.AddProductToStoreForm;
 import com.example.demo.form.StoreForm;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -34,9 +36,9 @@ public class Store {
 
     private Date createdAt;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
-    @JsonIgnore
     private Staff createdBy;
 
     public enum Status {
@@ -50,5 +52,10 @@ public class Store {
         store.setEmail(storeForm.getEmail());
         store.setStatus(storeForm.getStatus());
         return store;
+    }
+
+    public static Store addProductToStore(Store store, Set<Product> products) {
+//        store.getProducts().addAll(products);
+        return null;
     }
 }

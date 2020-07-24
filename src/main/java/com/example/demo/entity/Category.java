@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import com.example.demo.form.CategoryForm;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class Category {
 
     private Date createdAt;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private Staff createdBy;

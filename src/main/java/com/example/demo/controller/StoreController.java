@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Store;
+import com.example.demo.form.AddProductToStoreForm;
 import com.example.demo.form.StoreForm;
 import com.example.demo.response.MessageResponse;
 import com.example.demo.security.constants.StorePermission;
@@ -49,6 +50,12 @@ public class StoreController {
         Store store = storeService.save(storeForm);
         return new ResponseEntity<>(store, HttpStatus.OK);
 //        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/stores/products")
+    public ResponseEntity<?> addProductToStore(@Valid @RequestBody AddProductToStoreForm addProductToStoreForm) {
+        storeService.addProductToStore(addProductToStoreForm);
+        return new ResponseEntity<>(new MessageResponse("Add product to store successfully!"), HttpStatus.OK);
     }
 
     @PutMapping("/stores/{storeId}")

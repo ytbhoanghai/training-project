@@ -15,6 +15,6 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @EntityGraph(value = "graph.Category.createdBy")
     Optional<Category> findById(Integer integer);
 
-    Set<Category> findAllByIds(Set<Integer> ids);
+    Set<Category> findAllByIdIsIn(Set<Integer> ids);
 
 }

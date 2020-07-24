@@ -2,10 +2,8 @@ package com.example.demo.entity;
 
 import com.example.demo.form.ProductForm;
 import com.example.demo.service.CategoryService;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -19,6 +17,7 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "product")
+@NamedEntityGraph(name = "graph.Product.categories", attributeNodes = @NamedAttributeNode("categories"))
 public class Product {
 
     @Id
@@ -31,6 +30,7 @@ public class Product {
 
     private Date createdAt;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private Staff createdBy;

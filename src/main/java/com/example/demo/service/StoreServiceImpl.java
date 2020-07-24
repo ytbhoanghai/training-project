@@ -2,8 +2,11 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
+import com.example.demo.entity.StoreProduct;
 import com.example.demo.exception.StoreNotFoundException;
+import com.example.demo.form.AddProductToStoreForm;
 import com.example.demo.form.StoreForm;
+import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.StoreRepository;
 import com.example.demo.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +18,22 @@ import java.util.List;
 public class StoreServiceImpl implements StoreService {
 
     private StoreRepository storeRepository;
-    private StaffService staffService;
+    private ProductRepository productRepository;
+    private StoreProductService storeProductService;
+    private StaffServiceImpl staffService;
     private SecurityUtil securityUtil;
 
     @Autowired
     public StoreServiceImpl(
             StoreRepository storeRepository,
-            StaffService staffService,
+            ProductRepository productRepository,
+            StoreProductService storeProductService,
+            StaffServiceImpl staffService,
             SecurityUtil securityUtil) {
 
         this.storeRepository = storeRepository;
+        this.productRepository = productRepository;
+        this.storeProductService = storeProductService;
         this.staffService = staffService;
         this.securityUtil = securityUtil;
     }
@@ -44,6 +53,11 @@ public class StoreServiceImpl implements StoreService {
     public Store save(StoreForm storeForm) {
         Staff staff = staffService.findByUsername(securityUtil.getCurrentPrincipal().getUsername());
         return storeRepository.save(StoreForm.buildStore(storeForm, staff));
+    }
+
+    @Override
+    public StoreProduct addProductToStore(AddProductToStoreForm addProductToStoreForm) {
+        return storeProductService.addProductToStore(addProductToStoreForm);
     }
 
     @Override

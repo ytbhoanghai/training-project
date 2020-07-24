@@ -51,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product save(ProductForm productForm) {
         Staff createByStaff = securityUtil.getCurrentStaff();
-        Set<Category> categories = categoryRepository.findAllByIds(productForm.getCategories());
+        Set<Category> categories = categoryRepository.findAllByIdIsIn(productForm.getCategories());
         return productRepository.save(
                 ProductForm.buildProduct(productForm, createByStaff, categories));
     }
@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product update(Integer id, ProductForm productForm) {
         Product product = findById(id);
-        Set<Category> categories = categoryRepository.findAllByIds(productForm.getCategories());
+        Set<Category> categories = categoryRepository.findAllByIdIsIn(productForm.getCategories());
         return productRepository.save(
                 Product.updateData(product, productForm, categories));
     }
