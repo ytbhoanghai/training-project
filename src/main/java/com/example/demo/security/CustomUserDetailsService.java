@@ -1,7 +1,6 @@
 package com.example.demo.security;
 
 import com.example.demo.entity.Staff;
-import com.example.demo.repository.StaffRepository;
 import com.example.demo.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Staff staff = staffService.findStaffByUsername(username);
+        Staff staff = staffService.findByUsername(username);
         return buildUserDetailsFromStaff(staff);
     }
 
@@ -36,7 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
         staff.getRoles().forEach(role -> {
             role.getPermissions().forEach(permission -> {
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + permission.getName()));
+                authorities.add(new SimpleGrantedAuthority(permission.getName()));
             });
         });
 

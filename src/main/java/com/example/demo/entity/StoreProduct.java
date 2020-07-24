@@ -36,7 +36,18 @@ public class StoreProduct {
     @AllArgsConstructor
     @Embeddable
     public static class StoreProductID implements Serializable {
-        private Integer idStore;
         private Integer idProduct;
+        private Integer idStore;
+    }
+
+    public static StoreProduct addProductToStore(Store store, Product product, Integer quantity) {
+        StoreProductID id = new StoreProductID(product.getId(), store.getId());
+        StoreProduct storeProduct = StoreProduct.builder()
+                .id(id)
+                .store(store)
+                .product(product)
+                .quantity(quantity)
+                .build();
+        return storeProduct;
     }
 }

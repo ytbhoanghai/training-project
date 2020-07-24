@@ -1,12 +1,13 @@
 package com.example.demo.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.demo.form.ProductForm;
+import com.example.demo.service.CategoryService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.net.PortUnreachableException;
 import java.util.Date;
 import java.util.Set;
 
@@ -16,10 +17,11 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "product")
+@NamedEntityGraph(name = "graph.Product.categories", attributeNodes = @NamedAttributeNode("categories"))
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
@@ -28,6 +30,7 @@ public class Product {
 
     private Date createdAt;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private Staff createdBy;
@@ -38,4 +41,11 @@ public class Product {
             joinColumns = @JoinColumn(name = "id_product"),
             inverseJoinColumns = @JoinColumn(name = "id_category"))
     private Set<Category> categories;
+
+    public static Product updateData(Product product, ProductForm productForm, Set<Category> categorySet) {
+        product.setName(productForm.getName());
+        product.setPrice(productForm.getPrice());
+        product.setCategories(categorySet);
+        return product;
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.example.demo.form.RoleForm;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,20 +15,27 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "role")
+@NamedEntityGraph(name = "graph.Role.Staff-Permissions",
+    attributeNodes = { @NamedAttributeNode("createdBy"), @NamedAttributeNode(value = "permissions", subgraph = "subGraph.permissions.resource") },
+    subgraphs = @NamedSubgraph(name = "subGraph.permissions.resource", attributeNodes = @NamedAttributeNode("resource")))
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
 
     private Date createdAt;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private Staff createdBy;
 
+    private Boolean grantable;
+
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "role_permission",
@@ -34,4 +43,20 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "id_permission"))
     private Set<Permission> permissions;
 
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "staff_role",
+            joinColumns = @JoinColumn(name = "id_role"),
+            inverseJoinColumns = @JoinColumn(name = "id_staff"))
+    private Set<Staff> staffs;
+
+
+    public static Role updateData(Role role, RoleForm roleForm, Staff createByStaff, Set<Permission> permissions) {
+        role.setName(roleForm.getName());
+        role.setCreatedBy(createByStaff);
+        role.setPermissions(permissions);
+        return role;
+    }
 }

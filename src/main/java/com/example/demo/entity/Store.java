@@ -1,5 +1,8 @@
 package com.example.demo.entity;
 
+import com.example.demo.form.AddProductToStoreForm;
+import com.example.demo.form.StoreForm;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -17,7 +21,7 @@ import java.util.Date;
 public class Store {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
@@ -32,11 +36,26 @@ public class Store {
 
     private Date createdAt;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private Staff createdBy;
 
-    public enum  Status {
+    public enum Status {
         Open, Closed
+    }
+
+    public static Store updateData(Store store, StoreForm storeForm) {
+        store.setName(storeForm.getName());
+        store.setAddress(storeForm.getAddress());
+        store.setPhone(storeForm.getPhone());
+        store.setEmail(storeForm.getEmail());
+        store.setStatus(storeForm.getStatus());
+        return store;
+    }
+
+    public static Store addProductToStore(Store store, Set<Product> products) {
+//        store.getProducts().addAll(products);
+        return null;
     }
 }
