@@ -40,6 +40,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtProvider.generateJwtToken(authentication);
+
         return new JwtResponse(jwt);
     }
 }

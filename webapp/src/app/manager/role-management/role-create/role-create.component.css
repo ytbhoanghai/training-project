@@ -1,0 +1,17 @@
+table {
+  width: 85%;
+}
+.warp-table {
+  justify-content: center;
+}
+input[type="checkbox"] {
+  -ms-transform: scale(1.5); /* IE */
+  -moz-transform: scale(1.5); /* FF */
+  -webkit-transform: scale(1.5); /* Safari and Chrome */
+  -o-transform: scale(1.5); /* Opera */
+}
+
+.remove-all-checked:hover {
+  cursor: pointer;
+  background-color: #d4fdfd;
+}

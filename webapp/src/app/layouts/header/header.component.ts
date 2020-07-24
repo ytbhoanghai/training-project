@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/auth/auth.service';
 import { UserService } from 'src/app/core/auth/user.service';
+import {MDBModalRef, MDBModalService} from "ng-uikit-pro-standard";
+import {LoginModalComponent} from "../../modal/login-modal/login-modal.component";
 
 @Component({
   selector: 'app-header',
@@ -8,22 +10,28 @@ import { UserService } from 'src/app/core/auth/user.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  constructor(
-    private authService: AuthService,
-    private userService: UserService
-  ) {}
 
-  ngOnInit(): void {
-    this.userService.fetchUserInfor().subscribe();
+  modalLoginRef: MDBModalRef;
+  name: string;
+
+  constructor(
+    private modalService: MDBModalService,
+    private authService: AuthService,
+    private userService: UserService) {
   }
 
-  login(): void {
-    this.authService.loginUser('admin', 'admin').subscribe((res) => {
-      console.log('res', res);
-    });
+  ngOnInit(): void {
+    this.userService.fetchUserInfo().subscribe(value => this.name = value?.name);
+    this.userService.currentUser$.subscribe(value => this.name = value?.name);
   }
 
   logout(): void {
-    this.authService.logoutUser().subscribe();
+    this.authService.logoutUser().subscribe(_ => this.name = null);
+  }
+
+  openModalLogin(): void {
+    this.modalLoginRef = this.modalService.show(LoginModalComponent, {
+      containerClass: 'fade left'
+    });
   }
 }

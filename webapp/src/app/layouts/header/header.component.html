@@ -29,7 +29,7 @@
           </span>
         </a>
       </li>
-      <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
+
       <li
         ngbDropdown
         class="nav-item dropdown pointer"
@@ -99,7 +99,6 @@
               <span>Category manager</span>
             </a>
           </li>
-          <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
         </ul>
       </li>
       <li
@@ -118,12 +117,9 @@
           <span>
             <i class="far fa-user"></i>
             <span>
-              Account
+              {{name ? name : 'Account'}}
             </span>
           </span>
-          <!-- <span>
-                      <img class="profile-image rounded-circle" alt="Avatar">
-                  </span> -->
         </a>
         <ul
           class="dropdown-menu"
@@ -132,7 +128,7 @@
         >
           <li>
             <a
-              class="dropdown-item"
+              class="dropdown-item account-menu-item"
               routerLink="account/settings"
             >
               <!-- <fa-icon icon="wrench" [fixedWidth]="true"></fa-icon> -->
@@ -140,13 +136,13 @@
             </a>
           </li>
           <li>
-            <a class="dropdown-item" id="logout" (click)='logout()'>
+            <a class="dropdown-item account-menu-item" id="logout" (click)='logout()'>
               <!-- <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon> -->
               <span>Sign out</span>
             </a>
           </li>
           <li>
-            <a class="dropdown-item" id="login" (click)='login()'>
+            <a class="dropdown-item account-menu-item" id="login" (click)='openModalLogin()'>
               <!-- <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon> -->
               <span>Sign in</span>
             </a>

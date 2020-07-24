@@ -16,6 +16,7 @@ type JwtToken = {
   providedIn: 'root',
 })
 export class AuthService {
+
   private jwtLocalStorageName: string = 'authenticationToken';
 
   constructor(
@@ -39,14 +40,14 @@ export class AuthService {
       localStorage.removeItem(this.jwtLocalStorageName);
       this.router.navigate(['']);
       this.userService.removeCurrentUser();
-      observer.complete();
+      observer.next();
     });
   }
 
   // Store jwt into local storage after authenticate success
   private authenticateSuccess(jwt: JwtToken) {
     localStorage.setItem(this.jwtLocalStorageName, jwt.id_token);
-    this.userService.fetchUserInfor().subscribe();
+    this.userService.fetchUserInfo().subscribe(null);
   }
 
   getAuthToken(): string {

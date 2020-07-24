@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 
 @Component
 public class SecurityProblemSupport implements AuthenticationEntryPoint, AccessDeniedHandler {
@@ -36,7 +38,6 @@ public class SecurityProblemSupport implements AuthenticationEntryPoint, AccessD
         } else if (e instanceof AccessDeniedHandler) {
             LOGGER.error("Access Denied error. Message - {}", errMessage);
         }
-
-        res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error -> Unauthorized. Message - " + errMessage);
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED, errMessage);
     }
 }

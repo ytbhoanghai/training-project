@@ -1,0 +1,79 @@
+<!--Content-->
+<div class="modal-content text-center">
+  <!--Body-->
+  <div class="modal-body ">
+    <div class="role-details text-left">
+      <div class="panel">
+        <div class="panel-heading">
+					<span class="panel-icon">
+					  <i class="fa fa-star"></i>
+					</span>
+          <span class="panel-title"> Role Details</span>
+        </div>
+        <div class="panel-body pn">
+          <table class="table mbn tc-icon-1 tc-med-2 tc-bold-last">
+            <tbody>
+            <tr>
+              <td>ID</td>
+              <td>
+                {{role.id}}
+              </td>
+            </tr>
+            <tr>
+              <td>Role Name</td>
+              <td>
+                {{role.name}}
+              </td>
+            </tr>
+            <tr>
+              <td>Created By</td>
+              <td>
+                {{role.createdBy}}
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div id="view-permissions">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">
+                  <small  class="text-primary ">
+                    # View Permissions ({{role.permissions.length}})
+                  </small >
+                </h5>
+              </div>
+
+              <div class="collapse show">
+                <div class="card-body" style="padding: 0.5rem; max-height: 250px; overflow-y: auto">
+                  <table class="table table-striped">
+                    <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Permission Name</th>
+                      <th scope="col">Resource Name</th>
+                      <th scope="col">Type</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let permission of role.permissions">
+                      <th scope="row">{{permission.id}}</th>
+                      <td>{{permission.name}}</td>
+                      <td>{{permission.resourceName}}</td>
+                      <td>{{permission.type}}</td>
+                    </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/.Content-->

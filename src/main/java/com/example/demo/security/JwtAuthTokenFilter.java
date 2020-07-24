@@ -1,5 +1,7 @@
 package com.example.demo.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +20,8 @@ import java.io.IOException;
 @Component
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthTokenFilter.class);
+
     private JwtProvider jwtProvider;
 
     private UserDetailsService userDetailsService;
@@ -34,16 +38,18 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
             String jwt = getJwt(req);
             if (jwt != null && jwtProvider.validateJwtToken(jwt)) {
                 String username = jwtProvider.getUsernameFromJwtToken(jwt);
-
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+                LOGGER.info("JWT {} is valid - {}", jwt.substring(0, 8) + "...", username);
             }
         } catch (Exception e) {
-            logger.error("Can NOT set user authentication -> Message: {}", e);
+            LOGGER.error("Can NOT set user authentication -> Message: {}", e.getMessage());
         }
 
         filterChain.doFilter(req, res);

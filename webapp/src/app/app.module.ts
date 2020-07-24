@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CoreModule } from './core/core.module'
+import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
+import { MDBSpinningPreloader } from 'ng-uikit-pro-standard';
 
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './layouts/header/header.component';
@@ -14,6 +16,10 @@ import { ProductManagementComponent } from './manager/product-management/product
 import { CategoryManagementComponent } from './manager/category-management/category-management.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HomeComponent } from './home/home.component';
+import { LoginModalComponent } from './modal/login-modal/login-modal.component';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ViewRoleDetailsManagementComponent } from './modal/view-role-details-management/view-role-details-management.component';
+import { ConfirmModalComponent } from './modal/confirm-modal/confirm-modal.component';
 
 @NgModule({
   declarations: [
@@ -26,15 +32,22 @@ import { HomeComponent } from './home/home.component';
     StoreManagementComponent,
     ProductManagementComponent,
     CategoryManagementComponent,
-    HomeComponent
+    HomeComponent,
+    LoginModalComponent,
+    ViewRoleDetailsManagementComponent,
+    ConfirmModalComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    CoreModule,
-    NgbModule
-  ],
-  providers: [],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        CoreModule,
+        NgbModule,
+        MDBBootstrapModulesPro.forRoot(),
+        FormsModule,
+        ReactiveFormsModule,
+    ],
+  entryComponents: [LoginModalComponent],
+  providers: [MDBSpinningPreloader],
   bootstrap: [ContentComponent]
 })
 export class AppModule { }
