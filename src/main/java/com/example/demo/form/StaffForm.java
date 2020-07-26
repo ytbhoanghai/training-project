@@ -18,13 +18,6 @@ import java.util.Date;
 @Builder
 public class StaffForm {
 
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private static BCryptPasswordEncoder bCryptPasswordEncoder;
-
     @NotBlank
     @NotNull
     private String name;

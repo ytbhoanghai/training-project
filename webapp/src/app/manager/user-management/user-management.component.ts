@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../core/auth/user.service';
+import {Component, OnInit} from '@angular/core';
+import {UserManagementService} from "./user-management.service";
+import {IUser} from "../../core/auth/user.service";
+import {UserModalService} from "../../service/user-modal.service";
+import {NotificationService} from "../../layouts/notification/notification.service";
 
 @Component({
   selector: 'app-user-management',
@@ -7,7 +10,41 @@ import { UserService } from '../../core/auth/user.service';
   styleUrls: ['./user-management.component.css'],
 })
 export class UserManagementComponent implements OnInit {
-  constructor(private userService: UserService) {}
+  users: IUser[] = [];
 
-  ngOnInit(): void {}
+  constructor(
+    private userService: UserManagementService,
+    private userModalService: UserModalService,
+    private nofiService: NotificationService) {
+  }
+
+  ngOnInit(): void {
+    this.fetchUsers();
+  }
+
+  fetchUsers(): void {
+    this.userService.fetchAll().subscribe(users =>
+      this.users = users
+    );
+  }
+
+  deleteUser(id: number): void {
+    this.userService.delete(id).subscribe(() => {
+      this.users = this.users.filter(user => user.id !== id);
+      this.nofiService.showSuccess('Delete successfully!');
+    })
+  }
+
+  showDetailsModal(id: number): void {
+    this.userService.fetchById(id).subscribe(user => {
+      this.userModalService.showDetailModel(user);
+    })
+  }
+
+  showUpdateModal(id: number): void {
+    this.userService.fetchById(id).subscribe(user => {
+      this.userModalService.showUpdateModal(user);
+    })
+  }
+
 }

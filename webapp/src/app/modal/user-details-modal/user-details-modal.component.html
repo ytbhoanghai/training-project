@@ -1,0 +1,40 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">User infomation</h5>
+    <button type="button" class="close" (click)="hideModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-star"></i>
+        {{ user?.name }}
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <div><b>Username: </b>{{ user?.username }}</div>
+        </li>
+        <li class="list-group-item">
+          <div><b>Email: </b>{{ user?.email }}</div>
+        </li>
+        <li class="list-group-item">
+          <div><b>Address: </b>{{ user?.address }}</div>
+        </li>
+        <li class="list-group-item">
+          <div><b>Roles: </b>
+            <ng-container *ngFor="let role of user.roles">
+              {{ role.name + " " }}
+            </ng-container>
+            </div>
+        </li>
+        <li class="list-group-item">
+          <div><b>Created at: </b>{{ user?.createdAt | date:'medium' }}</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="hideModal()">Close</button>
+  </div>
+</div>

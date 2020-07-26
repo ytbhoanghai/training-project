@@ -54,9 +54,10 @@ public class Staff {
     @JoinColumn(name = "id_store")
     private Store store;
 
+    @JsonIgnore
     private Type type;
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "staff_role",
