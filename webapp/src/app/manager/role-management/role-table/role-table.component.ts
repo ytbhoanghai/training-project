@@ -1,20 +1,17 @@
-import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import {
-  IPermission,
-  IPermissionChoose,
-  IResource,
-  IRoleBody,
-} from '../role-management.component';
-import { RoleManagementService } from '../../../service/role-management.service';
+import { RoleManagementService } from './../../../service/role-management.service';
+import { IResource, IPermissionChoose, IRoleBody, IPermission, IRole } from './../role-management.component';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  moduleId: 'resoure-table',
-  selector: 'app-role-create',
-  templateUrl: './role-create.component.html',
-  styleUrls: ['./role-create.component.css'],
+  selector: 'app-role-table',
+  templateUrl: './role-table.component.html',
+  styleUrls: ['./role-table.component.css']
 })
-export class RoleCreateComponent implements OnInit {
+export class RoleTableComponent implements OnInit {
+  @Input() type: string;
+  @Input() role: IRole;
+  permissionIds: number[];
   resources: IResource[];
   roleName: string = '';
 
@@ -25,6 +22,18 @@ export class RoleCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.findAllResources();
+    this.passData();
+  }
+
+  passData(): void {
+    if (this.role) {
+      this.roleName = this.role.name;
+      this.permissionIds = this.role.permissions.map(p => p.id);
+    }
+  }
+
+  isUpdateMode(): boolean {
+    return this.type === 'update';
   }
 
   back(): void {
@@ -34,7 +43,26 @@ export class RoleCreateComponent implements OnInit {
   findAllResources(): void {
     this.roleManagementService
       .findAllResources()
-      .subscribe((resources) => (this.resources = resources));
+      .subscribe((resources) => {
+        // this.checkGrantedPermmisonsOnUpdate(resources);
+        this.resources = resources
+      });
+  }
+
+  // TODO: Make it runs properly tomorrow
+  checkGrantedPermmisonsOnUpdate(resources: IResource[]): IResource[] {
+    if (this.role && this.isUpdateMode()) {
+      resources.forEach(resource => {
+        resource.permissions.forEach(permission => {
+          if (this.permissionIds.includes(permission.id)) {
+            (permission as IPermissionChoose).choose = true;
+            console.log(permission.id)
+          }
+        })
+      })
+      return null;
+    }
+    return resources;
   }
 
   onChangeButtonCheckAllPermissions(resourceName: string): void {

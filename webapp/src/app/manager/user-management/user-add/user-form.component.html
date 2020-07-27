@@ -1,24 +1,49 @@
-<form [formGroup]="userForm" (ngSubmit)="onSubmit.emit(userForm.value)">
+<form [formGroup]="userForm" (ngSubmit)="emitSubmitEvent()">
   <div class="form-group">
     <label>Full name</label>
     <input type="text" formControlName="name" class="form-control" placeholder="Ex: John Dee">
   </div>
+
   <div class="form-group">
     <label>Username</label>
-    <input type="text" formControlName="username" class="form-control" placeholder="Ex: johndee">
+    <input type="text" formControlName="username" class="form-control"
+      placeholder="Ex: johndee" [attr.disabled]="isUpdateMode() ? true : null" />
   </div>
-  <div class="form-group">
-    <label>Password</label>
-    <input type="password" formControlName="password" class="form-control" placeholder="At least 4 characters">
+
+  <div *ngIf="!isUpdateMode()">
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" formControlName="password" class="form-control" placeholder="At least 4 characters" required>
+    </div>
+    <div class="form-group">
+      <label>Retype password</label>
+      <input type="password"
+        (input)="validatePass()"
+        formControlName="repassword"
+        class="form-control"
+        placeholder="At least 4 characters"
+        required>
+      <div class="field-error" *ngIf="!isPasswordMatched">Password does not matched!</div>
+    </div>
   </div>
+
   <div class="form-group">
     <label>Email</label>
     <input type="email" formControlName="email" class="form-control" placeholder="Ex: example@mail.com">
   </div>
+
   <div class="form-group">
     <label>Address</label>
     <input type="email" formControlName="address" class="form-control" placeholder="Ex: Vietnam">
   </div>
+
+  <div class="form-group">
+    <label>Select role(s):</label>
+    <select class="custom-select" formControlName="roleIds" multiple size="3">
+      <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+    </select>
+  </div>
+
   <div class="form-group">
     <label>Select store:</label>
     <select class="custom-select" formControlName="storeId">
@@ -26,5 +51,9 @@
       <option *ngFor="let store of stores" [value]="store.id">{{ store.name }}</option>
     </select>
   </div>
-  <button class="btn btn-primary" type="submit"><i class="fas fa-save"></i>Save</button>
+
+  <div class="text-right">
+    <button class="btn btn-primary mr-2" type="submit"><i class="fas fa-save"></i>Save</button>
+    <button class="btn btn-danger" type="button" (click)='onCancel.emit()'><i class="fas fa-times"></i>Cancel</button>
+  </div>
 </form>

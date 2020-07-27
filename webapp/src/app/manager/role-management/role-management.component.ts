@@ -1,3 +1,4 @@
+import { RoleUpdateModalComponent } from './../../modal/role-update-modal/role-update-modal.component';
 import { Component, OnInit } from '@angular/core';
 import { RoleManagementService } from "../../service/role-management.service";
 import {MDBModalRef, MDBModalService} from "ng-uikit-pro-standard";
@@ -33,6 +34,15 @@ export class RoleManagementComponent implements OnInit {
           class: 'modal-dialog-centered modal-xl',
           data: { role } });
       })
+  }
+
+  openUpdateModal(role: IRole): void {
+    this.roleManagementService.findRoleById(role.id).subscribe(role => {
+      this.modalService.show(RoleUpdateModalComponent, {
+            class: 'modal-xl',
+            data: { role }
+      });
+    })
   }
 
   deleteRole(role: IRole): void {

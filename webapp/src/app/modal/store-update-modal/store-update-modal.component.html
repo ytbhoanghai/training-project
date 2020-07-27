@@ -6,11 +6,6 @@
     </button>
   </div>
   <div class="modal-body">
-    <app-user-form
-      [user]="user"
-      [type]="type.UPDATE"
-      (onSubmit)="handleSubmit(user.id, $event)"
-      (onCancel)="hideModal()"
-    ></app-user-form>
+    <app-store-form [store]="store" (onSubmit)="handleSubmit(store.id, $event)"></app-store-form>
   </div>
 </div>

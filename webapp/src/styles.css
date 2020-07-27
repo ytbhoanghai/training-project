@@ -2,3 +2,7 @@
 .fas, .far {
   margin-right: 4px;
 }
+
+table td, table td *, table th, table th * {
+  vertical-align: middle !important;
+}

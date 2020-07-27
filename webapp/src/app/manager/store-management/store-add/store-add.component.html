@@ -5,14 +5,10 @@
     </button>
     <div class="card">
       <div class="card-header bg-success font-weight-bold text-light">
-        Create a new staff
+        Create a new store
       </div>
       <div class="card-body">
-        <app-user-form
-          [type]="type.CREATE"
-          (onSubmit)="handleSubmit($event)"
-          (onCancel)="back()"
-        ></app-user-form>
+        <app-store-form (onSubmit)="handleSubmit($event)" (onCancel)="back()"></app-store-form>
       </div>
     </div>
   </div>

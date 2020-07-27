@@ -15,7 +15,7 @@
         <th scope="col">Email</th>
         <th scope="col">Address</th>
         <th scope="col">Created at</th>
-        <th scope="col">Action</th>
+        <th scope="col" class="text-center">Action</th>
       </tr>
       </thead>
       <tbody>
@@ -26,7 +26,7 @@
           <td>{{ user.email }}</td>
           <td>{{ user.address }}</td>
           <td>{{ user.createdAt | date:"short" }}</td>
-          <td>
+          <td class="text-center">
             <button class="btn btn-action mr-1" (click)="showDetailsModal(user.id)"><i class="far fa-eye mr-0"></i></button>
             <button class="btn btn-action mr-1" (click)="showUpdateModal(user.id)"><i class="fas fa-edit mr-0"></i></button>
             <button class="btn btn-action mr-1" (click)="deleteUser(user.id)"><i class="fas fa-trash-alt"></i></button>

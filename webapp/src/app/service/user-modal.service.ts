@@ -32,7 +32,7 @@ export class UserModalService {
   }
 
   showUpdateModal(user?: IUser): void {
-    // this.options.data = { user };
-    this.userUpdateModalRef = this.modalService.show(UserUpdateModalComponent, { data: { user }});
+    this.options.data = { user };
+    this.userUpdateModalRef = this.modalService.show(UserUpdateModalComponent, this.options);
   }
 }

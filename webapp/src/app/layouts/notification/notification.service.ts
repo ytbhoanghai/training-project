@@ -14,11 +14,14 @@ export class NotificationService {
   }
 
 
-  constructor(private toastService: ToastrService) {
-  }
+  constructor(private toastService: ToastrService) { }
 
   showSuccess(message?: string): void {
     this.toastService.success(message || "Operation perform successfully!", "200 OK", this.options);
+  }
+
+  showWaring(message?: string): void {
+    this.toastService.warning(message || "Please check again!", "Warning", this.options);
   }
 
   showError401(message?: string): void {
