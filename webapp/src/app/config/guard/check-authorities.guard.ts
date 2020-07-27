@@ -18,7 +18,7 @@ export class CheckAuthoritiesGuard implements CanActivate {
     if (currentUser) {
       return true;
     }
-    this.router.navigate(['/accessdenied']);
+    // this.router.navigate(['/accessdenied']);
     return false;
   }
   

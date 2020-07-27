@@ -25,6 +25,7 @@ import { ToastrModule } from 'ngx-toastr';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { UserDetailsModalComponent } from './modal/user-details-modal/user-details-modal.component';
 import { UserUpdateModalComponent } from './modal/user-update-modal/user-update-modal.component';
+import { RoleUpdateModalComponent } from './modal/role-update-modal/role-update-modal.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { UserUpdateModalComponent } from './modal/user-update-modal/user-update-
     ConfirmModalComponent,
     UserDetailsModalComponent,
     UserUpdateModalComponent,
+    RoleUpdateModalComponent
   ],
   imports: [
     BrowserModule,

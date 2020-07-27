@@ -1,15 +1,21 @@
 <div class="container">
+  <!-- <form ngNativeValidate> -->
   <div class="row mt-5 mb-3">
     <a class="btn btn-outline-secondary" (click)="back()"><i class="fas fa-backward"></i></a>
 
-    <div class="d-flex w-100 justify-content-end">
-      <div class="form-group mx-sm-3 my-2">
-        <label for="inputRoleName" class="sr-only">Role Name</label>
-        <input type="text" class="form-control" id="inputRoleName" placeholder="Type in role name">
+      <div class="d-flex w-100 justify-content-end">
+        <div class="form-group mx-sm-3 my-2">
+          <label for="inputRoleName" class="sr-only">Role Name</label>
+          <input
+            type="text" class="form-control" id="inputRoleName"
+            placeholder="Type in role name"
+            required minlength="3"
+            [(ngModel)]="roleName" />
+        </div>
+        <button type="submit" class="btn btn-primary my-2 mr-5" (click)="submitForm()">Create</button>
       </div>
-      <button type="submit" class="btn btn-primary my-2 mr-5">Create</button>
     </div>
-  </div>
+  <!-- </form> -->
   <div class="row warp-table">
     <table class="table table-sm table-striped mx-auto">
       <caption class="text-primary">Permissions List</caption>
