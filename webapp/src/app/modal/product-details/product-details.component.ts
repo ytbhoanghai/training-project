@@ -1,15 +1,24 @@
+import { ProductModalService } from './../../service/product-modal.service';
+import { IProduct } from './../../manager/product-management/product.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details.component.html',
-  styleUrls: ['./product-details.component.css']
+  styleUrls: ['./product-details.component.css'],
 })
 export class ProductDetailsComponent implements OnInit {
+  product: IProduct;
 
-  constructor() { }
+  constructor(private productModalService: ProductModalService) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  hideModal(): void {
+    this.productModalService.hideDetailsModal();
   }
 
+  getCategories(): string {
+    return this.product.categories.map((m) => m.name).join(', ');
+  }
 }

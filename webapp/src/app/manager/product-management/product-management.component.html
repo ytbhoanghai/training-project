@@ -1,6 +1,6 @@
 <div class="card">
-  <div class="card-header bg-info font-weight-bold text-light">
-    Store Management
+  <div class="card-header bg-secondary font-weight-bold text-light">
+    Product Management
   </div>
   <div class="card-body">
     <div class="d-flex justify-content-end">
@@ -22,11 +22,7 @@
           <th scope="row">{{ i + 1}}</th>
           <td>{{ product.name }}</td>
           <td>{{ product.price }}</td>
-          <td>
-            <ng-container *ngFor="let category of product.categories">
-              {{ category.name + ' ' }}
-            </ng-container>
-          </td>
+          <td>{{ getCategories(product) }}</td>
           <td>{{ product.createdAt | date:"short" }}</td>
           <td class="text-center">
             <button class="btn btn-action mr-1" (click)="showDetailsModal(product.id)"><i class="far fa-eye mr-0"></i></button>

@@ -25,7 +25,10 @@ export class RoleManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.roleManagementService.findAllRoles()
-      .subscribe(roles => this.roles = roles);
+      .subscribe(roles => {
+        console.log(roles)
+        this.roles = roles;
+      });
   }
 
   viewRoleDetails(role: IRole): void {
@@ -88,6 +91,8 @@ export interface IRole {
   name: string;
   createdBy: number;
   permissions: IPermission[];
+  allowUpdate: boolean;
+  allowDelete: boolean;
 }
 
 export interface IRoleBody {

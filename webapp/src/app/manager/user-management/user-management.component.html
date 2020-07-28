@@ -15,6 +15,7 @@
         <th scope="col">Email</th>
         <th scope="col">Address</th>
         <th scope="col">Created at</th>
+        <th scope="col" class="text-center">Granted</th>
         <th scope="col" class="text-center">Action</th>
       </tr>
       </thead>
@@ -26,6 +27,10 @@
           <td>{{ user.email }}</td>
           <td>{{ user.address }}</td>
           <td>{{ user.createdAt | date:"short" }}</td>
+          <td class="text-center">
+            <div class="badge badge-pill badge-danger" *ngIf="user.allowDelete">Deletable</div> <br />
+            <div class="badge badge-pill badge-info" *ngIf="user.allowUpdate">Updatable</div>
+          </td>
           <td class="text-center">
             <button class="btn btn-action mr-1" (click)="showDetailsModal(user.id)"><i class="far fa-eye mr-0"></i></button>
             <button class="btn btn-action mr-1" (click)="showUpdateModal(user.id)"><i class="fas fa-edit mr-0"></i></button>

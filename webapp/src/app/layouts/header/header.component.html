@@ -131,22 +131,24 @@
               class="dropdown-item account-menu-item"
               routerLink="account/settings"
             >
-              <!-- <fa-icon icon="wrench" [fixedWidth]="true"></fa-icon> -->
+              <i class="fas fa-user-cog fa-fw text-secondary"></i>
               <span>Settings</span>
             </a>
           </li>
-          <li>
+          <li *ngIf="isLogin(); else elseBlock">
             <a class="dropdown-item account-menu-item" id="logout" (click)='logout()'>
-              <!-- <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon> -->
+              <i class="fas fa-power-off fa-fw text-danger"></i>
               <span>Sign out</span>
             </a>
           </li>
-          <li>
-            <a class="dropdown-item account-menu-item" id="login" (click)='openModalLogin()'>
-              <!-- <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon> -->
-              <span>Sign in</span>
-            </a>
-          </li>
+          <ng-template #elseBlock>
+            <li>
+              <a class="dropdown-item account-menu-item" id="login" (click)='openModalLogin()'>
+                <i class="fas fa-sign-in-alt fa-fw text-info"></i>
+                <span>Sign in</span>
+              </a>
+            </li>
+          </ng-template>
         </ul>
       </li>
     </ul>

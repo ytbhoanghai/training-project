@@ -22,11 +22,7 @@
           <div><b>Address: </b>{{ user?.address }}</div>
         </li>
         <li class="list-group-item">
-          <div><b>Roles: </b>
-            <ng-container *ngFor="let role of user.roles">
-              {{ role.name + " " }}
-            </ng-container>
-            </div>
+          <div><b>Roles: </b> {{ getRolesFormUser(user)}}</div>
         </li>
         <li class="list-group-item">
           <div><b>Created at: </b>{{ user?.createdAt | date:'medium' }}</div>

@@ -18,4 +18,8 @@ export class UserDetailsModalComponent implements OnInit {
   hideModal(): void {
     this.userModalService.userDetailsModalRef.hide();
   }
+
+  getRolesFormUser(user: IUser): string {
+    return user.roles.map(r => r.name).join(', ');
+  }
 }

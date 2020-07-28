@@ -15,7 +15,9 @@ export type IUser = {
   ];
   idStore?: number;
   createdAt: number;
-  createdBy: number
+  createdBy: number;
+  allowDelete: boolean;
+  allowUpdate: boolean;
 }
 
 @Injectable({
@@ -49,5 +51,9 @@ export class UserService {
 
   removeCurrentUser(): void {
     return this.currentUserSubject.next(null);
+  }
+
+  isLogin(): boolean {
+    return this.getCurrentUser() !== null;
   }
 }
