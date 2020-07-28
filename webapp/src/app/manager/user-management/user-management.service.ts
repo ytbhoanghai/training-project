@@ -1,19 +1,21 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import { map } from 'rxjs/operators'
-import {IUser} from "../../core/auth/user.service";
-import {SERVER_URL} from "../../core/constants/api.constants";
+import { Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { IUser } from '../../core/auth/user.service';
+import { SERVER_URL } from '../../core/constants/api.constants';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserManagementService {
+  userSubject = new Subject();
+  userObservable$ = this.userSubject.asObservable();
 
   private REQUEST_URL: string = `${SERVER_URL}/staffs/`;
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   fetchAll(): Observable<IUser[]> {
     return this.http.get<IUser[]>(this.REQUEST_URL);
@@ -21,7 +23,7 @@ export class UserManagementService {
 
   fetchById(id: number): Observable<IUser> {
     return this.http.get<IUser>(this.REQUEST_URL + id).pipe(
-      map(user => {
+      map((user) => {
         return user;
       })
     );

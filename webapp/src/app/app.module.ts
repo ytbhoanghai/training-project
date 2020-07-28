@@ -1,3 +1,5 @@
+import { CategoryManagementModule } from './manager/category-management/category-management.module';
+import { ProductManagementModule } from './manager/product-management/product-management.module';
 import { RoleManagementModule } from './manager/role-management/role-management.module';
 import { StoreManagementModule } from './manager/store-management/store-management.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -32,6 +34,8 @@ import { StoreUpdateModalComponent } from './modal/store-update-modal/store-upda
 import { StoreDetailsModalComponent } from './modal/store-details-modal/store-details-modal.component';
 import { ProductDetailsComponent } from './modal/product-details/product-details.component';
 import { ProductUpdateComponent } from './modal/product-update/product-update.component';
+import { CategoryDetailsComponent } from './modal/category-details/category-details.component';
+import { CategoryUpdateComponent } from './modal/category-update/category-update.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +59,8 @@ import { ProductUpdateComponent } from './modal/product-update/product-update.co
     StoreDetailsModalComponent,
     ProductDetailsComponent,
     ProductUpdateComponent,
+    CategoryDetailsComponent,
+    CategoryUpdateComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,6 +73,8 @@ import { ProductUpdateComponent } from './modal/product-update/product-update.co
     UserManagementModule,
     StoreManagementModule,
     RoleManagementModule,
+    ProductManagementModule,
+    CategoryManagementModule,
     ToastModule.forRoot(),
     BrowserAnimationsModule,
     ToastrModule.forRoot(),

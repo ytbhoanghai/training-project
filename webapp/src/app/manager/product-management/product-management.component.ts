@@ -1,3 +1,8 @@
+import { ConfirmModalComponent } from './../../modal/confirm-modal/confirm-modal.component';
+import { MDBModalRef } from 'ng-uikit-pro-standard';
+import { ConfirmModalService } from './../../service/confirm-modal.service';
+import { ProductModalService } from './../../service/product-modal.service';
+import { NotificationService } from './../../layouts/notification/notification.service';
 import { IProduct, ProductService } from './product.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -8,22 +13,51 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProductManagementComponent implements OnInit {
   products: IProduct[] = [];
+  confirmModalRef: MDBModalRef;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private notiService: NotificationService,
+    private productModalService: ProductModalService,
+    private confirmService: ConfirmModalService
+  ) {}
 
   ngOnInit(): void {
     this.fetchProducts();
   }
 
   fetchProducts(): void {
-    this.productService.fetchProducts().subscribe(products => {
+    this.productService.fetchProducts().subscribe((products) => {
       this.products = products;
+    });
+  }
+
+  showDetailsModal(id: number) {
+    this.productService.fetchProductById(id).subscribe(product => {
+      this.productModalService.showDetailsModal(product);
     })
   }
 
-  showDetailsModal(id: number) {}
+  showUpdateModal(id: number) {
+    this.productService.fetchProductById(id).subscribe(product => {
+      this.productModalService.showUpdateModal(product);
+    })
+  }
 
-  showUpdateModal(id: number) {}
+  deleteProduct(id: number) {
+    this.confirmModalRef = this.confirmService.show('DeleteProduct');
+    this.confirmModalRef.content.action.subscribe(({ value, key }) => {
+      if (key === 'DeleteProduct' && value === ConfirmModalComponent.YES) {
+        this.productService.deleteById(id).subscribe(() => {
+          this.products = this.products.filter(store => store.id !== id);
+          this.notiService.showSuccess('Delete successfully!');
+        })
+        this.confirmModalRef.hide();
+      }
+    })
+  }
 
-  deleteProduct(id: number) {}
+  getCategories(product: IProduct) {
+    return product.categories.map(c => c.name).join(", ");
+  }
 }

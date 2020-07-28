@@ -25,6 +25,10 @@ export class HeaderComponent implements OnInit {
     this.userService.currentUser$.subscribe(value => this.name = value?.name);
   }
 
+  isLogin(): boolean {
+    return this.userService.isLogin();
+  }
+
   logout(): void {
     this.authService.logoutUser().subscribe(_ => this.name = null);
   }
