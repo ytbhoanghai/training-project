@@ -8,6 +8,7 @@ import com.example.demo.response.RoleResponse;
 import com.example.demo.response.SimpleRoleResponse;
 import com.example.demo.security.constants.RolePermission;
 import com.example.demo.security.constants.StaffPermission;
+import com.example.demo.service.RoleService;
 import com.example.demo.service.RoleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,44 +20,44 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/roles")
 public class RoleController {
 
-    private RoleServiceImpl roleService;
+    private RoleService roleService;
 
     @Autowired
-    public RoleController(RoleServiceImpl roleService) {
+    public RoleController(RoleService roleService) {
         this.roleService = roleService;
     }
 
-    @GetMapping("/roles")
+    @GetMapping
     public ResponseEntity<List<SimpleRoleResponse>> findAll() {
         List<SimpleRoleResponse> simpleRoleList = roleService.findAll();
         return new ResponseEntity<>(simpleRoleList, HttpStatus.OK);
     }
 
-    @GetMapping("/roles/{roleId}")
+    @GetMapping("{roleId}")
     @PreAuthorize("hasAuthority(\"" + RolePermission.READ + "\")")
     public ResponseEntity<RoleResponse> findById(@PathVariable Integer roleId) {
         RoleResponse roleResponse = roleService.findById(roleId);
         return new ResponseEntity<>(roleResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/roles")
+    @PostMapping
     @PreAuthorize("hasAuthority(\"" + RolePermission.CREATE + "\")")
     public ResponseEntity<Role> save(@Valid @RequestBody RoleForm roleForm) {
         Role role = roleService.save(roleForm);
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
 
-    @PutMapping("/roles/{roleId}")
+    @PutMapping("{roleId}")
     @PreAuthorize("hasAuthority(\"" + RolePermission.UPDATE + "\")")
     public ResponseEntity<Role> update(@PathVariable Integer roleId, @Valid @RequestBody RoleForm roleForm) {
         Role role = roleService.update(roleId, roleForm);
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
 
-    @DeleteMapping("/roles/{roleId}")
+    @DeleteMapping("{roleId}")
     @PreAuthorize("hasAuthority(\"" + RolePermission.DELETE + "\")")
     public ResponseEntity<MessageResponse> delete(@PathVariable Integer roleId) {
         roleService.delete(roleId);

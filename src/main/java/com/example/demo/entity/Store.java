@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.example.demo.form.AddProductToStoreForm;
 import com.example.demo.form.StoreForm;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -54,8 +53,4 @@ public class Store {
         return store;
     }
 
-    public static Store addProductToStore(Store store, Set<Product> products) {
-//        store.getProducts().addAll(products);
-        return null;
-    }
 }

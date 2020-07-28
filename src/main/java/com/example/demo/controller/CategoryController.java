@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/categories")
 public class CategoryController {
 
     private CategoryServiceImpl categoryService;
@@ -26,35 +26,35 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/categories")
+    @GetMapping
     public ResponseEntity<List<SimpleCategoryResponse>> findAll() {
         List<SimpleCategoryResponse> categoryResponseList = categoryService.findAll();
         return new ResponseEntity<>(categoryResponseList, HttpStatus.OK);
     }
 
-    @GetMapping("/categories/{categoryId}")
-//    @PreAuthorize("hasAuthority(\"" + CategoryPermission.READ + "\")")
+    @GetMapping("{categoryId}")
+    @PreAuthorize("hasAuthority(\"" + CategoryPermission.READ + "\")")
     public ResponseEntity<Category> findById(@PathVariable Integer categoryId) {
         Category category = categoryService.findById(categoryId);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
-    @PostMapping("/categories")
-//    @PreAuthorize("hasAuthority(\"" + CategoryPermission.CREATE + "\")")
+    @PostMapping
+    @PreAuthorize("hasAuthority(\"" + CategoryPermission.CREATE + "\")")
     public ResponseEntity<Category> save(@Valid @RequestBody CategoryForm categoryForm) {
         Category category = categoryService.save(categoryForm);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
-    @PutMapping("/categories/{categoryId}")
-//    @PreAuthorize("hasAuthority(\"" + CategoryPermission.UPDATE + "\")")
+    @PutMapping("{categoryId}")
+    @PreAuthorize("hasAuthority(\"" + CategoryPermission.UPDATE + "\")")
     public ResponseEntity<Category> update(@PathVariable Integer categoryId, @Valid @RequestBody CategoryForm categoryForm) {
         Category category = categoryService.update(categoryId, categoryForm);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
-    @DeleteMapping("/categories/{categoryId}")
-//    @PreAuthorize("hasAuthority(\"" + CategoryPermission.DELETE + "\")")
+    @DeleteMapping("{categoryId}")
+    @PreAuthorize("hasAuthority(\"" + CategoryPermission.DELETE + "\")")
     public ResponseEntity<MessageResponse> delete(@PathVariable Integer categoryId) {
         categoryService.deleteById(categoryId);
         return new ResponseEntity<>(new MessageResponse("Deleted category with id: " + categoryId), HttpStatus.OK);

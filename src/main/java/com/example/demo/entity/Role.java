@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.example.demo.form.RoleForm;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -35,6 +34,8 @@ public class Role {
 
     private Boolean grantable;
 
+    private Integer level;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -53,10 +54,9 @@ public class Role {
     private Set<Staff> staffs;
 
 
-    public static Role updateData(Role role, RoleForm roleForm, Staff createByStaff, Set<Permission> permissions) {
-        role.setName(roleForm.getName());
-        role.setCreatedBy(createByStaff);
-        role.setPermissions(permissions);
-        return role;
+    public Role updateData(String name, Set<Permission> permissions) {
+        this.name = name;
+        this.permissions = permissions;
+        return this;
     }
 }

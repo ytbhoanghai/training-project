@@ -56,6 +56,8 @@ public class Staff {
 
     private Type type;
 
+    private Integer level;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(

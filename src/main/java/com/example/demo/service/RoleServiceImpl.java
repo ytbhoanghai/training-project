@@ -12,6 +12,7 @@ import com.example.demo.response.SimpleRoleResponse;
 import com.example.demo.security.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Id;
@@ -34,6 +35,7 @@ public class RoleServiceImpl implements RoleService {
                            SecurityUtil securityUtil,
                            StaffServiceImpl staffService,
                            PermissionServiceImpl permissionService) {
+
         this.roleRepository = roleRepository;
         this.securityUtil = securityUtil;
         this.staffService = staffService;
@@ -57,38 +59,44 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role save(RoleForm roleForm) {
-        Staff createByStaff = staffService.findByUsername(
-                securityUtil.getCurrentPrincipal().getUsername());
+        Staff createByStaff = securityUtil.getCurrentStaff();
+
         Set<Permission> permissions = permissionService.findAllByIdIsIn(roleForm.getPermissions());
-        Role role = roleRepository.save(RoleForm.buildRole(roleForm.getName(), createByStaff, permissions));
-        return role;
+        return roleRepository.save(RoleForm.buildRole(roleForm.getName(), createByStaff, permissions));
     }
 
     @Override
     public Role update(Integer id, RoleForm roleForm) {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new RoleNotFoundException(id));
-        Staff createByStaff = securityUtil.getCurrentStaff();
+
+        if (!isAllowed(role)) {
+            throw new AccessDeniedException("Access Denied !!!");
+        }
+
         Set<Permission> permissions = permissionService.findAllByIdIsIn(roleForm.getPermissions());
-        return roleRepository.save(Role.updateData(role, roleForm, createByStaff, permissions));
+        return roleRepository.save(role.updateData(
+                roleForm.getName(),
+                permissions));
     }
 
     @Override
     public void delete(Integer id) {
-//        Admin can delete any role
-        Staff staff = securityUtil.getCurrentStaff();
-        if (staff.isRootAdmin()) {
-            roleRepository.deleteById(id);
-            return;
+        Role role = roleRepository.findById(id)
+                .orElseThrow(() -> new RoleNotFoundException(id));
+
+        if (!isAllowed(role)) {
+            throw new AccessDeniedException("Access Denied !!!");
         }
 
-//        Staff can only delete role that they created
-        Optional<Role> optionalRole = roleRepository.findByIdAndCreatedBy(id, staff);
-        if (optionalRole.isPresent()) {
-            roleRepository.deleteById(id);
-        } else {
-            throw new RoleNotCreateByCurrentStaffException();
-        }
+        roleRepository.deleteById(role.getId());
     }
 
+    private boolean isAllowed(Role role) {
+        Staff staff = securityUtil.getCurrentStaff();
+        if (staff.getLevel() > role.getLevel()) {
+            return true;
+        }
+        return staff.getLevel().equals(role.getLevel()) && role.getCreatedBy().equals(staff);
+    }
 }

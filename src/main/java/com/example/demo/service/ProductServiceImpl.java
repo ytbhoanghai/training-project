@@ -27,6 +27,7 @@ public class ProductServiceImpl implements ProductService {
             ProductRepository productRepository,
             SecurityUtil securityUtil,
             CategoryRepository categoryRepository) {
+
         this.productRepository = productRepository;
         this.securityUtil = securityUtil;
         this.categoryRepository = categoryRepository;

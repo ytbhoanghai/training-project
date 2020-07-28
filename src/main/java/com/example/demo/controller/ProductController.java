@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/products")
 public class ProductController {
 
     private ProductService productService;
@@ -25,34 +25,34 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/products")
+    @GetMapping
     public ResponseEntity<List<Product>> findAll() {
         List<Product> products = productService.findAll();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @GetMapping("/products/{productId}")
+    @GetMapping("{productId}")
     @PreAuthorize("hasAuthority(\"" + ProductPermission.READ + "\")")
     public ResponseEntity<Product> findById(@PathVariable Integer productId) {
         Product product = productService.findById(productId);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
-    @PostMapping("/products")
+    @PostMapping
     @PreAuthorize("hasAuthority(\"" + ProductPermission.CREATE + "\")")
     public ResponseEntity<Product> save(@Valid @RequestBody ProductForm productForm) {
         Product product = productService.save(productForm);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
-    @PutMapping("/products/{productId}")
+    @PutMapping("{productId}")
     @PreAuthorize("hasAuthority(\"" + ProductPermission.UPDATE + "\")")
     public ResponseEntity<Product> update(@PathVariable Integer productId, @Valid @RequestBody ProductForm productForm) {
         Product product = productService.update(productId, productForm);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
-    @DeleteMapping("/products/{productId}")
+    @DeleteMapping("{productId}")
     @PreAuthorize("hasAuthority(\"" + ProductPermission.DELETE + "\")")
     public ResponseEntity<MessageResponse> delete(@PathVariable Integer productId) {
         productService.delete(productId);

@@ -4,15 +4,16 @@ import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
 import com.example.demo.entity.StoreProduct;
 import com.example.demo.exception.StoreNotFoundException;
-import com.example.demo.form.AddProductToStoreForm;
 import com.example.demo.form.StoreForm;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.StoreRepository;
 import com.example.demo.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StoreServiceImpl implements StoreService {
@@ -20,7 +21,7 @@ public class StoreServiceImpl implements StoreService {
     private StoreRepository storeRepository;
     private ProductRepository productRepository;
     private StoreProductService storeProductService;
-    private StaffServiceImpl staffService;
+    private StaffService staffService;
     private SecurityUtil securityUtil;
 
     @Autowired
@@ -28,7 +29,7 @@ public class StoreServiceImpl implements StoreService {
             StoreRepository storeRepository,
             ProductRepository productRepository,
             StoreProductService storeProductService,
-            StaffServiceImpl staffService,
+            StaffService staffService,
             SecurityUtil securityUtil) {
 
         this.storeRepository = storeRepository;
@@ -56,8 +57,8 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public StoreProduct addProductToStore(AddProductToStoreForm addProductToStoreForm) {
-        return storeProductService.addProductToStore(addProductToStoreForm);
+    public StoreProduct addProductToStore(Integer storeId, Integer productId, Integer quantity) {
+        return storeProductService.addProductToStore(storeId, productId, quantity);
     }
 
     @Override
@@ -67,8 +68,24 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    @Transactional
     public String deleteById(Integer id) {
+        Store store = findById(id);
+        // remove store in staff
+        List<Staff> staffListAfterRemoveStore = staffService.findAllByStore(store).stream()
+                .map(staff -> {
+                    staff.setStore(null);
+                    return staff;
+                })
+                .collect(Collectors.toList());
+        staffService.saveAll(staffListAfterRemoveStore);
+
+        // delete products in store
+        storeProductService.deleteByStore(store);
+
+        // delete store
         storeRepository.deleteById(id);
+
         return String.valueOf(id);
     }
 }

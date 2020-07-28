@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @ControllerAdvice
-@RequestMapping("/api")
+@RequestMapping("/api/authenticate")
 public class AuthenticationController {
 
     private AuthenticationService authenticationService;
@@ -19,7 +19,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping(value = "authenticate")
+    @PostMapping
     public ResponseEntity<?> authenticate(@Valid @RequestBody LoginForm loginForm) {
 
         return ResponseEntity

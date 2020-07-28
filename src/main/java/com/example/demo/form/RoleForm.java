@@ -36,6 +36,6 @@ public class RoleForm {
                 .createdAt(new Date())
                 .grantable(true)
                 .createdBy(createByStaff)
-                .build();
+                .level(createByStaff.getLevel()).build();
     }
 }

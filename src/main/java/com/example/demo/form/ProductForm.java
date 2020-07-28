@@ -5,6 +5,7 @@ import com.example.demo.entity.Product;
 import com.example.demo.entity.Staff;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Data
 public class ProductForm {
 
+    @NotNull
     private String name;
 
     private BigDecimal price;
@@ -24,7 +26,6 @@ public class ProductForm {
                 .price(productForm.getPrice())
                 .createdAt(new Date())
                 .createdBy(createByStaff)
-                .categories(categories)
-                .build();
+                .categories(categories).build();
     }
 }

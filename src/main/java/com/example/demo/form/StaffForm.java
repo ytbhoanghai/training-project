@@ -1,5 +1,6 @@
 package com.example.demo.form;
 
+import com.example.demo.entity.Role;
 import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
 import lombok.*;
@@ -11,19 +12,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class StaffForm {
-
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private static BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @NotBlank
     @NotNull
@@ -40,10 +36,13 @@ public class StaffForm {
 
     private String address;
 
-    private int storeId;
+    private Integer storeId;
+
+    @Size(min = 0, max = 99)
+    private Set<Integer> roleIds;
 
     public static Staff buildStaff(
-            StaffForm staffForm, Staff createByStaff, Store ofStore) {
+            StaffForm staffForm, Staff createByStaff, Store ofStore, Set<Role> roles, Integer level) {
 
         return Staff.builder()
                 .name(staffForm.getName())
@@ -55,7 +54,7 @@ public class StaffForm {
                 .createdAt(new Date())
                 .createdBy(createByStaff)
                 .type(Staff.TYPE_DEFAULT)
-                .build();
-
+                .roles(roles)
+                .level(level).build();
     }
 }

@@ -6,27 +6,24 @@ import com.example.demo.entity.Store;
 import com.example.demo.exception.StaffNotFoundException;
 import com.example.demo.exception.StoreNotFoundException;
 import com.example.demo.exception.WrongOldPasswordException;
-import com.example.demo.form.AddRoleToStaffForm;
 import com.example.demo.form.StaffForm;
 import com.example.demo.form.UpdatePasswordForm;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.StaffRepository;
 import com.example.demo.repository.StoreRepository;
 import com.example.demo.security.SecurityUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Service(value = "staffService")
 public class StaffServiceImpl implements StaffService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(StaffServiceImpl.class);
 
     private StaffRepository staffRepository;
     private StoreRepository storeRepository;
@@ -55,6 +52,11 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    public List<Staff> findAllByStore(Store store) {
+        return staffRepository.findAllByStore(store);
+    }
+
+    @Override
     public List<Staff> findAll() {
         return staffRepository.findAll();
     }
@@ -67,23 +69,29 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public Staff save(StaffForm staffForm) {
-//        Get store from input id
-        Store ofStore = storeRepository.findById(staffForm.getStoreId())
-                .orElseThrow(() -> new StoreNotFoundException(staffForm.getStoreId()));
+        Staff staff = securityUtil.getCurrentStaff();
 
-//        Get current login staff and save
-        Staff createByStaff = findByUsername(securityUtil.getCurrentPrincipal().getUsername());
-        Staff newStaff = StaffForm.buildStaff(staffForm, createByStaff, ofStore);
-//        Hash password and save to the object
+        Store store = null;
+        if (staffForm.getStoreId() != null) {
+            store = storeRepository
+                    .findById(staffForm.getStoreId())
+                    .orElseThrow(() -> new StoreNotFoundException(staffForm.getStoreId()));
+        }
+
+        Set<Role> roles = new HashSet<>();
+        if (!staffForm.getRoleIds().isEmpty()) {
+            roles = roleRepository.findAllByIdIsIn(staffForm.getRoleIds());
+        }
+
+        Staff newStaff = StaffForm.buildStaff(staffForm, staff, store, roles, staff.getLevel() + 1);
         newStaff.setPassword(new BCryptPasswordEncoder().encode(staffForm.getPassword()));
+
         return staffRepository.save(newStaff);
     }
 
     @Override
-    public Staff addRoleToStaff(AddRoleToStaffForm addRoleToStaffForm) {
-        Staff staff = findById(addRoleToStaffForm.getStaffId());
-        Set<Role> roles = roleRepository.findAllByIdIsIn(addRoleToStaffForm.getRoleIds());
-        return staffRepository.save(Staff.updateRole(staff, roles));
+    public List<Staff> saveAll(List<Staff> staff) {
+        return staffRepository.saveAll(staff);
     }
 
     @Override

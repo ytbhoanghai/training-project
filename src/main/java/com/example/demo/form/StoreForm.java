@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
@@ -27,7 +28,7 @@ public class StoreForm {
     @Email
     private String email;
 
-    @Size(max = 11)
+    @Pattern(regexp = "\\d{1,11}")
     private String phone;
 
     private Status status;
@@ -40,8 +41,7 @@ public class StoreForm {
                 .phone(storeForm.getPhone())
                 .status(storeForm.getStatus())
                 .createdBy(createdBy)
-                .createdAt(new Date())
-                .build();
+                .createdAt(new Date()).build();
     }
 
 }

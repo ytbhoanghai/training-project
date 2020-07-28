@@ -5,7 +5,6 @@ import com.example.demo.entity.Store;
 import com.example.demo.entity.StoreProduct;
 import com.example.demo.exception.ProductNotFoundException;
 import com.example.demo.exception.StoreNotFoundException;
-import com.example.demo.form.AddProductToStoreForm;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.StoreProductRepository;
 import com.example.demo.repository.StoreRepository;
@@ -33,18 +32,22 @@ public class StoreProductServiceImpl implements StoreProductService {
 
 
     @Override
-    public StoreProduct addProductToStore(AddProductToStoreForm addProductToStoreForm) {
-//        Would be foreign key error if the input is wrong
-        Integer storeId = addProductToStoreForm.getStoreId();
-        Integer productId = addProductToStoreForm.getProductId();
-        Integer quantity = addProductToStoreForm.getQuantity();
-
+    public StoreProduct addProductToStore(Integer storeId, Integer productId, Integer quantity) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new StoreNotFoundException(storeId));
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
 
-        StoreProduct storeProduct = storeProductRepository.save(StoreProduct.addProductToStore(store, product, quantity));
+        StoreProduct.StoreProductID id = new StoreProduct.StoreProductID(store.getId(), product.getId());
+        StoreProduct storeProduct = new StoreProduct(id, quantity, store, product);
+
+        storeProductRepository.save(storeProduct);
+
         return storeProduct;
+    }
+
+    @Override
+    public void deleteByStore(Store store) {
+        storeProductRepository.deleteByStore(store);
     }
 }

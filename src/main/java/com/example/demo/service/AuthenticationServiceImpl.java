@@ -36,6 +36,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword());
 
+
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

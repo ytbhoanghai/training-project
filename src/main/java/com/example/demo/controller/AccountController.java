@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.security.Principal;
 
 @ControllerAdvice
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/account")
 public class AccountController {
 
     private StaffService staffService;
@@ -22,7 +22,7 @@ public class AccountController {
         this.staffService = staffService;
     }
 
-    @GetMapping(value = "account")
+    @GetMapping
     public ResponseEntity<?> getInfoAccount(Principal principal) {
         String username = principal.getName();
         Staff staff = staffService.findByUsername(username);

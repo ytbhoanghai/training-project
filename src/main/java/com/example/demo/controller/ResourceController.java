@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/resources")
 public class ResourceController {
 
     private ResourceServiceImpl resourceService;
@@ -23,7 +23,7 @@ public class ResourceController {
         this.resourceService = resourceService;
     }
 
-    @GetMapping("/resources")
+    @GetMapping
     public ResponseEntity<List<ResourceResponse>> findAllResourcesWithPermissions() {
         List<ResourceResponse> resourceList = resourceService.findAll();
         return new ResponseEntity<>(resourceList, HttpStatus.OK);

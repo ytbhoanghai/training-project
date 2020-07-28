@@ -23,7 +23,6 @@ public class CategoryForm {
         return Category.builder()
                 .name(categoryForm.getName())
                 .createdAt(new Date())
-                .createdBy(createByStaff)
-                .build();
+                .createdBy(createByStaff).build();
     }
 }

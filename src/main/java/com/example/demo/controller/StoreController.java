@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Store;
-import com.example.demo.form.AddProductToStoreForm;
 import com.example.demo.form.StoreForm;
 import com.example.demo.response.MessageResponse;
 import com.example.demo.security.constants.StorePermission;
@@ -17,7 +16,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/stores")
 @Slf4j
 public class StoreController {
 
@@ -28,7 +27,7 @@ public class StoreController {
         this.storeService = storeService;
     }
 
-    @GetMapping("/stores")
+    @GetMapping
 //    @PreAuthorize("hasAuthority(\"" + StorePermission.READ + "\")")
     public ResponseEntity<List<Store>> findAll() {
         System.out.println();
@@ -36,36 +35,35 @@ public class StoreController {
         return new ResponseEntity<>(stores, HttpStatus.OK);
     }
 
-    @GetMapping("/stores/{storeId}")
+    @GetMapping("{storeId}")
     @PreAuthorize("hasAuthority(\"" + StorePermission.READ + "\")")
     public ResponseEntity<Store> findById(@PathVariable Integer storeId) {
         Store store = storeService.findById(storeId);
         return new ResponseEntity<>(store, HttpStatus.OK);
     }
 
-    @PostMapping("/stores")
+    @PostMapping
     @PreAuthorize("hasAuthority(\"" + StorePermission.CREATE + "\")")
     public ResponseEntity<Store> createStore(@Valid @RequestBody StoreForm storeForm) {
         log.info(storeForm.toString());
         Store store = storeService.save(storeForm);
         return new ResponseEntity<>(store, HttpStatus.OK);
-//        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/stores/products")
-    public ResponseEntity<?> addProductToStore(@Valid @RequestBody AddProductToStoreForm addProductToStoreForm) {
-        storeService.addProductToStore(addProductToStoreForm);
+    @PutMapping("{storeId}/products/{productId}")
+    public ResponseEntity<?> addProductToStore(@PathVariable Integer storeId, @PathVariable Integer productId, @RequestParam Integer quantity) {
+        storeService.addProductToStore(storeId, productId, quantity);
         return new ResponseEntity<>(new MessageResponse("Add product to store successfully!"), HttpStatus.OK);
     }
 
-    @PutMapping("/stores/{storeId}")
+    @PutMapping("{storeId}")
     @PreAuthorize("hasAuthority(\"" + StorePermission.UPDATE + "\")")
     public ResponseEntity<Store> updateStore(@PathVariable Integer storeId, @Valid @RequestBody StoreForm storeForm) {
         Store store = storeService.update(storeId, storeForm);
         return new ResponseEntity<>(store, HttpStatus.OK);
     }
 
-    @DeleteMapping("/stores/{storeId}")
+    @DeleteMapping("{storeId}")
     @PreAuthorize("hasAuthority(\"" + StorePermission.DELETE + "\")")
     public ResponseEntity<?> deleteStore(@PathVariable Integer storeId) {
         String id = storeService.deleteById(storeId);
