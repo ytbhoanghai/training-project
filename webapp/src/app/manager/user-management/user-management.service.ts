@@ -22,7 +22,6 @@ export class UserManagementService {
   fetchById(id: number): Observable<IUser> {
     return this.http.get<IUser>(this.REQUEST_URL + id).pipe(
       map(user => {
-        console.log(user)
         return user;
       })
     );

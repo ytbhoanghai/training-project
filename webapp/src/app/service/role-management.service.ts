@@ -50,6 +50,10 @@ export class RoleManagementService {
     return this.httpClient.post<IRole>(SERVER_URL + '/roles', body);
   }
 
+  updateRole(id: number, body: IRoleBody): Observable<IRole> {
+    return this.httpClient.put<IRole>(SERVER_URL + `/roles/${id}`, body);
+  }
+
   private permissionListResolver(permissions: IPermission[]): IPermissionChoose[] {
     let arrTemp = { "CREATE": 0,  "READ": 1,  "UPDATE": 2,  "DELETE": 3 },
       temp: IPermissionChoose[] = [];

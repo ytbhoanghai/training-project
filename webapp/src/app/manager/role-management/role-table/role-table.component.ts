@@ -1,16 +1,25 @@
 import { Location } from '@angular/common';
 import { RoleManagementService } from './../../../service/role-management.service';
-import { IResource, IPermissionChoose, IRoleBody, IPermission, IRole } from './../role-management.component';
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  IResource,
+  IPermissionChoose,
+  IRoleBody,
+  IPermission,
+  IRole,
+} from './../role-management.component';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { NotificationService } from 'src/app/layouts/notification/notification.service';
 
 @Component({
   selector: 'app-role-table',
   templateUrl: './role-table.component.html',
-  styleUrls: ['./role-table.component.css']
+  styleUrls: ['./role-table.component.css'],
 })
 export class RoleTableComponent implements OnInit {
   @Input() type: string;
   @Input() role: IRole;
+  @Output() onSubmit = new EventEmitter();
+
   permissionIds: number[];
   resources: IResource[];
   roleName: string = '';
@@ -18,6 +27,7 @@ export class RoleTableComponent implements OnInit {
   constructor(
     private location: Location,
     private roleManagementService: RoleManagementService,
+    private notiSerive: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -28,7 +38,7 @@ export class RoleTableComponent implements OnInit {
   passData(): void {
     if (this.role) {
       this.roleName = this.role.name;
-      this.permissionIds = this.role.permissions.map(p => p.id);
+      this.permissionIds = this.role.permissions.map((p) => p.id);
     }
   }
 
@@ -41,26 +51,24 @@ export class RoleTableComponent implements OnInit {
   }
 
   findAllResources(): void {
-    this.roleManagementService
-      .findAllResources()
-      .subscribe((resources) => {
-        // this.checkGrantedPermmisonsOnUpdate(resources);
-        this.resources = resources
-      });
+    this.roleManagementService.findAllResources().subscribe((resources) => {
+      // this.checkGrantedPermmisonsOnUpdate(resources);
+      this.resources = this.checkGrantedPermmisonsOnUpdate(resources);
+    });
   }
 
   // TODO: Make it runs properly tomorrow
   checkGrantedPermmisonsOnUpdate(resources: IResource[]): IResource[] {
-    if (this.role && this.isUpdateMode()) {
-      resources.forEach(resource => {
-        resource.permissions.forEach(permission => {
-          if (this.permissionIds.includes(permission.id)) {
-            (permission as IPermissionChoose).choose = true;
-            console.log(permission.id)
-          }
-        })
-      })
-      return null;
+    // Exit on CREATE mode
+    if (!this.role || !this.isUpdateMode()) return resources;
+    // Check on granted permission and check on checkbox
+    for (let i = 0; i < resources.length; i++) {
+      for (let j = 0; j < resources[i].permissions.length; j++) {
+        let currentPermisson = resources[i].permissions[j];
+        if (this.permissionIds.includes(currentPermisson.id)) {
+          currentPermisson.choose = true;
+        }
+      }
     }
     return resources;
   }
@@ -125,14 +133,21 @@ export class RoleTableComponent implements OnInit {
   }
 
   submitForm(): void {
+    if (!this.roleName) {
+      this.notiSerive.showWaring('Invalid role name. Please check again!');
+      return;
+    }
+
     const body: IRoleBody = {
       name: this.roleName,
-      permissions: this.getPermissionsFromResource(this.resources)
-    }
-    this.roleManagementService.createRole(body).subscribe(role => {
-      console.log("Inserted role", role);
-      this.back();
-    })
+      permissions: this.getPermissionsFromResource(this.resources),
+    };
+
+    this.onSubmit.emit(body);
+    // this.roleManagementService.createRole(body).subscribe((role) => {
+    //   console.log('Inserted role', role);
+    //   this.back();
+    // });
   }
 
   getPermissionsFromResource(resources: IResource[]): number[] {

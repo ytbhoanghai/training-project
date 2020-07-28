@@ -1,3 +1,4 @@
+import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { RoleUpdateModalComponent } from './../../modal/role-update-modal/role-update-modal.component';
 import { Component, OnInit } from '@angular/core';
 import { RoleManagementService } from "../../service/role-management.service";
@@ -19,7 +20,8 @@ export class RoleManagementComponent implements OnInit {
   constructor(
     private roleManagementService: RoleManagementService,
     private modalService: MDBModalService,
-    private ngbService: NgbModal) { }
+    private ngbService: NgbModal,
+    private notiSerive: NotificationService) { }
 
   ngOnInit(): void {
     this.roleManagementService.findAllRoles()
@@ -64,6 +66,7 @@ export class RoleManagementComponent implements OnInit {
 
           // hide modal confirm
           this.confirmModalRef.hide();
+          this.notiSerive.showSuccess('Role deleted successfully!');
         })
       }
     })
@@ -97,6 +100,7 @@ export interface IPermission {
   name: string;
   resourceName: string;
   type: string;
+  choose?: boolean;
 }
 
 export interface IPermissionChoose extends IPermission {

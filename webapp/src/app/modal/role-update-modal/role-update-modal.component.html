@@ -1,9 +1,13 @@
 <div class="modal-header">
-  <button type="button" class="close pull-right" aria-label="Close">
+  <button type="button" class="close pull-right" aria-label="Close" (click)="hide()">
     <span aria-hidden="true">×</span>
   </button>
   <h4 class="modal-title w-100" id="myModalLabel">Update role</h4>
 </div>
 <div class="modal-body">
-  <app-role-table [type]="'update'" [role]="role"></app-role-table>
+  <app-role-table
+    [type]="'update'"
+    [role]="role"
+    (onSubmit)="handleSubmit(role.id, $event)"
+  ></app-role-table>
 </div>

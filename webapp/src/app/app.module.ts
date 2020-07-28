@@ -30,6 +30,8 @@ import { UserUpdateModalComponent } from './modal/user-update-modal/user-update-
 import { RoleUpdateModalComponent } from './modal/role-update-modal/role-update-modal.component';
 import { StoreUpdateModalComponent } from './modal/store-update-modal/store-update-modal.component';
 import { StoreDetailsModalComponent } from './modal/store-details-modal/store-details-modal.component';
+import { ProductDetailsComponent } from './modal/product-details/product-details.component';
+import { ProductUpdateComponent } from './modal/product-update/product-update.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { StoreDetailsModalComponent } from './modal/store-details-modal/store-de
     RoleUpdateModalComponent,
     StoreUpdateModalComponent,
     StoreDetailsModalComponent,
+    ProductDetailsComponent,
+    ProductUpdateComponent,
   ],
   imports: [
     BrowserModule,
