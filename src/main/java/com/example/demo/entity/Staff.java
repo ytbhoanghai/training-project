@@ -54,11 +54,12 @@ public class Staff {
     @JoinColumn(name = "id_store")
     private Store store;
 
+    @JsonIgnore
     private Type type;
 
     private Integer level;
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "staff_role",
@@ -70,20 +71,18 @@ public class Staff {
         ADMIN, OTHER
     }
 
-    public static Staff updateData(Staff staff, StaffForm staffForm) {
-        staff.setName(staffForm.getName());
-        staff.setUsername(staffForm.getUsername());
-        staff.setEmail(staffForm.getEmail());
-        staff.setAddress(staffForm.getAddress());
-        return staff;
+    public Boolean isAdmin() {
+        return this.type.equals(Type.ADMIN);
     }
 
-    public static Staff updateRole(Staff staff, Set<Role> roles) {
-        staff.setRoles(roles);
-        return staff;
-    }
+    public Staff updateData(StaffForm staffForm, Store store, Set<Role> roles) {
+        this.name = staffForm.getName();
+        this.username = staffForm.getUsername();
+        this.email = staffForm.getEmail();
+        this.address = staffForm.getAddress();
+        this.roles = roles;
+        this.store = store;
 
-    public boolean isRootAdmin() {
-        return this.getType().equals(ROOT_ADMIN);
+        return this;
     }
 }

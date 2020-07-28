@@ -1,6 +1,9 @@
+import { NotificationService } from 'src/app/layouts/notification/notification.service';
+import { RoleUpdateModalComponent } from './../../modal/role-update-modal/role-update-modal.component';
 import { Component, OnInit } from '@angular/core';
 import { RoleManagementService } from "../../service/role-management.service";
 import {MDBModalRef, MDBModalService} from "ng-uikit-pro-standard";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import {ViewRoleDetailsManagementComponent} from "../../modal/view-role-details-management/view-role-details-management.component";
 import {ConfirmModalComponent} from "../../modal/confirm-modal/confirm-modal.component";
 
@@ -16,7 +19,9 @@ export class RoleManagementComponent implements OnInit {
 
   constructor(
     private roleManagementService: RoleManagementService,
-    private modalService: MDBModalService) { }
+    private modalService: MDBModalService,
+    private ngbService: NgbModal,
+    private notiSerive: NotificationService) { }
 
   ngOnInit(): void {
     this.roleManagementService.findAllRoles()
@@ -31,6 +36,15 @@ export class RoleManagementComponent implements OnInit {
           class: 'modal-dialog-centered modal-xl',
           data: { role } });
       })
+  }
+
+  openUpdateModal(role: IRole): void {
+    this.roleManagementService.findRoleById(role.id).subscribe(role => {
+      this.modalService.show(RoleUpdateModalComponent, {
+            class: 'modal-xl',
+            data: { role }
+      });
+    })
   }
 
   deleteRole(role: IRole): void {
@@ -52,9 +66,14 @@ export class RoleManagementComponent implements OnInit {
 
           // hide modal confirm
           this.confirmModalRef.hide();
+          this.notiSerive.showSuccess('Role deleted successfully!');
         })
       }
     })
+  }
+
+  openModal(modalName): void {
+    this.ngbService.open(modalName);
   }
 }
 
@@ -71,11 +90,17 @@ export interface IRole {
   permissions: IPermission[];
 }
 
+export interface IRoleBody {
+  name: string,
+  permissions: number[]
+}
+
 export interface IPermission {
   id: number;
   name: string;
   resourceName: string;
   type: string;
+  choose?: boolean;
 }
 
 export interface IPermissionChoose extends IPermission {

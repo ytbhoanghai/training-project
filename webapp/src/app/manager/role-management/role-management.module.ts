@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { RoleCreateComponent } from './role-create/role-create.component';
 import {FormsModule} from "@angular/forms";
+import { RoleTableComponent } from './role-table/role-table.component';
 
 @NgModule({
-  declarations: [RoleCreateComponent],
+  declarations: [RoleCreateComponent, RoleTableComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
@@ -15,5 +16,6 @@ import {FormsModule} from "@angular/forms";
     ]),
     FormsModule,
   ],
+  exports: [RoleTableComponent]
 })
 export class RoleManagementModule {}

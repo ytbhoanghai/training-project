@@ -4,6 +4,7 @@ import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
 import com.example.demo.form.StaffForm;
 import com.example.demo.form.UpdatePasswordForm;
+import com.example.demo.response.StaffResponse;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface StaffService {
 
     List<Staff> findAllByStore(Store store);
 
-    List<Staff> findAll();
+    List<StaffResponse> findAll();
 
     Staff findById(Integer id);
 

@@ -3,7 +3,7 @@ import { HttpClient} from "@angular/common/http";
 import {Observable, of} from "rxjs";
 import { SERVER_URL } from "../core/constants/api.constants";
 import { catchError, map, tap } from "rxjs/operators";
-import {IPermission, IPermissionChoose, IResource, IRole} from "../manager/role-management/role-management.component";
+import {IPermission, IPermissionChoose, IResource, IRole, IRoleBody} from "../manager/role-management/role-management.component";
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +44,14 @@ export class RoleManagementService {
         return resources;
       })
     )
+  }
+
+  createRole(body: IRoleBody): Observable<IRole> {
+    return this.httpClient.post<IRole>(SERVER_URL + '/roles', body);
+  }
+
+  updateRole(id: number, body: IRoleBody): Observable<IRole> {
+    return this.httpClient.put<IRole>(SERVER_URL + `/roles/${id}`, body);
   }
 
   private permissionListResolver(permissions: IPermission[]): IPermissionChoose[] {

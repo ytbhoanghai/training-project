@@ -1,38 +1,5 @@
 <div class="container">
-  <div class="row mt-5 mb-3">
-    <a class="btn btn-outline-secondary" (click)="back()"><i class="fas fa-backward"></i></a>
-
-    <div class="d-flex w-100 justify-content-end">
-      <div class="form-group mx-sm-3 my-2">
-        <label for="inputRoleName" class="sr-only">Role Name</label>
-        <input type="text" class="form-control" id="inputRoleName" placeholder="Type in role name">
-      </div>
-      <button type="submit" class="btn btn-primary my-2 mr-5">Create</button>
-    </div>
-  </div>
-  <div class="row warp-table">
-    <table class="table table-sm table-striped mx-auto">
-      <caption class="text-primary">Permissions List</caption>
-      <thead>
-      <tr class="d-flex">
-        <th class="col-6 pl-2"># Resource Name</th>
-        <th class="text-center col-1">Create</th>
-        <th class="text-center col-1">Read</th>
-        <th class="text-center col-1">Update</th>
-        <th class="text-center col-1">Delete</th>
-        <th class="text-center col-2">All<i class="far fa-trash-alt ml-2 remove-all-checked" title="remove all checked" (click)="removeAllChecked()"></i></th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr class="d-flex" *ngFor="let resource of resources">
-        <td class="col-6 pl-2">{{resource.name}}</td>
-        <td class="text-center col-1" *ngFor="let permission of resource.permissions">
-          <input type="checkbox" class="form-check-input ml-0" [(ngModel)]="permission.choose" (change)="onChangeButtonCheckPermission(permission, resource)">
-        </td>
-        <td class="text-center col-2"><input type="checkbox" class="form-check-input ml-0" [(ngModel)]="resource.isCheckAllPermissions" (change)="onChangeButtonCheckAllPermissions(resource.name)"></td>
-      </tr>
-
-      </tbody>
-    </table>
-  </div>
+  <!-- <form ngNativeValidate> -->
+  <a class="btn btn-outline-secondary" (click)="back()"><i class="fas fa-backward"></i></a>
+  <app-role-table (onSubmit)="handleSubmit($event)"></app-role-table>
 </div>

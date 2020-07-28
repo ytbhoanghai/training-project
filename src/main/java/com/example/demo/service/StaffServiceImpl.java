@@ -3,24 +3,25 @@ package com.example.demo.service;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
+import com.example.demo.exception.RoleNotFoundException;
 import com.example.demo.exception.StaffNotFoundException;
-import com.example.demo.exception.StoreNotFoundException;
 import com.example.demo.exception.WrongOldPasswordException;
 import com.example.demo.form.StaffForm;
 import com.example.demo.form.UpdatePasswordForm;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.StaffRepository;
 import com.example.demo.repository.StoreRepository;
+import com.example.demo.response.StaffResponse;
 import com.example.demo.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service(value = "staffService")
 public class StaffServiceImpl implements StaffService {
@@ -57,8 +58,11 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public List<Staff> findAll() {
-        return staffRepository.findAll();
+    public List<StaffResponse> findAll() {
+        Staff currentStaff = securityUtil.getCurrentStaff();
+        return staffRepository.findAll().stream()
+                .map(staff -> convertStaffToStaffResponse(staff, currentStaff))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -69,13 +73,13 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public Staff save(StaffForm staffForm) {
-        Staff staff = securityUtil.getCurrentStaff();
+        Staff currentStaff = securityUtil.getCurrentStaff();
 
         Store store = null;
         if (staffForm.getStoreId() != null) {
             store = storeRepository
                     .findById(staffForm.getStoreId())
-                    .orElseThrow(() -> new StoreNotFoundException(staffForm.getStoreId()));
+                    .orElseThrow(null);
         }
 
         Set<Role> roles = new HashSet<>();
@@ -83,7 +87,7 @@ public class StaffServiceImpl implements StaffService {
             roles = roleRepository.findAllByIdIsIn(staffForm.getRoleIds());
         }
 
-        Staff newStaff = StaffForm.buildStaff(staffForm, staff, store, roles, staff.getLevel() + 1);
+        Staff newStaff = StaffForm.buildStaff(staffForm, currentStaff, store, roles, currentStaff.getLevel() + 1);
         newStaff.setPassword(new BCryptPasswordEncoder().encode(staffForm.getPassword()));
 
         return staffRepository.save(newStaff);
@@ -96,8 +100,34 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public Staff update(Integer id, StaffForm staffForm) {
+        Staff currentStaff = securityUtil.getCurrentStaff();
         Staff staff = findById(id);
-        return staffRepository.save(Staff.updateData(staff, staffForm));
+
+        // current user not allowed update staff info (level less than)
+        if (!isAllowedUpdate(staff, currentStaff)) {
+            throw new AccessDeniedException("Access Denied !!!");
+        }
+        Store store = null;
+        if (staffForm.getStoreId() != null) {
+            store = storeRepository.findById(staffForm.getStoreId())
+                    .orElse(null);
+        }
+
+        Set<Role> roles = new HashSet<>();
+        if (!staffForm.getRoleIds().isEmpty()) {
+            if (isAllowedUpdateRole(staff, currentStaff)) {
+                if (staff.isAdmin()) {
+                    Role roleAdmin = roleRepository.findById(1)
+                            .orElseThrow(() -> new RoleNotFoundException(1));
+                    roles.add(roleAdmin);
+                }
+                roles.addAll(roleRepository.findAllByIdIsIn(staffForm.getRoleIds()));
+            } else {
+                throw new AccessDeniedException("You not have permission to do update roles");
+            }
+        }
+
+        return staffRepository.save(staff.updateData(staffForm, store, roles));
     }
 
     @Override
@@ -116,11 +146,39 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public String deleteById(Integer id) {
-        try {
-            staffRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new StaffNotFoundException(id);
+        Staff staff = staffRepository.findById(id)
+                .orElseThrow(() -> new StaffNotFoundException(id));
+
+        if (!isAllowedDelete(staff, securityUtil.getCurrentStaff())) {
+            throw new AccessDeniedException("Access Denied !!!");
         }
+
+        staffRepository.deleteById(id);
+
         return String.valueOf(id);
+    }
+
+    private StaffResponse convertStaffToStaffResponse(Staff staff, Staff currentStaff) {
+        return new StaffResponse(staff,
+                isAllowedUpdate(staff, currentStaff),
+                isAllowedDelete(staff, currentStaff));
+    }
+
+    private Boolean isAllowedUpdate(Staff staff, Staff currentStaff) {
+        return currentStaff.isAdmin()
+                || currentStaff.getLevel() < staff.getLevel()
+                || staff.equals(currentStaff);
+    }
+
+    private Boolean isAllowedUpdateRole(Staff staff, Staff currentStaff) {
+        return currentStaff.isAdmin()
+                || currentStaff.getLevel() < staff.getLevel();
+    }
+
+    private Boolean isAllowedDelete(Staff staff, Staff currentStaff) {
+        if (staff.getLevel() == 0) {
+            return false;
+        }
+        return currentStaff.isAdmin() || currentStaff.getLevel() < staff.getLevel();
     }
 }

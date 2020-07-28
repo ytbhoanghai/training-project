@@ -1,7 +1,9 @@
+import { RoleManagementModule } from './manager/role-management/role-management.module';
+import { StoreManagementModule } from './manager/store-management/store-management.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { CoreModule } from './core/core.module'
-import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
+import { CoreModule } from './core/core.module';
+import { MDBBootstrapModulesPro, ToastModule } from 'ng-uikit-pro-standard';
 import { MDBSpinningPreloader } from 'ng-uikit-pro-standard';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -17,9 +19,19 @@ import { CategoryManagementComponent } from './manager/category-management/categ
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HomeComponent } from './home/home.component';
 import { LoginModalComponent } from './modal/login-modal/login-modal.component';
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ViewRoleDetailsManagementComponent } from './modal/view-role-details-management/view-role-details-management.component';
 import { ConfirmModalComponent } from './modal/confirm-modal/confirm-modal.component';
+import { UserManagementModule } from './manager/user-management/user-management.module';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserDetailsModalComponent } from './modal/user-details-modal/user-details-modal.component';
+import { UserUpdateModalComponent } from './modal/user-update-modal/user-update-modal.component';
+import { RoleUpdateModalComponent } from './modal/role-update-modal/role-update-modal.component';
+import { StoreUpdateModalComponent } from './modal/store-update-modal/store-update-modal.component';
+import { StoreDetailsModalComponent } from './modal/store-details-modal/store-details-modal.component';
+import { ProductDetailsComponent } from './modal/product-details/product-details.component';
+import { ProductUpdateComponent } from './modal/product-update/product-update.component';
 
 @NgModule({
   declarations: [
@@ -35,19 +47,32 @@ import { ConfirmModalComponent } from './modal/confirm-modal/confirm-modal.compo
     HomeComponent,
     LoginModalComponent,
     ViewRoleDetailsManagementComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    UserDetailsModalComponent,
+    UserUpdateModalComponent,
+    RoleUpdateModalComponent,
+    StoreUpdateModalComponent,
+    StoreDetailsModalComponent,
+    ProductDetailsComponent,
+    ProductUpdateComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        CoreModule,
-        NgbModule,
-        MDBBootstrapModulesPro.forRoot(),
-        FormsModule,
-        ReactiveFormsModule,
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    CoreModule,
+    NgbModule,
+    MDBBootstrapModulesPro.forRoot(),
+    FormsModule,
+    ReactiveFormsModule,
+    UserManagementModule,
+    StoreManagementModule,
+    RoleManagementModule,
+    ToastModule.forRoot(),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+  ],
   entryComponents: [LoginModalComponent],
   providers: [MDBSpinningPreloader],
-  bootstrap: [ContentComponent]
+  bootstrap: [ContentComponent],
 })
-export class AppModule { }
+export class AppModule {}

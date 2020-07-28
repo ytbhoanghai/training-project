@@ -20,11 +20,16 @@ public class SimpleRoleResponse {
 
     private Date createdAt;
 
-    public static SimpleRoleResponse from(Role role) {
+    private Boolean allowUpdate;
+
+    private Boolean allowDelete;
+
+    public static SimpleRoleResponse from(Role role, Boolean allowUpdate, Boolean allowDelete) {
         return SimpleRoleResponse.builder()
                 .id(role.getId())
                 .name(role.getName())
                 .createdAt(role.getCreatedAt())
-                .build();
+                .allowUpdate(allowUpdate)
+                .allowDelete(allowDelete).build();
     }
 }

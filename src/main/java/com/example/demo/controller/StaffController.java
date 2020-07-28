@@ -4,6 +4,7 @@ import com.example.demo.entity.Staff;
 import com.example.demo.form.StaffForm;
 import com.example.demo.form.UpdatePasswordForm;
 import com.example.demo.response.MessageResponse;
+import com.example.demo.response.StaffResponse;
 import com.example.demo.security.constants.StaffPermission;
 import com.example.demo.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class StaffController {
 
     @GetMapping
 //    @PreAuthorize("hasAuthority(\"" + StaffPermission.READ + "\")")
-    public ResponseEntity<List<Staff>> findAll() {
-        List<Staff> staffs = staffService.findAll();
+    public ResponseEntity<List<StaffResponse>> findAll() {
+        List<StaffResponse> staffs = staffService.findAll();
         return new ResponseEntity<>(staffs, HttpStatus.OK);
     }
 

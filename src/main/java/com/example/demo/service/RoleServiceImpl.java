@@ -44,9 +44,13 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<SimpleRoleResponse> findAll() {
-        List<Role> roleList = roleRepository.findAll();
+        Staff staff = securityUtil.getCurrentStaff();
+        List<Role> roleList = roleRepository.findAll(true);
         return roleList.stream()
-                .map(SimpleRoleResponse::from)
+                .map(role -> SimpleRoleResponse.from(
+                        role,
+                        isAllowedUpdate(role, staff),
+                        isAllowedDelete(role, staff)))
                 .collect(Collectors.toList());
     }
 
@@ -60,17 +64,18 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role save(RoleForm roleForm) {
         Staff createByStaff = securityUtil.getCurrentStaff();
-
         Set<Permission> permissions = permissionService.findAllByIdIsIn(roleForm.getPermissions());
+
         return roleRepository.save(RoleForm.buildRole(roleForm.getName(), createByStaff, permissions));
     }
 
     @Override
     public Role update(Integer id, RoleForm roleForm) {
+        Staff currentStaff = securityUtil.getCurrentStaff();
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new RoleNotFoundException(id));
 
-        if (!isAllowed(role)) {
+        if (!isAllowedUpdate(role, currentStaff)) {
             throw new AccessDeniedException("Access Denied !!!");
         }
 
@@ -82,21 +87,27 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void delete(Integer id) {
+        Staff currentStaff = securityUtil.getCurrentStaff();
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new RoleNotFoundException(id));
 
-        if (!isAllowed(role)) {
+        if (!isAllowedDelete(role, currentStaff)) {
             throw new AccessDeniedException("Access Denied !!!");
         }
 
         roleRepository.deleteById(role.getId());
     }
 
-    private boolean isAllowed(Role role) {
-        Staff staff = securityUtil.getCurrentStaff();
-        if (staff.getLevel() > role.getLevel()) {
-            return true;
+    private Boolean isAllowedUpdate(Role role, Staff currentStaff) {
+        return currentStaff.getLevel() < role.getLevel()
+                || role.getCreatedBy().equals(currentStaff);
+    }
+
+    private Boolean isAllowedDelete(Role role, Staff currentStaff) {
+        if (role.getGrantable() == false) {
+            return false;
         }
-        return staff.getLevel().equals(role.getLevel()) && role.getCreatedBy().equals(staff);
+        return currentStaff.getLevel() < role.getLevel()
+                || role.getCreatedBy().equals(currentStaff);
     }
 }
