@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Permission;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
@@ -13,11 +14,13 @@ import com.example.demo.repository.StaffRepository;
 import com.example.demo.repository.StoreRepository;
 import com.example.demo.response.StaffResponse;
 import com.example.demo.security.SecurityUtil;
+import com.example.demo.security.constants.StaffPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -114,17 +117,19 @@ public class StaffServiceImpl implements StaffService {
         }
 
         Set<Role> roles = new HashSet<>();
+        if (staff.isAdmin()) {
+            Role roleAdmin = roleRepository.findById(1)
+                    .orElseThrow(() -> new RoleNotFoundException(1));
+            roles.add(roleAdmin);
+        }
         if (!staffForm.getRoleIds().isEmpty()) {
             if (isAllowedUpdateRole(staff, currentStaff)) {
-                if (staff.isAdmin()) {
-                    Role roleAdmin = roleRepository.findById(1)
-                            .orElseThrow(() -> new RoleNotFoundException(1));
-                    roles.add(roleAdmin);
-                }
                 roles.addAll(roleRepository.findAllByIdIsIn(staffForm.getRoleIds()));
             } else {
                 throw new AccessDeniedException("You not have permission to do update roles");
             }
+        } else {
+            roles.addAll(staff.getRoles());
         }
 
         return staffRepository.save(staff.updateData(staffForm, store, roles));
@@ -158,6 +163,18 @@ public class StaffServiceImpl implements StaffService {
         return String.valueOf(id);
     }
 
+    @Override
+    public List<Integer> getPermissionIdsOfCurrentStaff(Staff currentStaff) {
+        List<Integer> result = new ArrayList<>();
+        currentStaff.getRoles().forEach(role -> {
+            List<Integer> permissionIds = role.getPermissions().stream()
+                    .map(Permission::getId)
+                    .collect(Collectors.toList());
+            result.addAll(permissionIds);
+        });
+        return result;
+    }
+
     private StaffResponse convertStaffToStaffResponse(Staff staff, Staff currentStaff) {
         return new StaffResponse(staff,
                 isAllowedUpdate(staff, currentStaff),
@@ -165,20 +182,29 @@ public class StaffServiceImpl implements StaffService {
     }
 
     private Boolean isAllowedUpdate(Staff staff, Staff currentStaff) {
-        return currentStaff.isAdmin()
-                || currentStaff.getLevel() < staff.getLevel()
-                || staff.equals(currentStaff);
+        if (currentStaff.hasPermission(StaffPermission.UPDATE)) {
+            return currentStaff.isAdmin()
+                    || currentStaff.getLevel() < staff.getLevel()
+                    || staff.equals(currentStaff);
+        }
+        return false;
     }
 
     private Boolean isAllowedUpdateRole(Staff staff, Staff currentStaff) {
-        return currentStaff.isAdmin()
-                || currentStaff.getLevel() < staff.getLevel();
+        if (currentStaff.hasPermission(StaffPermission.UPDATE)) {
+            return currentStaff.isAdmin()
+                    || currentStaff.getLevel() < staff.getLevel();
+        }
+        return false;
     }
 
     private Boolean isAllowedDelete(Staff staff, Staff currentStaff) {
-        if (staff.getLevel() == 0) {
-            return false;
+        if (currentStaff.hasPermission(StaffPermission.DELETE)) {
+            if (staff.getLevel() == 0) {
+                return false;
+            }
+            return currentStaff.isAdmin() || currentStaff.getLevel() < staff.getLevel();
         }
-        return currentStaff.isAdmin() || currentStaff.getLevel() < staff.getLevel();
+        return false;
     }
 }

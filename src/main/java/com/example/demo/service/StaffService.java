@@ -10,22 +10,24 @@ import java.util.List;
 
 public interface StaffService {
 
-    Staff findByUsername(String username);
+    List<StaffResponse> findAll();
 
     List<Staff> findAllByStore(Store store);
 
-    List<StaffResponse> findAll();
+    List<Staff> saveAll(List<Staff> staff);
+
+    Staff findByUsername(String username);
 
     Staff findById(Integer id);
 
     Staff save(StaffForm staffForm);
 
-    List<Staff> saveAll(List<Staff> staff);
-
     Staff update(Integer id, StaffForm staffForm);
 
-    boolean updatePassword(UpdatePasswordForm updatePasswordForm);
-
     String deleteById(Integer id);
+
+    List<Integer> getPermissionIdsOfCurrentStaff(Staff currentStaff);
+
+    boolean updatePassword(UpdatePasswordForm updatePasswordForm);
 
 }

@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Staff;
 import com.example.demo.response.AccountResponse;
+import com.example.demo.security.SecurityUtil;
 import com.example.demo.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,12 @@ import java.security.Principal;
 public class AccountController {
 
     private StaffService staffService;
+    private SecurityUtil securityUtil;
 
     @Autowired
-    public AccountController(StaffService staffService) {
+    public AccountController(StaffService staffService, SecurityUtil securityUtil) {
         this.staffService = staffService;
+        this.securityUtil = securityUtil;
     }
 
     @GetMapping
@@ -29,4 +32,9 @@ public class AccountController {
         return ResponseEntity.ok(AccountResponse.build(staff));
     }
 
+    @GetMapping(value = "permissions")
+    public ResponseEntity<?> getPermissionsOfCurrentStaff() {
+        Staff currentStaff = securityUtil.getCurrentStaff();
+        return ResponseEntity.ok(staffService.getPermissionIdsOfCurrentStaff(currentStaff));
+    }
 }

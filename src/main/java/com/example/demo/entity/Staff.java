@@ -75,6 +75,15 @@ public class Staff {
         return this.type.equals(Type.ADMIN);
     }
 
+    public Boolean hasPermission(String permissionName) {
+        for (Role role : roles) {
+            for (Permission permission : role.getPermissions()) {
+                if (permission.getName().equals(permissionName)) return true;
+            }
+        }
+        return false;
+    }
+
     public Staff updateData(StaffForm staffForm, Store store, Set<Role> roles) {
         this.name = staffForm.getName();
         this.username = staffForm.getUsername();

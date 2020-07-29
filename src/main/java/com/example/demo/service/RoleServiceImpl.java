@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.Permission;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.Staff;
+import com.example.demo.exception.PermissionInvalidException;
 import com.example.demo.exception.RoleNotCreateByCurrentStaffException;
 import com.example.demo.exception.RoleNotFoundException;
 import com.example.demo.form.RoleForm;
@@ -10,6 +11,7 @@ import com.example.demo.repository.RoleRepository;
 import com.example.demo.response.RoleResponse;
 import com.example.demo.response.SimpleRoleResponse;
 import com.example.demo.security.SecurityUtil;
+import com.example.demo.security.constants.RolePermission;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -26,15 +28,15 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl implements RoleService {
 
     private RoleRepository roleRepository;
-    private StaffServiceImpl staffService;
-    private PermissionServiceImpl permissionService;
+    private StaffService staffService;
+    private PermissionService permissionService;
     private SecurityUtil securityUtil;
 
     @Autowired
     public RoleServiceImpl(RoleRepository roleRepository,
                            SecurityUtil securityUtil,
-                           StaffServiceImpl staffService,
-                           PermissionServiceImpl permissionService) {
+                           StaffService staffService,
+                           PermissionService permissionService) {
 
         this.roleRepository = roleRepository;
         this.securityUtil = securityUtil;
@@ -63,10 +65,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role save(RoleForm roleForm) {
-        Staff createByStaff = securityUtil.getCurrentStaff();
+        Staff currentStaff = securityUtil.getCurrentStaff();
+
+        handlePermissionsIsValid(currentStaff, roleForm.getPermissions()); // throw exception if not valid
         Set<Permission> permissions = permissionService.findAllByIdIsIn(roleForm.getPermissions());
 
-        return roleRepository.save(RoleForm.buildRole(roleForm.getName(), createByStaff, permissions));
+        return roleRepository.save(RoleForm.buildRole(roleForm.getName(), currentStaff, permissions));
     }
 
     @Override
@@ -79,6 +83,7 @@ public class RoleServiceImpl implements RoleService {
             throw new AccessDeniedException("Access Denied !!!");
         }
 
+        handlePermissionsIsValid(currentStaff, roleForm.getPermissions()); // throw exception if not valid
         Set<Permission> permissions = permissionService.findAllByIdIsIn(roleForm.getPermissions());
         return roleRepository.save(role.updateData(
                 roleForm.getName(),
@@ -99,15 +104,36 @@ public class RoleServiceImpl implements RoleService {
     }
 
     private Boolean isAllowedUpdate(Role role, Staff currentStaff) {
-        return currentStaff.getLevel() < role.getLevel()
-                || role.getCreatedBy().equals(currentStaff);
+        if (currentStaff.hasPermission(RolePermission.UPDATE)) {
+            return currentStaff.getLevel() < role.getLevel()
+                    || role.getCreatedBy().equals(currentStaff);
+        }
+        return false;
     }
 
     private Boolean isAllowedDelete(Role role, Staff currentStaff) {
-        if (role.getGrantable() == false) {
+        if (!currentStaff.hasPermission(RolePermission.DELETE) || !role.getGrantable()) {
             return false;
         }
         return currentStaff.getLevel() < role.getLevel()
                 || role.getCreatedBy().equals(currentStaff);
+    }
+
+    private void handlePermissionsIsValid(Staff currentStaff, Set<Integer> permissions) {
+        String message = "Permissions";
+        List<Integer> permissionsList = staffService.getPermissionIdsOfCurrentStaff(currentStaff);
+
+        int count = 0;
+        for (Integer id : permissions) {
+            if (permissionsList.contains(id)) {
+                count += 1;
+            } else {
+                message += (" " + id);
+            }
+        }
+        if (count != permissions.size()) {
+            message += " is not allowed to use";
+            throw new PermissionInvalidException(message);
+        }
     }
 }
