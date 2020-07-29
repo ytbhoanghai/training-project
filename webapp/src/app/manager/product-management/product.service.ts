@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import { Observable } from 'rxjs';
 import { SERVER_URL } from './../../core/constants/api.constants';
 import { HttpClient } from '@angular/common/http';
@@ -9,6 +10,9 @@ import { ICategory } from '../category-management/category.service';
 })
 export class ProductService {
   private REQUEST_URL = SERVER_URL + '/products/';
+
+  public updateSubject = new Subject();
+  public updateObservable$ = this.updateSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 

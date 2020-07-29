@@ -39,11 +39,12 @@ export class StoreFormComponent implements OnInit {
     if (this.storeForm.valid) {
       return this.onSubmit.emit(this.storeForm.value);
     }
+    console.log(this.storeForm)
     this.notiService.showWaring('Invalid form. Please check again!');
   }
 
   fillDataToForm(): void {
     if (!this.store) return;
-    this.storeForm.patchValue(this.store)
+    this.storeForm.patchValue(this.store);
   }
 }

@@ -24,6 +24,10 @@ export class StoreManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchStores();
+    this.storeService.updateObservable$.subscribe((store: IStore) => {
+      const index: number = this.stores.findIndex(s => s.id === store.id);
+      this.stores[index] = store;
+    })
   }
 
   fetchStores(): void {
@@ -45,15 +49,11 @@ export class StoreManagementComponent implements OnInit {
   }
 
   deleteStore(id: number): void {
-    this.confirmModalRef = this.confirmService.show('DeleteStore');
-    this.confirmModalRef.content.action.subscribe(({ value, key }) => {
-      if (key === 'DeleteStore' && value === ConfirmModalComponent.YES) {
+    this.confirmService.show().onYes(() => {
         this.storeService.deleteById(id).subscribe(() => {
           this.stores = this.stores.filter(store => store.id !== id);
           this.notiService.showSuccess('Delete successfully!');
         })
-        this.confirmModalRef.hide();
-      }
     })
   }
 }

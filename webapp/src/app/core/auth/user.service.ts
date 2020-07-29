@@ -24,6 +24,8 @@ export type IUser = {
   providedIn: 'root',
 })
 export class UserService {
+  REQUEST_URL: string = SERVER_URL + '/account/';
+
   private currentUserSubject: BehaviorSubject<IUser>;
   currentUser$: Observable<IUser>;
 
@@ -33,7 +35,7 @@ export class UserService {
   }
 
   fetchUserInfo(): Observable<IUser> {
-    return this.http.get<IUser>(SERVER_URL + '/account').pipe(
+    return this.http.get<IUser>(this.REQUEST_URL).pipe(
       map((user) => {
         this.currentUserSubject.next(user);
         return user;
@@ -43,6 +45,10 @@ export class UserService {
         return of(null)
       } )
     );
+  }
+
+  fetchGrantedPemissions(): Observable<number[]> {
+    return this.http.get<number[]>(this.REQUEST_URL + 'permissions');
   }
 
   getCurrentUser(): IUser {
@@ -56,4 +62,5 @@ export class UserService {
   isLogin(): boolean {
     return this.getCurrentUser() !== null;
   }
+
 }

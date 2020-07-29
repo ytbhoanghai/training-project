@@ -28,6 +28,7 @@ export class UserUpdateModalComponent implements OnInit {
     this.userService.update(id, user).subscribe((user) => {
       this.modalService.userUpdateModalRef.hide();
       this.notiService.showSuccess();
+      this.userService.updateSubject.next(user);
     });
   }
 

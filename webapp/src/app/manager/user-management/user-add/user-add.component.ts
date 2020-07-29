@@ -25,7 +25,6 @@ export class UserAddComponent implements OnInit {
   }
 
   handleSubmit(user): void {
-    console.log('RECEIVED', user);
     this.userService.save(user).subscribe((user) => {
       this.notiService.showSuccess('Added successfully!');
       this.back();

@@ -1,3 +1,5 @@
+import { ConfirmModalService } from './../../../service/confirm-modal.service';
+import { UserService } from 'src/app/core/auth/user.service';
 import { Location } from '@angular/common';
 import { RoleManagementService } from './../../../service/role-management.service';
 import {
@@ -9,6 +11,7 @@ import {
 } from './../role-management.component';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
+import { compileNgModule } from '@angular/compiler';
 
 @Component({
   selector: 'app-role-table',
@@ -20,17 +23,22 @@ export class RoleTableComponent implements OnInit {
   @Input() role: IRole;
   @Output() onSubmit = new EventEmitter();
 
+  // Just in use when updating
   permissionIds: number[];
   resources: IResource[];
   roleName: string = '';
+  grantedPemissions: number[] = [];
 
   constructor(
     private location: Location,
     private roleManagementService: RoleManagementService,
-    private notiSerive: NotificationService
+    private notiSerive: NotificationService,
+    private userService: UserService,
+    private confirmService: ConfirmModalService
   ) {}
 
   ngOnInit(): void {
+    this.fetchCurrentGrantedPemissons();
     this.findAllResources();
     this.passData();
   }
@@ -40,6 +48,16 @@ export class RoleTableComponent implements OnInit {
       this.roleName = this.role.name;
       this.permissionIds = this.role.permissions.map((p) => p.id);
     }
+  }
+
+  fetchCurrentGrantedPemissons(): void {
+    this.userService.fetchGrantedPemissions().subscribe(permissions => {
+      this.grantedPemissions = permissions;
+    })
+  }
+
+  canGrantPermission(permission: IPermission): boolean {
+    return this.grantedPemissions.includes(permission.id);
   }
 
   isUpdateMode(): boolean {
@@ -52,9 +70,20 @@ export class RoleTableComponent implements OnInit {
 
   findAllResources(): void {
     this.roleManagementService.findAllResources().subscribe((resources) => {
-      // this.checkGrantedPermmisonsOnUpdate(resources);
+      // Only activate on update
       this.resources = this.checkGrantedPermmisonsOnUpdate(resources);
+
+      // Define status of CHECK ALL button
+      this.resources = this.checkIfCanCheckAll(this.resources);
     });
+  }
+
+  checkIfCanCheckAll(resources: IResource[]): IResource[] {
+    for (let i = 0; i < resources.length; i++) {
+      // Define status of CHECK ALL button on each row
+      resources[i].isCheckAllDisabled = this.hasAnyDisabledPermmissions(resources[i]);
+    }
+    return resources;
   }
 
   // TODO: Make it runs properly tomorrow
@@ -69,8 +98,20 @@ export class RoleTableComponent implements OnInit {
           currentPermisson.choose = true;
         }
       }
+      resources[i].isCheckAllPermissions = this.isCheckAllPermissions(resources[i]);
+      resources[i].isCheckAllDisabled = this.hasAnyDisabledPermmissions(resources[i]);
     }
     return resources;
+  }
+
+  hasAnyDisabledPermmissions(resource: IResource): boolean {
+    // Check if each row has any permissons that are not grantable to others
+    for (let p of resource.permissions) {
+      if (!this.grantedPemissions.includes(p.id)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   onChangeButtonCheckAllPermissions(resourceName: string): void {
@@ -143,11 +184,9 @@ export class RoleTableComponent implements OnInit {
       permissions: this.getPermissionsFromResource(this.resources),
     };
 
-    this.onSubmit.emit(body);
-    // this.roleManagementService.createRole(body).subscribe((role) => {
-    //   console.log('Inserted role', role);
-    //   this.back();
-    // });
+    this.confirmService.show().onYes(() => {
+      this.onSubmit.emit(body);
+    });
   }
 
   getPermissionsFromResource(resources: IResource[]): number[] {

@@ -1,1 +1,15 @@
-<p>category-update works!</p>
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">Update product</h5>
+    <button type="button" class="close" (click)="hideModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-category-form
+      [category]="category"
+      (onCancel)="hideModal()"
+      (onSubmit)="handleSubmit(category.id, $event)"
+    ></app-category-form>
+  </div>
+</div>

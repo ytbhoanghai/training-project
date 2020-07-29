@@ -19,7 +19,16 @@
 <!-- </form> -->
 <div class="row warp-table">
   <table class="table table-sm table-striped mx-auto">
-    <caption class="text-primary">Permissions List</caption>
+    <caption class="text-primary">
+      <input type="checkbox"/>
+      <span class="text-info ml-2 small font-italic">* Grantable permissions</span><br />
+
+      <input type="checkbox" disabled />
+      <span class="text-warning ml-2 small font-italic">* Ungrantable permissions</span><br />
+
+      <input type="checkbox" disabled checked />
+      <span class="text-secondary ml-2 small font-italic">* Permissions granted by others</span>
+    </caption>
     <thead>
     <tr class="d-flex">
       <th class="col-6 pl-2"># Resource Name</th>
@@ -34,9 +43,23 @@
     <tr class="d-flex" *ngFor="let resource of resources">
       <td class="col-6 pl-2">{{resource.name}}</td>
       <td class="text-center col-1" *ngFor="let permission of resource.permissions">
-        <input type="checkbox" class="form-check-input ml-0" [(ngModel)]="permission.choose" (change)="onChangeButtonCheckPermission(permission, resource)">
+        <input
+          type="checkbox"
+          class="form-check-input ml-0"
+          [(ngModel)]="permission.choose"
+          (change)="onChangeButtonCheckPermission(permission, resource)"
+          [disabled]="!canGrantPermission(permission)"
+        />
       </td>
-      <td class="text-center col-2"><input type="checkbox" class="form-check-input ml-0" [(ngModel)]="resource.isCheckAllPermissions" (change)="onChangeButtonCheckAllPermissions(resource.name)"></td>
+      <!-- CHECK ALL CHECKBOX HERE -->
+      <td class="text-center col-2">
+        <input
+          type="checkbox" class="form-check-input ml-0"
+          [(ngModel)]="resource.isCheckAllPermissions"
+          [disabled]="resource.isCheckAllDisabled"
+          (change)="onChangeButtonCheckAllPermissions(resource.name)"
+        />
+      </td>
     </tr>
 
     </tbody>

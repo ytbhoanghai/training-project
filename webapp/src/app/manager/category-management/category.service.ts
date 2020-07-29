@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SERVER_URL } from './../../core/constants/api.constants';
@@ -7,6 +8,9 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CategoryService {
+  public updateSubject = new Subject();
+  public updateObservable$ = this.updateSubject.asObservable();
+
   private REQUEST_URL = SERVER_URL + '/categories/';
 
   constructor(private http: HttpClient) { }

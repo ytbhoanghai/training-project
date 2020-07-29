@@ -1,16 +1,19 @@
+import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {SERVER_URL} from "../../core/constants/api.constants";
-import {Observable} from "rxjs";
-import {ClassGetter} from "@angular/compiler/src/output/output_ast";
+import { HttpClient } from '@angular/common/http';
+import { SERVER_URL } from '../../core/constants/api.constants';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StoreService {
   private REQUEST_URL: string = SERVER_URL + '/stores/';
 
-  constructor(private http: HttpClient) { }
+  public updateSubject = new Subject();
+  public updateObservable$ = this.updateSubject.asObservable();
+
+  constructor(private http: HttpClient) {}
 
   fetchStores(): Observable<IStore[]> {
     return this.http.get<IStore[]>(this.REQUEST_URL);
@@ -40,9 +43,10 @@ export type IStore = {
   email: string;
   phone: string;
   status: StatusType;
-  createdAt: number
-}
+  createdAt: number;
+};
 
 enum StatusType {
-  Closed, Open
+  Closed,
+  Open,
 }

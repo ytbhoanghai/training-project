@@ -2,10 +2,12 @@
   <div class="form-group">
     <label>Store name:</label>
     <input type="text" formControlName="name" class="form-control" placeholder="Enter store name" />
+    <div class="error" *ngIf="productForm.get('name').invalid">Required. Min length 4</div>
   </div>
   <div class="form-group">
     <label>Price:</label>
     <input type="number" formControlName="price" class="form-control" placeholder="Ex: 0123xxxxxx" />
+    <div class="error" *ngIf="productForm.get('price').invalid">Minimum at 0</div>
   </div>
   <div class="form-group">
     <label>Choose category:</label>

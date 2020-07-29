@@ -2,12 +2,14 @@
   <div class="form-group">
     <label>Full name</label>
     <input type="text" formControlName="name" class="form-control" placeholder="Ex: John Dee">
+    <div class="error" *ngIf="userForm.get('name').invalid">Required. Min 4 characters</div>
   </div>
 
   <div class="form-group">
     <label>Username</label>
     <input type="text" formControlName="username" class="form-control"
       placeholder="Ex: johndee" [attr.disabled]="isUpdateMode() ? true : null" />
+    <div class="error" *ngIf="userForm.get('username').invalid">Required. Min 4 characters</div>
   </div>
 
   <div *ngIf="!isUpdateMode()">
@@ -47,7 +49,7 @@
   <div class="form-group">
     <label>Select store:</label>
     <select class="custom-select" formControlName="storeId">
-      <option selected="selected">-- Select a store --</option>
+      <option>-- Select a store --</option>
       <option *ngFor="let store of stores" [value]="store.id">{{ store.name }}</option>
     </select>
   </div>

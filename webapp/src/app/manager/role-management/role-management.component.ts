@@ -24,9 +24,16 @@ export class RoleManagementComponent implements OnInit {
     private notiSerive: NotificationService) { }
 
   ngOnInit(): void {
+    this.fetchRoles();
+    this.roleManagementService.updateObservable$.subscribe((role: IRole) => {
+      const index: number = this.roles.findIndex(r => r.id === role.id);
+      this.roles[index] = role;
+    })
+  }
+
+  fetchRoles(): void {
     this.roleManagementService.findAllRoles()
       .subscribe(roles => {
-        console.log(roles)
         this.roles = roles;
       });
   }
@@ -84,6 +91,7 @@ export interface IResource {
   name: string;
   permissions: IPermission[] | IPermissionChoose[];
   isCheckAllPermissions: boolean;
+  isCheckAllDisabled?: boolean;
 }
 
 export interface IRole {

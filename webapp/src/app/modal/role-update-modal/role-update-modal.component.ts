@@ -27,6 +27,7 @@ export class RoleUpdateModalComponent implements OnInit {
     this.roleService.updateRole(roleId, body).subscribe((role) => {
       this.notiSerive.showSuccess('Updated successfully!');
       this.hide();
+      this.roleService.updateSubject.next(role);
     });
   }
 
