@@ -2,6 +2,7 @@
   <div class="form-group">
     <label>Store name:</label>
     <input type="text" formControlName="name" class="form-control" placeholder="Enter store name" />
+    <div *ngIf="storeForm.get('name').invalid" class="error">Required, min 4 characters</div>
   </div>
   <div class="form-group">
     <label>Email:</label>
@@ -14,12 +15,13 @@
   <div class="form-group">
     <label>Phone:</label>
     <input type="text" formControlName="phone" class="form-control" placeholder="Ex: 0123xxxxxx" />
+    <div *ngIf="storeForm.get('phone').invalid" class="error">Have to start with 01 or 09, max length 11</div>
   </div>
   <div class="form-group">
     <label>Status:</label>
-    <select formControlName="status" class="form-control">
+    <select formControlName="status" class="form-control" [required]="true">
+      <option value="Open" [selected]="true">Open</option>
       <option value="Closed">Closed</option>
-      <option value="Open">Open</option>
     </select>
   </div>
   <div class="text-right">

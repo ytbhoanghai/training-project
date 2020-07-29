@@ -75,7 +75,6 @@ export class UserFormComponent implements OnInit {
     if (this.userForm.valid) {
       return this.onSubmit.emit(this.userForm.value);
     }
-    console.log(this.userForm);
     this.notiService.showWaring('Invalid form. Please check again!');
   }
 

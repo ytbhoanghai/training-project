@@ -6,3 +6,9 @@
 table td, table td *, table th, table th * {
   vertical-align: middle !important;
 }
+
+.error {
+  color: red;
+  font-style: italic;
+  font-size: 0.8rem;
+}

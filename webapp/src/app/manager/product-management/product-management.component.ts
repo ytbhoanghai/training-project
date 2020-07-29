@@ -61,7 +61,10 @@ export class ProductManagementComponent implements OnInit {
     // })
     this.confirmService.show();
     this.confirmService.onYes(() => {
-      console.log("YES")
+        this.productService.deleteById(id).subscribe(() => {
+          this.products = this.products.filter(store => store.id !== id);
+          this.notiService.showSuccess('Delete successfully!');
+        })
     })
   }
 

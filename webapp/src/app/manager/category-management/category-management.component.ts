@@ -21,6 +21,10 @@ export class CategoryManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchCategories();
+    this.categoryService.updateObservable$.subscribe((category: ICategory) => {
+      const index = this.categories.findIndex(c => c.id === category.id);
+      this.categories[index] = category;
+    })
   }
 
   fetchCategories(): void {
@@ -42,7 +46,12 @@ export class CategoryManagementComponent implements OnInit {
   }
 
   deleteCategory(id: number): void {
-    this.confirmService.show('DeleteCategory');
+    this.confirmService.show().onYes(() => {
+      this.categoryService.deleteById(id).subscribe(() => {
+        this.categories = this.categories.filter(c => c.id !== id);
+        this.notiService.showSuccess('Deleted successfully!');
+      })
+    });
   }
 
 }

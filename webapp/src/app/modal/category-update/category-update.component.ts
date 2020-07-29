@@ -28,6 +28,7 @@ export class CategoryUpdateComponent implements OnInit {
     this.categoryService.update(id, body).subscribe(category => {
       this.notiService.showSuccess();
       this.hideModal();
+      this.categoryService.updateSubject.next(category);
     })
   }
 }
