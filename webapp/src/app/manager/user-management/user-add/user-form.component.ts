@@ -33,8 +33,8 @@ export class UserFormComponent implements OnInit {
     repassword: [null, [Validators.minLength(4)]],
     email: ['', Validators.email],
     address: [],
-    roleIds: [null],
-    storeId: [null, Validators.required],
+    roleIds: [[]],
+    storeId: [null],
   });
 
   constructor(
@@ -64,14 +64,18 @@ export class UserFormComponent implements OnInit {
 
   fillUserToForm(): void {
     if (!this.user) return;
-    this.userForm.patchValue({ ...this.user });
+    this.userForm.patchValue({
+      ...this.user,
+      roleIds: this.user.roles.map((r) => r.id),
+      storeId: this.user.idStore
+    });
   }
 
   emitSubmitEvent(): void {
     if (this.userForm.valid) {
       return this.onSubmit.emit(this.userForm.value);
     }
-    console.log(this.userForm)
+    console.log(this.userForm);
     this.notiService.showWaring('Invalid form. Please check again!');
   }
 

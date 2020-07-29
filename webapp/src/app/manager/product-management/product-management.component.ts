@@ -24,6 +24,10 @@ export class ProductManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchProducts();
+    this.productService.updateObservable$.subscribe((product: IProduct) => {
+      const index: number = this.products.findIndex(p => p.id === product.id);
+      this.products[index] = product;
+    })
   }
 
   fetchProducts(): void {
@@ -45,15 +49,19 @@ export class ProductManagementComponent implements OnInit {
   }
 
   deleteProduct(id: number) {
-    this.confirmModalRef = this.confirmService.show('DeleteProduct');
-    this.confirmModalRef.content.action.subscribe(({ value, key }) => {
-      if (key === 'DeleteProduct' && value === ConfirmModalComponent.YES) {
-        this.productService.deleteById(id).subscribe(() => {
-          this.products = this.products.filter(store => store.id !== id);
-          this.notiService.showSuccess('Delete successfully!');
-        })
-        this.confirmModalRef.hide();
-      }
+    // this.confirmModalRef = this.confirmService.show('DeleteProduct');
+    // this.confirmModalRef.content.action.subscribe(({ value, key }) => {
+    //   if (key === 'DeleteProduct' && value === ConfirmModalComponent.YES) {
+    //     this.productService.deleteById(id).subscribe(() => {
+    //       this.products = this.products.filter(store => store.id !== id);
+    //       this.notiService.showSuccess('Delete successfully!');
+    //     })
+    //     this.confirmModalRef.hide();
+    //   }
+    // })
+    this.confirmService.show();
+    this.confirmService.onYes(() => {
+      console.log("YES")
     })
   }
 

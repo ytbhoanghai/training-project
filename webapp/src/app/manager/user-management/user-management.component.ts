@@ -25,11 +25,14 @@ export class UserManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchUsers();
+    this.userService.updateObservable$.subscribe((user: IUser) => {
+      const index: number = this.users.findIndex(u => u.id === user.id);
+      this.users[index] = user;
+    })
   }
 
   fetchUsers(): void {
     this.userService.fetchAll().subscribe((users) => {
-      console.log(users)
       this.users = users;
     });
   }

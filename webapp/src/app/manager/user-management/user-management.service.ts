@@ -10,8 +10,8 @@ import { SERVER_URL } from '../../core/constants/api.constants';
   providedIn: 'root',
 })
 export class UserManagementService {
-  userSubject = new Subject();
-  userObservable$ = this.userSubject.asObservable();
+  public updateSubject = new Subject();
+  public updateObservable$ = this.updateSubject.asObservable();
 
   private REQUEST_URL: string = `${SERVER_URL}/staffs/`;
 

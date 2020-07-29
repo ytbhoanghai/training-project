@@ -27,6 +27,7 @@ export class ProductUpdateComponent implements OnInit {
     this.productService.update(id, body).subscribe(product => {
       this.notiService.showSuccess();
       this.productModalService.hideUpdateModal();
+      this.productService.updateSubject.next(product);
     })
   }
 

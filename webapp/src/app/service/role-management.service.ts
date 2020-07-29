@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient} from "@angular/common/http";
-import {Observable, of} from "rxjs";
+import {Observable, of, Subject} from "rxjs";
 import { SERVER_URL } from "../core/constants/api.constants";
 import { catchError, map, tap } from "rxjs/operators";
 import {IPermission, IPermissionChoose, IResource, IRole, IRoleBody} from "../manager/role-management/role-management.component";
@@ -9,12 +9,13 @@ import {IPermission, IPermissionChoose, IResource, IRole, IRoleBody} from "../ma
   providedIn: 'root'
 })
 export class RoleManagementService {
+  public updateSubject = new Subject();
+  public updateObservable$ = this.updateSubject.asObservable();
 
   constructor(private httpClient: HttpClient) { }
 
   findAllRoles(): Observable<IRole[]> {
     return this.httpClient.get<IRole[]>(SERVER_URL + "/roles").pipe(
-      tap(_ => console.log("find all roles")),
       catchError(err => {
         console.error(err);
         return of([]);
@@ -40,6 +41,7 @@ export class RoleManagementService {
         for (let i = 0; i < resources.length; i++) {
           resources[i].permissions = this.permissionListResolver(resources[i].permissions);
           resources[i].isCheckAllPermissions = false;
+          resources[i].isCheckAllDisabled = false;
         }
         return resources;
       })

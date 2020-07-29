@@ -7,13 +7,26 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ConfirmModalService {
+  modalRef: MDBModalRef;
+
   constructor(private modalService: MDBModalService) {}
 
-  show(key: string): MDBModalRef {
-    return this.modalService.show(ConfirmModalComponent, {
+  show(key?: string): ConfirmModalService {
+    this.modalRef = this.modalService.show(ConfirmModalComponent, {
       containerClass: 'modal fade top',
       class: 'modal-dialog modal-frame modal-top',
       data: { key },
     });
+    return this;
+  }
+
+  onYes(fn: Function): any {
+    this.modalRef.content.action.subscribe(({value, key}) => {
+      if (value === ConfirmModalComponent.YES) {
+        fn();
+        this.modalRef.hide();
+        this.modalRef.content.action.unsubscribe();
+      }
+    })
   }
 }

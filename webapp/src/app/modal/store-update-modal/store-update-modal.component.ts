@@ -24,6 +24,7 @@ export class StoreUpdateModalComponent implements OnInit {
     this.storeService.update(id, store).subscribe((store) => {
       this.storeModalService.hideUpdateModal();
       this.notiService.showSuccess();
+      this.storeService.updateSubject.next(store);
     });
   }
 
