@@ -17,6 +17,13 @@ const routes: Routes = [
         (m) => m.ManagerRoutingModule
       ),
   },
+  {
+    path: 'my-store',
+    loadChildren: () =>
+      import('./my-store/my-store-routing.module').then(
+        (m) => m.MyStoreRoutingModule
+      ),
+  },
   ...errorRoute,
 ];
 

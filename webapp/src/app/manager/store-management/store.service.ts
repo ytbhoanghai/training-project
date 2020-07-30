@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { SERVER_URL } from '../../core/constants/api.constants';
 import { Observable } from 'rxjs';
 
@@ -23,6 +23,16 @@ export class StoreService {
     return this.http.get<IStore>(this.REQUEST_URL + id);
   }
 
+  fetchStatusList(): Observable<string[]> {
+    return this.http.get<string[]>(this.REQUEST_URL + 'status');
+  }
+
+  fetchIfManagersByStoreId(storeId: number, isManager: boolean): Observable<ISimpleStaff[]> {
+    return this.http.get<ISimpleStaff[]>(this.REQUEST_URL + `${storeId}/staffs`, {
+      params: new HttpParams().set('is_manager', String(isManager))
+    });
+  }
+
   save(body: IStore): Observable<IStore> {
     return this.http.post<IStore>(this.REQUEST_URL, body);
   }
@@ -36,6 +46,12 @@ export class StoreService {
   }
 }
 
+export type ISimpleStaff = {
+  id: number;
+  name: string;
+  email: string;
+}
+
 export type IStore = {
   id: number;
   name: string;
@@ -46,7 +62,7 @@ export type IStore = {
   createdAt: number;
 };
 
-enum StatusType {
+export enum StatusType {
   Closed,
   Open,
 }

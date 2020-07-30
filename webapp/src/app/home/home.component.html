@@ -1,4 +1,4 @@
-<div class="jumbotron">
+<div class="jumbotron bg-jumbotron">
   <h2 class="font-weight-bold">Welcome, {{ user?.name || "anonymous" }}!</h2>
   <div class="row border rounded">
 
@@ -12,7 +12,7 @@
         <p><b>Username: </b>{{ user.username }}</p>
         <p><b>Email: </b>{{ user.email }}</p>
         <p><b>Address: </b>{{ user.address }}</p>
-        <p><b>Roles: </b>{{ user.roles.join(',') }}</p>
+        <p><b>Roles: </b>{{ user.roles.join(', ') }}</p>
         <p><b>Created at: </b>{{ user.createdAt | date:'medium' }}</p>
       </div>
       <ng-template #elseBlock>
