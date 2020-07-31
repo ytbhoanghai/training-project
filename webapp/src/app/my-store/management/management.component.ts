@@ -26,7 +26,6 @@ export class ManagementComponent implements OnInit {
       this.storeId = params.id;
       this.storeService.fetchById(this.storeId).subscribe(store => {
         this.store = store;
-        console.log(store)
       })
     })
   }

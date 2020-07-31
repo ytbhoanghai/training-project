@@ -21,7 +21,8 @@ export class ProductFormComponent implements OnInit {
 
   productForm = this.formBuilder.group({
     name: [null, [Validators.required, Validators.minLength(4)]],
-    price: [0, [Validators.required, Validators.min(0)]],
+    price: [1, [Validators.required, Validators.min(0)]],
+    quantity: [1, [Validators.min(0), Validators.max(1000)]],
     categories: [[]],
   });
 

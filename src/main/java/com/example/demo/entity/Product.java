@@ -28,6 +28,8 @@ public class Product {
 
     private BigDecimal price;
 
+    private Integer quantity;
+
     private Date createdAt;
 
     @JsonIgnore

@@ -1,4 +1,4 @@
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -12,6 +12,7 @@ import { StoreStaffsComponent } from './store-staffs/store-staffs.component';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule.forChild([
       { path: '', component: ManagementComponent },
       { path: 'products', component: StoreProductComponent, outlet: 'tabs' },

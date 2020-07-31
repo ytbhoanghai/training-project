@@ -7,7 +7,6 @@ import com.example.demo.response.MessageResponse;
 import com.example.demo.security.constants.StaffPermission;
 import com.example.demo.security.constants.StorePermission;
 import com.example.demo.service.StoreService;
-import com.example.demo.service.StoreServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,6 +34,7 @@ public class StoreController {
     @GetMapping
     public ResponseEntity<List<Store>> findAll() {
         System.out.println();
+//        return null;
         List<Store> stores = storeService.findAll();
         return new ResponseEntity<>(stores, HttpStatus.OK);
     }
@@ -62,6 +63,15 @@ public class StoreController {
                         .collect(Collectors.toList()));
     }
 
+    @GetMapping(value = "{storeId}/products")
+    public ResponseEntity<?> getProductsByIsAdded(
+            @PathVariable Integer storeId,
+            @RequestParam(value = "is_added") Boolean isAdded) {
+        return ResponseEntity.ok(
+                storeService.findProductsByStoreAndIsAdded(storeId, isAdded)
+        );
+    }
+
     @PostMapping
     @PreAuthorize("hasAuthority(\"" + StorePermission.CREATE + "\")")
     public ResponseEntity<Store> createStore(@Valid @RequestBody StoreForm storeForm) {
@@ -75,6 +85,12 @@ public class StoreController {
     public ResponseEntity<?> addProductToStore(@PathVariable Integer storeId, @PathVariable Integer productId, @RequestParam Integer quantity) {
         storeService.addProductToStore(storeId, productId, quantity);
         return new ResponseEntity<>(new MessageResponse("Add product to store successfully!"), HttpStatus.OK);
+    }
+
+    @DeleteMapping("{storeId}/products/{productId}")
+    public ResponseEntity<?> deleteProductFromStore(@PathVariable Integer storeId, @PathVariable Integer productId) {
+        storeService.deleteProductFromStore(storeId, productId);
+        return ResponseEntity.ok(new MessageResponse("Delete product form store successfully!"));
     }
 
     @PutMapping("{storeId}/staffs")

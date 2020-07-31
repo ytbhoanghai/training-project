@@ -2,9 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
-import com.example.demo.entity.StoreProduct;
 import com.example.demo.form.StoreForm;
 import com.example.demo.form.StoreUpdateForm;
+import com.example.demo.response.StoreProductResponse;
 
 import java.util.List;
 import java.util.Set;
@@ -26,4 +26,8 @@ public interface StoreService {
     void addStaffListToStore(Integer storeId, Set<Integer> idStaff);
 
     List<Staff> findStaffsByStoreAndIsManager(Integer storeId, Boolean isManager);
+
+    List<StoreProductResponse> findProductsByStoreAndIsAdded(Integer storeId, Boolean isAdded);
+
+    void deleteProductFromStore(Integer storeId, Integer productId);
 }

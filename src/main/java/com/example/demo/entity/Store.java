@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -35,6 +36,10 @@ public class Store {
 
     private Date createdAt;
 
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "store")
+    private List<StoreProduct> storeProductList;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

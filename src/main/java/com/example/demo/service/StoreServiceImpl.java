@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Role;
-import com.example.demo.entity.Staff;
-import com.example.demo.entity.Store;
-import com.example.demo.entity.StoreProduct;
+import com.example.demo.entity.*;
 import com.example.demo.exception.RoleNotFoundException;
 import com.example.demo.exception.StoreNotFoundException;
 import com.example.demo.form.StoreForm;
@@ -11,7 +8,9 @@ import com.example.demo.form.StoreUpdateForm;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.StoreRepository;
+import com.example.demo.response.StoreProductResponse;
 import com.example.demo.security.SecurityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -22,6 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class StoreServiceImpl implements StoreService {
 
     private StoreRepository storeRepository;
@@ -68,6 +68,11 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public void addProductToStore(Integer storeId, Integer productId, Integer quantity) {
         storeProductService.addProductToStore(storeId, productId, quantity);
+    }
+
+    @Override
+    public void deleteProductFromStore(Integer storeId, Integer productId) {
+        storeProductService.deleteProductFormStore(storeId, productId);
     }
 
     @Override
@@ -180,5 +185,38 @@ public class StoreServiceImpl implements StoreService {
         staffService.saveAll(staffList);
     }
 
+    @Override
+    public List<StoreProductResponse> findProductsByStoreAndIsAdded(Integer storeId, Boolean isAdded) {
+        Store store = findById(storeId);
+        List<StoreProduct> productResponses = storeProductService.findAllByStore(store);
+
+//        Return product added to store
+        if (isAdded) {
+            return productResponses.stream()
+                    .map(storeProduct -> new StoreProductResponse(
+                            storeProduct.getProduct(),
+                            storeProduct.getQuantity()))
+                    .collect(Collectors.toList());
+        }
+
+//        Get list of added product id
+        List<Integer> productIds = productResponses.stream()
+                .map(storeProduct -> storeProduct.getProduct().getId())
+                .collect(Collectors.toList());
+
+//        If list empty return all
+        if (productIds.size() == 0) {
+            return productRepository.findAll().stream()
+                    .map(product -> new StoreProductResponse(
+                            product, product.getQuantity()))
+                    .collect(Collectors.toList());
+        }
+
+//        Else return product not in that list
+        return productRepository.findAllByIdIsNotIn(productIds).stream()
+                .map(product -> new StoreProductResponse(
+                        product, product.getQuantity()))
+                .collect(Collectors.toList());
+    }
 
 }
