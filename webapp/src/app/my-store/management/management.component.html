@@ -1,40 +1,52 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">My store</a></li>
+    <li class="breadcrumb-item"><a routerLink="/"><i class="fas fa-home"></i></a></li>
+    <li class="breadcrumb-item"><a routerLink="/my-store">My store</a></li>
     <li class="breadcrumb-item active" aria-current="page">Manage</li>
   </ol>
 </nav>
+
 <div class="jumbotron bg-jumbotron">
   <div class="container">
-    <div class="card">
-      <div class="card-body">
-        <ul class="nav nav-tabs nav-justified" role="tablist">
-          <li class="nav-item">
-            <a
-              class="nav-link active"
-              [routerLink]="[{ outlets: { 'tabs': ['products'] } }]"
-              routerLinkActive="active"
-              >Products</a
-            >
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              [routerLink]="[{ outlets: { 'tabs': ['staffs'] } }]"
-              routerLinkActive="active"
-              >Staffs</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Warehouse</a>
-          </li>
-        </ul>
-        <div class="border border-top-0">
-          <router-outlet name="tabs"></router-outlet>
-          <!-- <app-store-product></app-store-product>
-          <app-store-staffs></app-store-staffs> -->
-        </div>
-      </div>
+    <div class="pl-3 mb-2">
+      <h2>{{ store?.name }}</h2>
+      <h6 [ngClass]="isClosed() ? 'text-danger' : 'text-success'">
+        {{ store?.status }}
+      </h6>
+      <div class="text-muted small">{{ store?.address }}</div>
+      <hr>
     </div>
+
+    <!-- Nav tabs -->
+    <mdb-tabset [buttonClass]="'pills-secondary white mb-2'" [contentClass]="'card'">
+      <!--Panel 1-->
+      <mdb-tab heading="<i class='fas fa-hamburger'></i> Products">
+        <div class="row">
+          <div class="col-12">
+            <app-store-product></app-store-product>
+          </div>
+        </div>
+      </mdb-tab>
+      <!--Panel 2-->
+      <mdb-tab heading="<i class='fas fa-user-friends'></i> Staffs">
+        <div class="row">
+          <div class="col-12">
+            <app-store-staffs></app-store-staffs>
+          </div>
+        </div>
+      </mdb-tab>
+      <!--Panel 3-->
+      <mdb-tab heading="<i class='fas fa-star'></i> Be awesome">
+        <div class="row">
+          <div class="col-12">
+            <br>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil odit magnam minima, soluta
+              doloribus reiciendis molestiae placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora,
+              placeat ratione porro voluptate odit minima.</p>
+          </div>
+        </div>
+      </mdb-tab>
+    </mdb-tabset>
   </div>
 </div>
+

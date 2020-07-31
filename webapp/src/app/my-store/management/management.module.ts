@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -10,6 +11,7 @@ import { StoreStaffsComponent } from './store-staffs/store-staffs.component';
   declarations: [StoreProductComponent, StoreStaffsComponent],
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule.forChild([
       { path: '', component: ManagementComponent },
       { path: 'products', component: StoreProductComponent, outlet: 'tabs' },

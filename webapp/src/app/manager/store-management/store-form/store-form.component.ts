@@ -91,13 +91,13 @@ export class StoreFormComponent implements OnInit {
     if (!selectStaff) return;
 
     this.staffs = this.staffs.filter((s) => s.id !== staffId);
-    this.managers = [...this.managers, selectStaff];
+    this.managers.push(selectStaff);
     this.resetSelected();
   }
 
   removeManager(manager: ISimpleStaff): void {
     this.managers = this.managers.filter((m) => m !== manager);
-    this.staffs = [...this.staffs, manager];
+    this.staffs.push(manager);
   }
 
   // Reset selected after remove it from staff list
