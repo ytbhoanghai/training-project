@@ -9,4 +9,7 @@ import java.util.Set;
 @Repository
 public interface PermissionRepository extends JpaRepository<Permission, Integer> {
     Set<Permission> findAllByIdIsIn(Set<Integer> ids);
+
+    Set<Permission> findByGrantable(Boolean grantable);
+
 }

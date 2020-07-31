@@ -10,18 +10,27 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface StaffRepository extends JpaRepository<Staff, Integer> {
 
     @EntityGraph(value = "graph.Staff.Roles")
+    @Query("from Staff s where s.username = ?1 and s.isDeleted = false")
     Optional<Staff> findByUsername(String username);
 
+    @Query("from Staff s where s.store = ?1 and s.isDeleted = false")
     List<Staff> findAllByStore(Store store);
 
-    @Override
-    @Modifying
-//    1 means OTHER, 0 means ROOT_ADMIN
-    @Query("delete from Staff s where s.type = 1 and s.id = :id")
-    void deleteById(Integer id);
+    @Query("from Staff s where s.store = ?1 and s.isManager = ?2 and s.isDeleted = false")
+    List<Staff> findAllByStoreAndIsManager(Store store, Boolean isManager);
+
+    @Query("from Staff s where s.id in ?1 and s.isDeleted = false")
+    List<Staff> findAllByIdIsIn(Set<Integer> ids);
+
+    @Query("from Staff s where s.createdBy = ?1 and s.isDeleted = false")
+    List<Staff> findAllByCreatedBy(Staff staff);
+
+    @Query("from Staff s where s.isDeleted = false")
+    List<Staff> findAll();
 }

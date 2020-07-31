@@ -2,16 +2,14 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Role;
 import com.example.demo.form.RoleForm;
-import com.example.demo.repository.RoleRepository;
 import com.example.demo.response.MessageResponse;
 import com.example.demo.response.RoleResponse;
 import com.example.demo.response.SimpleRoleResponse;
 import com.example.demo.security.constants.RolePermission;
-import com.example.demo.security.constants.StaffPermission;
 import com.example.demo.service.RoleService;
-import com.example.demo.service.RoleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

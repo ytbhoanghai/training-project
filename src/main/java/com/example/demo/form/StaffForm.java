@@ -54,6 +54,8 @@ public class StaffForm {
                 .createdAt(new Date())
                 .createdBy(createByStaff)
                 .type(Staff.TYPE_DEFAULT)
+                .isManager(false)
+                .isDeleted(false)
                 .roles(roles)
                 .level(level).build();
     }

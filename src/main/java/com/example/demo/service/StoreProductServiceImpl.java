@@ -32,7 +32,7 @@ public class StoreProductServiceImpl implements StoreProductService {
 
 
     @Override
-    public StoreProduct addProductToStore(Integer storeId, Integer productId, Integer quantity) {
+    public void addProductToStore(Integer storeId, Integer productId, Integer quantity) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new StoreNotFoundException(storeId));
         Product product = productRepository.findById(productId)
@@ -42,8 +42,6 @@ public class StoreProductServiceImpl implements StoreProductService {
         StoreProduct storeProduct = new StoreProduct(id, quantity, store, product);
 
         storeProductRepository.save(storeProduct);
-
-        return storeProduct;
     }
 
     @Override

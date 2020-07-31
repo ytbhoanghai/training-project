@@ -35,6 +35,7 @@ public class Store {
 
     private Date createdAt;
 
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")

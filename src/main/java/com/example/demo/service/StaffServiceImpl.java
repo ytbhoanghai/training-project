@@ -61,6 +61,16 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    public List<Staff> findAllByStoreAndIsManager(Store store, Boolean isManager) {
+        return staffRepository.findAllByStoreAndIsManager(store, isManager);
+    }
+
+    @Override
+    public List<Staff> findAllByIdIsIn(Set<Integer> ids) {
+        return staffRepository.findAllByIdIsIn(ids);
+    }
+
+    @Override
     public List<StaffResponse> findAll() {
         Staff currentStaff = securityUtil.getCurrentStaff();
         return staffRepository.findAll().stream()
@@ -158,7 +168,8 @@ public class StaffServiceImpl implements StaffService {
             throw new AccessDeniedException("Access Denied !!!");
         }
 
-        staffRepository.deleteById(id);
+        staff.setIsDeleted(true);
+        staffRepository.save(staff);
 
         return String.valueOf(id);
     }

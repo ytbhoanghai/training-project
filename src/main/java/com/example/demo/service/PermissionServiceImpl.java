@@ -21,4 +21,9 @@ public class PermissionServiceImpl implements PermissionService {
     public Set<Permission> findAllByIdIsIn(Set<Integer> ids) {
         return permissionRepository.findAllByIdIsIn(ids);
     }
+
+    @Override
+    public Set<Permission> findByGrantable(Boolean grantable) {
+        return permissionRepository.findByGrantable(grantable);
+    }
 }

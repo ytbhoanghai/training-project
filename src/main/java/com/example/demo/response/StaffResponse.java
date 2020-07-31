@@ -2,7 +2,6 @@ package com.example.demo.response;
 
 import com.example.demo.entity.Staff;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +26,8 @@ public class StaffResponse extends Staff {
                 staff.getStore(),
                 staff.getType(),
                 staff.getLevel(),
+                staff.getIsManager(),
+                staff.getIsDeleted(),
                 staff.getRoles());
 
         this.allowUpdate = allowUpdate;

@@ -5,7 +5,7 @@ import com.example.demo.entity.StoreProduct;
 
 public interface StoreProductService {
 
-    StoreProduct addProductToStore(Integer storeId, Integer productId, Integer quantity);
+    void addProductToStore(Integer storeId, Integer productId, Integer quantity);
 
     void deleteByStore(Store store);
 }

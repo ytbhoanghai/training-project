@@ -11,13 +11,14 @@ import com.example.demo.repository.RoleRepository;
 import com.example.demo.response.RoleResponse;
 import com.example.demo.response.SimpleRoleResponse;
 import com.example.demo.security.SecurityUtil;
-import com.example.demo.security.constants.RolePermission;
+import com.example.demo.security.constants.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Id;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -121,11 +122,14 @@ public class RoleServiceImpl implements RoleService {
 
     private void handlePermissionsIsValid(Staff currentStaff, Set<Integer> permissions) {
         String message = "Permissions";
-        List<Integer> permissionsList = staffService.getPermissionIdsOfCurrentStaff(currentStaff);
+        List<Integer> currentPermissions = staffService.getPermissionIdsOfCurrentStaff(currentStaff);
+        List<Integer> blacklist = permissionService.findByGrantable(false).stream()
+                .map(Permission::getId)
+                .collect(Collectors.toList());
 
         int count = 0;
         for (Integer id : permissions) {
-            if (permissionsList.contains(id)) {
+            if (currentPermissions.contains(id) && !blacklist.contains(id)) {
                 count += 1;
             } else {
                 message += (" " + id);
