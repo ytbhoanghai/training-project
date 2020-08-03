@@ -2,13 +2,12 @@ package com.example.demo.entity;
 
 import com.example.demo.form.StoreForm;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -17,6 +16,7 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "store")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Store {
 
     @Id
@@ -34,6 +34,11 @@ public class Store {
     private Status status;
 
     private Date createdAt;
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "store")
+    private List<StoreProduct> storeProductList;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

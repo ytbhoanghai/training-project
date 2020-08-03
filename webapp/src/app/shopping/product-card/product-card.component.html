@@ -1,0 +1,23 @@
+<mdb-card class="mb-4">
+  <mdb-card-body>
+    <mdb-card-title>
+      <h5 class="font-weight-bolder">{{ product.name }}</h5>
+      <h6 class="text-danger font-weight-bold">
+        {{ product.price | currency:'USD':true:'1.0-2' }}
+      </h6>
+    </mdb-card-title>
+    <mdb-card-text>
+      <mdb-badge
+        pill="true"
+        primary="true"
+        *ngFor="let category of product.categories"
+      >
+        {{ category.name }}
+      </mdb-badge>
+    </mdb-card-text>
+
+    <button class="btn btn-sm text-light mb-2 btn-cart"><i class="fas fa-cart-plus"></i>Add to cart</button>
+
+    <div class="text-muted small"><i class="far fa-gem"></i>lorem</div>
+  </mdb-card-body>
+</mdb-card>

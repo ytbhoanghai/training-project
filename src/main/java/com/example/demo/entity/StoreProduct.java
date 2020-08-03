@@ -36,7 +36,7 @@ public class StoreProduct {
     @AllArgsConstructor
     @Embeddable
     public static class StoreProductID implements Serializable {
-        private Integer idProduct;
         private Integer idStore;
+        private Integer idProduct;
     }
 }

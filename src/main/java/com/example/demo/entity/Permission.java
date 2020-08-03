@@ -25,6 +25,8 @@ public class Permission {
     @JsonIgnore
     private Date createdAt;
 
+    private Boolean grantable;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     @JsonIgnore

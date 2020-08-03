@@ -12,3 +12,7 @@ table td, table td *, table th, table th * {
   font-style: italic;
   font-size: 0.8rem;
 }
+
+.bg-jumbotron {
+  background: #E9ECEF !important;
+}

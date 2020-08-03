@@ -28,7 +28,6 @@ public class StaffController {
     }
 
     @GetMapping
-//    @PreAuthorize("hasAuthority(\"" + StaffPermission.READ + "\")")
     public ResponseEntity<List<StaffResponse>> findAll() {
         List<StaffResponse> staffs = staffService.findAll();
         return new ResponseEntity<>(staffs, HttpStatus.OK);

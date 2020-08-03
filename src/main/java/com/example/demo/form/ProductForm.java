@@ -18,12 +18,15 @@ public class ProductForm {
 
     private BigDecimal price;
 
+    private Integer quantity;
+
     Set<Integer> categories;
 
     public static Product buildProduct(ProductForm productForm, Staff createByStaff, Set<Category> categories) {
         return Product.builder()
                 .name(productForm.getName())
                 .price(productForm.getPrice())
+                .quantity(productForm.getQuantity())
                 .createdAt(new Date())
                 .createdBy(createByStaff)
                 .categories(categories).build();

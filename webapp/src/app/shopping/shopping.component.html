@@ -1,0 +1,45 @@
+<div class="container">
+
+
+  <div class="row mt-3">
+    <div class="col-3">
+      <app-shopping-category></app-shopping-category>
+    </div>
+
+    <div class="col-9">
+
+      <div class="row mb-3">
+        <div class="col-10">
+          <div class="searchbar">
+            <input class="search_input" type="text" name="" placeholder="Search...">
+            <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+          </div>
+        </div>
+
+        <div class="col-2">
+          <button
+            class="btn"
+            [mdbPopover]="myCart"
+            mdbPopoverHeader="Shopping cart"
+            placement="bottom"
+            triggers="click"
+          >
+            <i class="fas fa-lg fa-shopping-cart"></i>
+          </button>
+          <ng-template #myCart>
+            <app-shopping-cart></app-shopping-cart>
+          </ng-template>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-4" *ngFor="let product of products">
+          <app-product-card [product]="product"></app-product-card>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

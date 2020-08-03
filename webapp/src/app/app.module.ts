@@ -1,3 +1,6 @@
+import { ManagementComponent } from './my-store/management/management.component';
+import { ManagementModule } from './my-store/management/management.module';
+import { DashboardModule } from './my-store/dashboard/dashboard.module';
 import { CategoryManagementModule } from './manager/category-management/category-management.module';
 import { ProductManagementModule } from './manager/product-management/product-management.module';
 import { RoleManagementModule } from './manager/role-management/role-management.module';
@@ -36,6 +39,11 @@ import { ProductDetailsComponent } from './modal/product-details/product-details
 import { ProductUpdateComponent } from './modal/product-update/product-update.component';
 import { CategoryDetailsComponent } from './modal/category-details/category-details.component';
 import { CategoryUpdateComponent } from './modal/category-update/category-update.component';
+import { DashboardComponent } from './my-store/dashboard/dashboard.component';
+import { ShoppingComponent } from './shopping/shopping.component';
+import { ShoppingCategoryComponent } from './shopping/shopping-category/shopping-category.component';
+import { ProductCardComponent } from './shopping/product-card/product-card.component';
+import { ShoppingCartComponent } from './shopping/shopping-cart/shopping-cart.component';
 
 @NgModule({
   declarations: [
@@ -61,13 +69,18 @@ import { CategoryUpdateComponent } from './modal/category-update/category-update
     ProductUpdateComponent,
     CategoryDetailsComponent,
     CategoryUpdateComponent,
+    DashboardComponent,
+    ManagementComponent,
+    ShoppingComponent,
+    ShoppingCategoryComponent,
+    ProductCardComponent,
+    ShoppingCartComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     CoreModule,
     NgbModule,
-    MDBBootstrapModulesPro.forRoot(),
     FormsModule,
     ReactiveFormsModule,
     UserManagementModule,
@@ -75,9 +88,12 @@ import { CategoryUpdateComponent } from './modal/category-update/category-update
     RoleManagementModule,
     ProductManagementModule,
     CategoryManagementModule,
-    ToastModule.forRoot(),
+    DashboardModule,
+    ManagementModule,
     BrowserAnimationsModule,
+    ToastModule.forRoot(),
     ToastrModule.forRoot(),
+    MDBBootstrapModulesPro.forRoot(),
   ],
   entryComponents: [LoginModalComponent],
   providers: [MDBSpinningPreloader],

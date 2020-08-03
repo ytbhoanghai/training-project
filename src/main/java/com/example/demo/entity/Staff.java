@@ -59,6 +59,10 @@ public class Staff {
 
     private Integer level;
 
+    private Boolean isManager;
+
+    private Boolean isDeleted;
+
 //    @JsonIgnore
     @ManyToMany
     @JoinTable(

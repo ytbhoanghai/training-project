@@ -1,3 +1,4 @@
+import { PermissionService } from './../../../service/permission.service';
 import { ConfirmModalService } from './../../../service/confirm-modal.service';
 import { UserService } from 'src/app/core/auth/user.service';
 import { Location } from '@angular/common';
@@ -11,7 +12,6 @@ import {
 } from './../role-management.component';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
-import { compileNgModule } from '@angular/compiler';
 
 @Component({
   selector: 'app-role-table',
@@ -28,17 +28,20 @@ export class RoleTableComponent implements OnInit {
   resources: IResource[];
   roleName: string = '';
   grantedPemissions: number[] = [];
+  ungrantedPermissions: number[] = [];
 
   constructor(
     private location: Location,
     private roleManagementService: RoleManagementService,
     private notiSerive: NotificationService,
     private userService: UserService,
-    private confirmService: ConfirmModalService
+    private confirmService: ConfirmModalService,
+    private permissionService: PermissionService
   ) {}
 
   ngOnInit(): void {
     this.fetchCurrentGrantedPemissons();
+    this.fetchUngrantedPemissions();
     this.findAllResources();
     this.passData();
   }
@@ -56,8 +59,16 @@ export class RoleTableComponent implements OnInit {
     })
   }
 
+  fetchUngrantedPemissions(): void {
+    this.permissionService.fetchPermission(false).subscribe(permissions => {
+      this.ungrantedPermissions = permissions;
+    })
+  }
+
   canGrantPermission(permission: IPermission): boolean {
-    return this.grantedPemissions.includes(permission.id);
+    // In granted permissions and NOT in ungranted permissons
+    return this.grantedPemissions.includes(permission.id)
+      && !this.ungrantedPermissions.includes(permission.id);
   }
 
   isUpdateMode(): boolean {
@@ -107,7 +118,7 @@ export class RoleTableComponent implements OnInit {
   hasAnyDisabledPermmissions(resource: IResource): boolean {
     // Check if each row has any permissons that are not grantable to others
     for (let p of resource.permissions) {
-      if (!this.grantedPemissions.includes(p.id)) {
+      if (!this.canGrantPermission(p)) {
         return true;
       }
     }

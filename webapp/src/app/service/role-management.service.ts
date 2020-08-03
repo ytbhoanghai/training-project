@@ -36,7 +36,6 @@ export class RoleManagementService {
 
   findAllResources(): Observable<IResource[]> {
     return this.httpClient.get<IResource[]>(SERVER_URL + "/resources").pipe(
-      tap( _ => console.log("find all resources")),
       map(resources => {
         for (let i = 0; i < resources.length; i++) {
           resources[i].permissions = this.permissionListResolver(resources[i].permissions);
