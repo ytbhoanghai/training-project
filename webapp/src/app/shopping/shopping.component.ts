@@ -21,4 +21,8 @@ export class ShoppingComponent implements OnInit {
     })
   }
 
+  filterByCategory(id: number): void {
+    console.log('filter category', id);
+  }
+
 }

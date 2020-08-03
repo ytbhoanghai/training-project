@@ -44,6 +44,7 @@ import { ShoppingComponent } from './shopping/shopping.component';
 import { ShoppingCategoryComponent } from './shopping/shopping-category/shopping-category.component';
 import { ProductCardComponent } from './shopping/product-card/product-card.component';
 import { ShoppingCartComponent } from './shopping/shopping-cart/shopping-cart.component';
+import { ShoppingStoreComponent } from './shopping/shopping-store/shopping-store.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { ShoppingCartComponent } from './shopping/shopping-cart/shopping-cart.co
     ShoppingComponent,
     ShoppingCategoryComponent,
     ProductCardComponent,
-    ShoppingCartComponent
+    ShoppingCartComponent,
+    ShoppingStoreComponent
   ],
   imports: [
     BrowserModule,

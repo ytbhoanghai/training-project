@@ -1,3 +1,17 @@
 .list-group-item {
   user-select: none;
 }
+
+.active {
+  color: #e7ab3c !important;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #e7ab3c !important;
+}
+
+li:hover a {
+  color: #e7ab3c !important;
+}

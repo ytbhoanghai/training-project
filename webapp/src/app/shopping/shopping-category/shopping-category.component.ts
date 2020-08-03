@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import {CategoryService, ICategory} from "../../manager/category-management/category.service";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-shopping-category',
@@ -9,10 +8,8 @@ import {Observable} from "rxjs";
 })
 export class ShoppingCategoryComponent implements OnInit {
   categories: ICategory[] = [];
-  categories$: Observable<ICategory[]>;
 
   constructor(private categoryService: CategoryService) {
-    this.categories$ = this.categoryService.fetchCategories();
   }
 
   ngOnInit(): void {

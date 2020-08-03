@@ -1,45 +1,107 @@
 <div class="container">
-
-
-  <div class="row mt-3">
-    <div class="col-3">
-      <app-shopping-category></app-shopping-category>
-    </div>
-
-    <div class="col-9">
-
-      <div class="row mb-3">
-        <div class="col-10">
-          <div class="searchbar">
-            <input class="search_input" type="text" name="" placeholder="Search...">
-            <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
-          </div>
-        </div>
-
-        <div class="col-2">
-          <button
-            class="btn"
-            [mdbPopover]="myCart"
-            mdbPopoverHeader="Shopping cart"
-            placement="bottom"
-            triggers="click"
-          >
-            <i class="fas fa-lg fa-shopping-cart"></i>
-          </button>
-          <ng-template #myCart>
-            <app-shopping-cart></app-shopping-cart>
-          </ng-template>
-        </div>
-
-      </div>
-
-      <div class="row">
-        <div class="col-4" *ngFor="let product of products">
-          <app-product-card [product]="product"></app-product-card>
+  <div class="inner-header">
+    <div class="row">
+      <div class="col-lg-2 col-md-2">
+        <div class="logo">
+          <a href="./index.html">
+            <img src="img/logo.png" alt="" />
+          </a>
         </div>
       </div>
-
+      <div class="col-lg-7 col-md-7">
+        <div class="advanced-search">
+          <button type="button" class="category-btn">All Categories</button>
+          <form action="#" class="input-group">
+            <input type="text" placeholder="What do you need?" />
+            <button type="button"><i class="fas fa-search"></i></button>
+          </form>
+        </div>
+      </div>
+      <div class="col-lg-3 text-right col-md-3">
+        <ul class="nav-right">
+          <li class="heart-icon">
+            <a href="#">
+              <i class="fas fa-truck"></i>
+              <span>1</span>
+            </a>
+          </li>
+          <app-shopping-cart></app-shopping-cart>
+        </ul>
+      </div>
     </div>
-
   </div>
 </div>
+
+<!-- Breadcrumb Section Begin -->
+<div class="breacrumb-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="breadcrumb-text">
+          <a href="#"><i class="fas fa-home"></i> Home</a>
+          <i class="fas fa-chevron-right fa-xs"></i>
+          <span>Shop</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Breadcrumb Section Begin -->
+
+<section class="product-shop spad">
+  <div class="container">
+    <div class="row">
+      <div
+        class="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter"
+      >
+        <app-shopping-category></app-shopping-category>
+        <app-shopping-store></app-shopping-store>
+      </div>
+      <div class="col-lg-9 order-1 order-lg-2">
+        <div class="product-show-option">
+          <div class="row">
+            <div class="col-lg-7 col-md-7"></div>
+            <div class="col-lg-5 col-md-5 text-right">
+              <p>Show 01- 09 Of 36 Product</p>
+            </div>
+          </div>
+        </div>
+        <div class="product-list">
+          <div class="row">
+            <div class="col-lg-4 col-sm-6" *ngFor="let product of products">
+              <app-product-card [product]="product"></app-product-card>
+            </div>
+          </div>
+        </div>
+        <div class="loading-more">
+          <button class="btn btn-sm">
+            <div class="spinner-border text-warning" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </button>
+          <a href="#">
+            Loading More
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer style="background-color: #191919; margin: 0 -16px;">
+  <div class="copyright-reserved">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="copyright-text">
+            Copyright &copy; 2020 All rights reserved | This template is made by
+            Phong & Hai
+          </div>
+          <div class="payment-pic">
+            <img src="assets/img/payment-method.png" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,23 +1,31 @@
-<mdb-card class="mb-4">
-  <mdb-card-body>
-    <mdb-card-title>
-      <h5 class="font-weight-bolder">{{ product.name }}</h5>
-      <h6 class="text-danger font-weight-bold">
-        {{ product.price | currency:'USD':true:'1.0-2' }}
-      </h6>
-    </mdb-card-title>
-    <mdb-card-text>
-      <mdb-badge
-        pill="true"
-        primary="true"
-        *ngFor="let category of product.categories"
-      >
-        {{ category.name }}
-      </mdb-badge>
-    </mdb-card-text>
+<div class="product-item border rounded">
+  <div class="pi-pic">
+    <img src="https://picsum.photos/250" alt="" class="product-img" />
+    <div class="sale pp-sale">Sale</div>
+    <div class="icon">
+      <i class="fas fa-cart-plus"></i>
+      <!-- <i class="far fa-star"></i> -->
+      <!-- <i class="far fa-gem"></i> -->
+    </div>
+    <ul>
+      <li class="w-icon active">
+        <a href="#"><i class="fas fa-info mr-0"></i></a>
+      </li>
+      <li class="quick-view"><a (click)="addToCart()">+ Add to cart</a></li>
+      <li class="w-icon">
+        <a href="#"><i class="fa fa-random"></i></a>
+      </li>
+    </ul>
+  </div>
+  <div class="pi-text">
+    <div class="catagory-name">{{ product.categories[0].name }}</div>
+    <a href="#">
+      <h5>{{ product.name }}</h5>
+    </a>
+    <div class="product-price">
+      {{ product.price | currency:'USD':true:'1.0-2' }}
+      <!-- <span>$35.00</span> -->
+    </div>
+  </div>
+</div>
 
-    <button class="btn btn-sm text-light mb-2 btn-cart"><i class="fas fa-cart-plus"></i>Add to cart</button>
-
-    <div class="text-muted small"><i class="far fa-gem"></i>lorem</div>
-  </mdb-card-body>
-</mdb-card>

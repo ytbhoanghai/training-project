@@ -16,3 +16,13 @@ table td, table td *, table th, table th * {
 .bg-jumbotron {
   background: #E9ECEF !important;
 }
+
+/* CUSTOM POPOVER WIDTH */
+.popover {
+  max-width: 500px;
+}
+
+a {
+  user-select: none;
+  cursor: pointer;
+}

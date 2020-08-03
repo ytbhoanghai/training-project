@@ -1,0 +1,19 @@
+<div class="filter-widget">
+  <h4 class="fw-title">Store</h4>
+  <div class="fw-brand-check">
+    <div class="bc-item">
+      <label for="bc-calvin" class="font-weight-bold">
+        ALL
+        <input type="checkbox" id="bc-calvin" checked />
+        <span class="checkmark"></span>
+      </label>
+    </div>
+    <div class="bc-item" *ngFor="let store of stores">
+      <label for="bc-diesel-{{ store.id }}">
+        {{ store.name }}
+        <input type="checkbox" id="bc-diesel-{{ store.id }}" />
+        <span class="checkmark"></span>
+      </label>
+    </div>
+  </div>
+</div>

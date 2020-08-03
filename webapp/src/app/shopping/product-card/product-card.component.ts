@@ -1,3 +1,4 @@
+import { LocalCartService } from './../../service/local-cart.service';
 import {Component, Input, OnInit} from '@angular/core';
 import {IProduct} from "../../manager/product-management/product.service";
 
@@ -9,9 +10,13 @@ import {IProduct} from "../../manager/product-management/product.service";
 export class ProductCardComponent implements OnInit {
   @Input() product: IProduct;
 
-  constructor() { }
+  constructor(private localCartService: LocalCartService) { }
 
   ngOnInit(): void {
   }
 
+  addToCart(): void {
+    this.localCartService.addItem(this.product);
+    console.log(this.localCartService.getItems())
+  }
 }
