@@ -30,4 +30,6 @@ public interface StoreService {
     List<StoreProductResponse> findProductsByStoreAndIsAdded(Integer storeId, Boolean isAdded);
 
     void deleteProductFromStore(Integer storeId, Integer productId);
+
+    List<Store> getManageableStores();
 }

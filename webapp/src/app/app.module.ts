@@ -40,6 +40,10 @@ import { ProductUpdateComponent } from './modal/product-update/product-update.co
 import { CategoryDetailsComponent } from './modal/category-details/category-details.component';
 import { CategoryUpdateComponent } from './modal/category-update/category-update.component';
 import { DashboardComponent } from './my-store/dashboard/dashboard.component';
+import { ShoppingComponent } from './shopping/shopping.component';
+import { ShoppingCategoryComponent } from './shopping/shopping-category/shopping-category.component';
+import { ProductCardComponent } from './shopping/product-card/product-card.component';
+import { ShoppingCartComponent } from './shopping/shopping-cart/shopping-cart.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +70,11 @@ import { DashboardComponent } from './my-store/dashboard/dashboard.component';
     CategoryDetailsComponent,
     CategoryUpdateComponent,
     DashboardComponent,
-    ManagementComponent
+    ManagementComponent,
+    ShoppingComponent,
+    ShoppingCategoryComponent,
+    ProductCardComponent,
+    ShoppingCartComponent
   ],
   imports: [
     BrowserModule,

@@ -6,15 +6,15 @@
           <div class="input-group-prepend">
             <span class="input-group-text input-sm">Staff</span>
           </div>
-          <select class="form-control form-control-sm w-50" name="selectStaffId">
+          <select class="form-control form-control-sm w-50" name="selectStaffId" [(ngModel)]="selectStaffId">
             <!-- <option disabled selected value="0">Default</option> -->
-            <option *ngFor="let staff of staffs" [value]="staff.id">
+            <option *ngFor="let staff of staffs" [ngValue]="staff.id">
               {{ staff.id + ': ' + staff.name }}
             </option>
             <option *ngIf="!staffs.length" disabled selected>Empty</option>
           </select>
         </div>
-        <button type="button" class="btn btn-success btn-sm ml-1" (click)="addManager()">
+        <button type="button" class="btn btn-success btn-sm ml-1" (click)="addStaff()">
           <i class="fas fa-plus mr-0"></i> Add
         </button>
       </div>
@@ -25,21 +25,30 @@
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Name</th>
+          <th scope="col">Role</th>
           <th scope="col" class="text-center">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let manager of managers">
-          <th scope="row">{{ manager.id }}</th>
-          <td>{{ manager.name }}</td>
+        <tr *ngFor="let staff of addedStaffs">
+          <th scope="row">{{ staff.id }}</th>
+          <td>{{ staff.name }}</td>
+          <td [ngClass]="staff.isManager ? 'text-success' : ''">
+            {{ staff.isManager ? 'Manager' : 'Staff' }}
+          </td>
           <td class="text-center">
-            <button (click)="removeManager(manager)" type="button" class="btn btn-danger btn-sm">
+            <button
+              type="button"
+              class="btn btn-danger btn-sm"
+              (click)="removeStaff(staff)"
+              [disabled]="staff.isManager"
+            >
               <i class="fas fa-times mr-0"></i>
             </button>
           </td>
         </tr>
-        <tr *ngIf="!managers.length">
-          <td colspan="3" class="text-center text-danger font-italic">Empty</td>
+        <tr *ngIf="!addedStaffs.length">
+          <td colspan="4" class="text-center text-danger font-italic">Empty</td>
         </tr>
       </tbody>
     </table>

@@ -16,6 +16,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -73,6 +74,23 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public void deleteProductFromStore(Integer storeId, Integer productId) {
         storeProductService.deleteProductFormStore(storeId, productId);
+    }
+
+    @Override
+    public List<Store> getManageableStores() {
+        Staff currentStaff = securityUtil.getCurrentStaff();
+        if (currentStaff.isAdmin()) {
+            return storeRepository.findAll();
+        }
+
+        if (currentStaff.getIsManager()) {
+            Integer storeId = currentStaff.getStore().getId();
+            Store store = storeRepository.findById(storeId)
+                    .orElseThrow(() -> new StoreNotFoundException(storeId));
+            return List.of(store);
+        }
+
+        return null;
     }
 
     @Override

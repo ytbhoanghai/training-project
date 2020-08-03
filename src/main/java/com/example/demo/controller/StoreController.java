@@ -8,6 +8,7 @@ import com.example.demo.security.constants.StaffPermission;
 import com.example.demo.security.constants.StorePermission;
 import com.example.demo.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +34,6 @@ public class StoreController {
 
     @GetMapping
     public ResponseEntity<List<Store>> findAll() {
-        System.out.println();
-//        return null;
         List<Store> stores = storeService.findAll();
         return new ResponseEntity<>(stores, HttpStatus.OK);
     }
@@ -49,6 +48,12 @@ public class StoreController {
     @GetMapping(value = "status")
     public ResponseEntity<?> getAllStatus() {
         return ResponseEntity.ok(Store.Status.values());
+    }
+
+    @GetMapping(value = "management")
+    @PreAuthorize("hasAuthority(\"" + StorePermission.READ + "\")")
+    public ResponseEntity<?> getManageableStores() {
+        return ResponseEntity.ok(storeService.getManageableStores());
     }
 
     @GetMapping(value = "{storeId}/staffs")

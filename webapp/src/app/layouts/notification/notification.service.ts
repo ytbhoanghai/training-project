@@ -26,4 +26,8 @@ export class NotificationService {
   showError401(message?: string): void {
     this.toastService.error(message || "You don't have permissions to do this action", "401 Unauthorized", this.options);
   }
+
+  showError(message?: string): void {
+    this.toastService.error(message || "Something went wrong!", "Error", this.options);
+  }
 }

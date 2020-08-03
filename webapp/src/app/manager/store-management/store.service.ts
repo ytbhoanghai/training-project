@@ -49,6 +49,10 @@ export class StoreService {
     });
   }
 
+  fetchManageableStores(): Observable<IStore[]> {
+    return this.http.get<IStore[]>(this.REQUEST_URL + 'management');
+  }
+
   save(body: IStore): Observable<IStore> {
     return this.http.post<IStore>(this.REQUEST_URL, body);
   }
@@ -86,6 +90,7 @@ export type ISimpleStaff = {
   id: number;
   name: string;
   email: string;
+  isManager: boolean;
 };
 
 export type IStore = {

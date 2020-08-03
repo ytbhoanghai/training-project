@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { CheckAuthoritiesGuard } from './config/guard/check-authorities.guard';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
+import {CheckAuthoritiesGuard} from './config/guard/check-authorities.guard';
 
-import { errorRoute } from './layouts/error/error.route';
+import {errorRoute} from './layouts/error/error.route';
 
 const routes: Routes = [
   {
@@ -24,6 +24,13 @@ const routes: Routes = [
         (m) => m.MyStoreRoutingModule
       ),
   },
+  {
+    path: 'shopping',
+    loadChildren: () =>
+      import('./shopping/shopping-routing.module').then(
+        m => m.ShoppingRoutingModule
+      )
+  },
   ...errorRoute,
 ];
 
@@ -31,4 +38,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

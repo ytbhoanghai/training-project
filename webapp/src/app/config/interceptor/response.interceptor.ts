@@ -13,7 +13,7 @@ import {NotificationService} from "../../layouts/notification/notification.servi
 
 @Injectable()
 export class ResponseInterceptor implements HttpInterceptor {
-  constructor(private nofiService: NotificationService) {}
+  constructor(private notiService: NotificationService) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -25,11 +25,17 @@ export class ResponseInterceptor implements HttpInterceptor {
   }
 
   handleError(err: HttpErrorResponse): Observable<any> {
-    if (err.status === 401) {
-      this.nofiService.showError401();
-      console.error('401 Unauthorizeddddddddddddddddd');
-      // Navigate to error page
+    switch (err.status) {
+      case 401:
+        this.notiService.showError401();
+        console.error('401 Unauthorizeddddddddddddddddd');
+        // Navigate to error page
+        break;
+      case 0:
+        this.notiService.showError('Connection refused!');
+        break;
     }
+
     return throwError(err);
   }
 }
