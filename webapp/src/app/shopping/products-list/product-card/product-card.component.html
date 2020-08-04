@@ -1,31 +1,37 @@
 <div class="product-item border rounded">
   <div class="pi-pic">
-    <img src="https://picsum.photos/250" alt="" class="product-img" />
+
+    <img src="https://picsum.photos/250" class="product-img" />
+    <img *ngIf="isOutOfStock" src="assets/img/out-of-stock.png" class="sold-out" />
+
     <div class="sale pp-sale">Sale</div>
     <div class="icon">
       <i class="fas fa-cart-plus"></i>
       <!-- <i class="far fa-star"></i> -->
       <!-- <i class="far fa-gem"></i> -->
     </div>
+
     <ul>
       <li class="w-icon active">
         <a href="#"><i class="fas fa-info mr-0"></i></a>
       </li>
-      <li class="quick-view"><a (click)="addToCart()">+ Add to cart</a></li>
+      <li class="quick-view hover-shadow">
+        <a (click)="addToCart()">+ Add to cart</a>
+      </li>
       <li class="w-icon">
         <a href="#"><i class="fa fa-random"></i></a>
       </li>
     </ul>
   </div>
+
   <div class="pi-text">
     <div class="catagory-name">{{ product.categories[0].name }}</div>
     <a href="#">
       <h5>{{ product.name }}</h5>
     </a>
     <div class="product-price">
-      {{ product.price | currency:'USD':true:'1.0-2' }}
+      {{ product.price | currency: "USD":true:"1.0-2" }}
       <!-- <span>$35.00</span> -->
     </div>
   </div>
 </div>
-

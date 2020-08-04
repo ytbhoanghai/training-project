@@ -1,9 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
-.fas, .far {
+.fas,
+.far {
   margin-right: 4px;
 }
 
-table td, table td *, table th, table th * {
+table td,
+table td *,
+table th,
+table th * {
   vertical-align: middle !important;
 }
 
@@ -14,7 +18,7 @@ table td, table td *, table th, table th * {
 }
 
 .bg-jumbotron {
-  background: #E9ECEF !important;
+  background: #e9ecef !important;
 }
 
 /* CUSTOM POPOVER WIDTH */
@@ -25,4 +29,24 @@ table td, table td *, table th, table th * {
 a {
   user-select: none;
   cursor: pointer;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.hover-shadow:hover, .primary-btn:hover {
+  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+html {
+  user-select: none;
+}
+
+.sold-out {
+	position: absolute;
+	left: 0;
+	top: 20px;
+	padding: 5px 10px;
 }

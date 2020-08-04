@@ -1,5 +1,5 @@
 <li class="cart-icon">
-  <a href="#">
+  <a>
     <i class="fas fa-shopping-cart"></i>
     <span>{{ items.length }}</span>
   </a>
@@ -14,14 +14,17 @@
             <td class="si-text">
               <div class="product-selected">
                 <p>
-                  {{ item.price | currency:"USD":true:"1.0-2" }} x
+                  {{ item.price | currency: "USD":true:"1.0-2" }} x
                   {{ item.quantity }}
                 </p>
                 <h6>{{ item.name }}</h6>
               </div>
             </td>
             <td class="si-close">
-              <i class="fas fa-times text-danger fa-lg"></i>
+              <i
+                class="fas fa-times text-danger fa-lg"
+                (click)="deleteItem(item.id)"
+              ></i>
             </td>
           </tr>
         </tbody>
@@ -29,11 +32,18 @@
     </div>
     <div class="select-total">
       <span>total:</span>
-      <h5>{{ totalPrice | currency:"USD":true:"1.0-2" }}</h5>
+      <h5>{{ totalPrice | currency: "USD":true:"1.0-2" }}</h5>
     </div>
     <div class="select-button">
-      <a href="#" class="primary-btn view-card">VIEW CARD</a>
-      <a href="#" class="primary-btn checkout-btn">CHECK OUT</a>
+      <a
+        class="primary-btn view-card"
+        routerLink="/shopping/cart"
+      >VIEW CARD</a>
+      <a
+        class="primary-btn checkout-btn"
+        routerLink="/shopping/checkout"
+      >CHECK OUT</a
+      >
     </div>
   </div>
 </li>

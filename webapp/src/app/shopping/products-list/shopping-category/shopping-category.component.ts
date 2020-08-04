@@ -1,5 +1,5 @@
+import { ICategory, CategoryService } from './../../../manager/category-management/category.service';
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import {CategoryService, ICategory} from "../../manager/category-management/category.service";
 
 @Component({
   selector: 'app-shopping-category',

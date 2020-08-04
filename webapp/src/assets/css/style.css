@@ -531,6 +531,10 @@ ol {
 	top: 40px;
 }
 
+.cart-hover tr:hover {
+  background-color: #f9f9f9;
+}
+
 .inner-header .nav-right li.cart-icon a {
 	color: #252525;
 	position: relative;
