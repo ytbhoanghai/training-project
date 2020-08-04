@@ -4,23 +4,19 @@ import com.example.demo.entity.Permission;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.Staff;
 import com.example.demo.exception.PermissionInvalidException;
-import com.example.demo.exception.RoleNotCreateByCurrentStaffException;
 import com.example.demo.exception.RoleNotFoundException;
 import com.example.demo.form.RoleForm;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.response.RoleResponse;
 import com.example.demo.response.SimpleRoleResponse;
 import com.example.demo.security.SecurityUtil;
-import com.example.demo.security.constants.*;
+import com.example.demo.security.constants.RolePermission;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Id;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 

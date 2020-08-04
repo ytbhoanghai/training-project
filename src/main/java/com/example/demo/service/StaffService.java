@@ -27,6 +27,8 @@ public interface StaffService {
 
     Staff save(StaffForm staffForm);
 
+    Staff save(Staff staff);
+
     Staff update(Integer id, StaffForm staffForm);
 
     String deleteById(Integer id);
@@ -34,5 +36,7 @@ public interface StaffService {
     List<Integer> getPermissionIdsOfCurrentStaff(Staff currentStaff);
 
     boolean updatePassword(UpdatePasswordForm updatePasswordForm);
+
+    List<Staff> findAllByStoreIsNull();
 
 }

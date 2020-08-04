@@ -11,7 +11,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StoreProductRepository extends JpaRepository<StoreProduct, Integer> {
+public interface StoreProductRepository extends JpaRepository<StoreProduct, StoreProduct.StoreProductID> {
+
     List<StoreProduct> findAllByStore(Store store);
 
     void deleteByStore(Store store);

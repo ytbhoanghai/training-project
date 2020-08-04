@@ -4,6 +4,8 @@ import com.example.demo.entity.Product;
 import com.example.demo.entity.Store;
 import com.example.demo.entity.StoreProduct;
 import com.example.demo.entity.StoreProduct.StoreProductID;
+import com.example.demo.exception.NotEnoughQuantityException;
+import com.example.demo.exception.ProductNotExistsInStoreException;
 import com.example.demo.exception.ProductNotFoundException;
 import com.example.demo.exception.StoreNotFoundException;
 import com.example.demo.repository.ProductRepository;
@@ -36,6 +38,12 @@ public class StoreProductServiceImpl implements StoreProductService {
     }
 
 
+    public StoreProduct findById(StoreProduct.StoreProductID id) {
+        return storeProductRepository.findById(id)
+                .orElseThrow(() -> new ProductNotExistsInStoreException(id));
+    }
+
+
     @Override
     public List<StoreProduct> findAllByStore(Store store) {
         return storeProductRepository.findAllByStore(store);
@@ -48,8 +56,16 @@ public class StoreProductServiceImpl implements StoreProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
 
+        Integer currentQuantity = product.getQuantity();
+        if (currentQuantity - quantity < 0) {
+            throw new NotEnoughQuantityException("sever not enough product to provide ... ");
+        }
+
         StoreProduct.StoreProductID id = new StoreProduct.StoreProductID(store.getId(), product.getId());
         StoreProduct storeProduct = new StoreProduct(id, quantity, store, product);
+
+        product.setQuantity(currentQuantity - quantity);
+        productRepository.save(product);
 
         storeProductRepository.save(storeProduct);
     }
@@ -62,7 +78,12 @@ public class StoreProductServiceImpl implements StoreProductService {
                 .orElseThrow(() -> new ProductNotFoundException(productId));
 
         StoreProductID id = new StoreProductID(store.getId(), product.getId());
-        System.out.println(id);
+        StoreProduct storeProduct = findById(id);
+
+        Integer currentQuantity = product.getQuantity();
+        product.setQuantity(currentQuantity + storeProduct.getQuantity());
+        productRepository.save(product);
+
         storeProductRepository.deleteById(id);
     }
 

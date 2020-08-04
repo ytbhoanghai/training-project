@@ -72,7 +72,7 @@ public class Staff {
     private Set<Role> roles;
 
     public enum Type {
-        ADMIN, OTHER
+        ADMIN, OTHER, CUSTOMER
     }
 
     public Boolean isAdmin() {

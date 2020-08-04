@@ -24,6 +24,7 @@ public class AccountResponse implements Serializable {
     private String email;
     private String address;
     private Integer createdBy;
+    private Staff.Type type;
     private Date createdAt;
     private Integer idStore;
     private List<String> roles;
@@ -40,6 +41,7 @@ public class AccountResponse implements Serializable {
                 .email(staff.getEmail())
                 .address(staff.getAddress())
                 .createdBy(staff.getCreatedBy() != null ? staff.getCreatedBy().getId() : null)
+                .type(staff.getType())
                 .createdAt(staff.getCreatedAt())
                 .idStore(staff.getStore() != null ? staff.getStore().getId() : null)
                 .roles(roles).build();
