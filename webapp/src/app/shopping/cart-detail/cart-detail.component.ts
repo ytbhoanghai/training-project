@@ -1,6 +1,6 @@
-import { IProduct } from './../../manager/product-management/product.service';
-import { LocalCartService } from './../../service/local-cart.service';
-import { Component, OnInit } from '@angular/core';
+import {ICartItem, LocalCartService} from './../../service/local-cart.service';
+import {Component, OnInit} from '@angular/core';
+import {CartService} from "../../service/cart.service";
 
 @Component({
   selector: 'app-cart-detail',
@@ -8,12 +8,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cart-detail.component.css']
 })
 export class CartDetailComponent implements OnInit {
-  items: IProduct[] = [];
+  items: ICartItem[] = [];
 
-  constructor(private localCartService: LocalCartService) { }
+  constructor(
+    private localCartService: LocalCartService,
+    private cartService: CartService
+  ) { }
 
   ngOnInit(): void {
     this.fetchLocalCart();
+    // this.cartService.fetchCart();
+    this.cartService.changeListener$.subscribe(cart => {
+      console.log(cart);
+    })
   }
 
   fetchLocalCart(): void {

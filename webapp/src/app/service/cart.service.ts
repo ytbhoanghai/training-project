@@ -13,7 +13,7 @@ export class CartService {
   private cart: ICart;
 
   changeEvent = new Subject<ICart>();
-  changeListener = this.changeEvent.asObservable();
+  changeListener$ = this.changeEvent.asObservable();
 
   constructor(
     private localCartService: LocalCartService,
@@ -73,5 +73,17 @@ export class CartService {
         }
       }
     );
+  }
+
+  removeItem(id: number): void {
+    if (!this.userService.isLogin()) {
+      this.localCartService.deleteItemById(id);
+      return;
+    }
+
+    this.customerService.removeCartItem(id).subscribe(() => {
+      this.cart.items = this.cart.items.filter(item => item.id !== id);
+      this.changeEvent.next(this.cart);
+    })
   }
 }

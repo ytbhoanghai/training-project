@@ -36,7 +36,7 @@ export class LocalCartService {
     return cart;
   }
 
-  getItems(): IProduct[] {
+  getItems(): ICartItem[] {
     if (this.isEmpty()) return [];
 
     const cart: ICart = JSON.parse(localStorage.getItem(this.cartName));
@@ -44,7 +44,7 @@ export class LocalCartService {
   }
 
   addItem(item: IProduct): void {
-    let items: IProduct[] = this.getItems();
+    let items: ICartItem[] = this.getItems();
     let index = items.findIndex((elem) => elem.id === item.id);
 
     // FOUND
@@ -58,7 +58,7 @@ export class LocalCartService {
     this.save(items);
   }
 
-  save(items: IProduct[]): void {
+  save(items: ICartItem[]): void {
     const totalPrice = items.reduce(
       (total, item) => total + item.price * item.quantity,
       0
@@ -91,7 +91,7 @@ export interface ICart {
   id?: number;
   createdAt?: number;
   totalPrice?: number;
-  items: IProduct[];
+  items: ICartItem[];
 }
 
 export interface ICartItem {
