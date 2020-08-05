@@ -7,6 +7,7 @@ import com.example.demo.entity.StoreProduct;
 import java.util.List;
 
 public interface StoreProductService {
+
     List<StoreProduct> findAllByStore(Store store);
 
     void addProductToStore(Integer storeId, Integer productId, Integer quantity);

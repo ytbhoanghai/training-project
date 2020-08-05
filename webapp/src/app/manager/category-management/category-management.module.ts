@@ -11,6 +11,7 @@ import {CategoryAddComponent} from './category-add/category-add.component';
   declarations: [CategoryFormComponent, CategoryAddComponent],
   imports: [
     CommonModule,
+    
     ReactiveFormsModule,
     RouterModule.forChild([
       {

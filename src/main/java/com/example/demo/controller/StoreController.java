@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StoreController {
 
+    @Autowired
     private StoreService storeService;
 
     @Autowired

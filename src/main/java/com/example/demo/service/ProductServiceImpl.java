@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Category;
-import com.example.demo.entity.Product;
-import com.example.demo.entity.Role;
-import com.example.demo.entity.Staff;
+import com.example.demo.entity.*;
 import com.example.demo.exception.ProductNotFoundException;
 import com.example.demo.form.ProductForm;
 import com.example.demo.repository.CategoryRepository;
@@ -42,11 +39,6 @@ public class ProductServiceImpl implements ProductService {
     public Product findById(Integer id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
-    }
-
-    @Override
-    public List<Product> findAllByStore() {
-        return null;
     }
 
     @Override
