@@ -1,7 +1,7 @@
-import { ICategory } from './../manager/category-management/category.service';
 import { Subject } from 'rxjs';
 import { IProduct } from './../manager/product-management/product.service';
 import { Injectable } from '@angular/core';
+import { ICart, ICartItem } from './customer.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +15,10 @@ export class LocalCartService {
   };
 
   listeners = {
-    onAdd: this.events.add.asObservable(),
-    onUpdate: this.events.update.asObservable(),
-    onDelete: this.events.delete.asObservable(),
-    onChange: this.events.change.asObservable(),
+    onAdd$: this.events.add.asObservable(),
+    onUpdate$: this.events.update.asObservable(),
+    onDelete$: this.events.delete.asObservable(),
+    onChange$: this.events.change.asObservable(),
   };
 
   private cartName: string = 'tps_training_user_cart';
@@ -85,21 +85,4 @@ export class LocalCartService {
   clear(): void {
     localStorage.removeItem(this.cartName);
   }
-}
-
-export interface ICart {
-  id?: number;
-  createdAt?: number;
-  totalPrice?: number;
-  items: ICartItem[];
-}
-
-export interface ICartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  storeProductQuantity?: number;
-  createdAt?: number;
-  categories?: ICategory[]
 }

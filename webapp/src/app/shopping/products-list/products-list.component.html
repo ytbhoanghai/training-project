@@ -38,8 +38,11 @@
               <app-product-card [product]="product"></app-product-card>
             </div>
           </div>
+          <div class="row d-flex justify-content-center" *ngIf="isEmptyResult()">
+            <img src="assets/img/no-result-found.png" />
+          </div>
         </div>
-        <div class="loading-more">
+        <div class="loading-more" *ngIf="!isEmptyResult()">
           <button class="btn btn-sm">
             <div class="spinner-border text-warning" role="status">
               <span class="sr-only">Loading...</span>

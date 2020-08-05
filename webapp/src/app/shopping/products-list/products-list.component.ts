@@ -1,3 +1,5 @@
+import { ActivatedRoute } from '@angular/router';
+import { CustomerService } from './../../service/customer.service';
 import {
   IProduct,
   ProductService,
@@ -12,19 +14,30 @@ import { Component, OnInit } from '@angular/core';
 export class ProductsListComponent implements OnInit {
   products: IProduct[] = [];
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private customerService: CustomerService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.fetchProducts();
-  }
-
-  fetchProducts(): void {
-    this.productService.fetchProducts().subscribe((products) => {
-      this.products = products;
+    this.route.params.subscribe((params) => {
+      this.fetchProducts(
+        params.storeId,
+        params.categoryId === 'all' ? -1 : params.categoryId
+      );
     });
   }
 
-  filterByCategory(id: number): void {
-    console.log('filter category', id);
+  fetchProducts(storeId: number = 14, categoryId: number = -1): void {
+    this.customerService
+      .fetchProductsByStoreAndCategory(storeId, categoryId)
+      .subscribe((products) => {
+        this.products = products;
+      });
+  }
+
+  isEmptyResult(): boolean {
+    return !this.products.length;
   }
 }

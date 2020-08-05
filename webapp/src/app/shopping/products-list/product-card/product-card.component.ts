@@ -1,8 +1,4 @@
-import { UserService } from './../../../core/auth/user.service';
-import { NotificationService } from 'src/app/layouts/notification/notification.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { CustomerService } from './../../../service/customer.service';
-import { LocalCartService } from './../../../service/local-cart.service';
+import { CartService } from './../../../service/cart.service';
 import { IProduct } from './../../../manager/product-management/product.service';
 import { Component, Input, OnInit } from '@angular/core';
 
@@ -14,36 +10,19 @@ import { Component, Input, OnInit } from '@angular/core';
 export class ProductCardComponent implements OnInit {
   @Input() product: IProduct;
   isOutOfStock: boolean = false;
+  imgId: number;
 
-  constructor(
-    private localCartService: LocalCartService,
-    private customerService: CustomerService,
-    private notiService: NotificationService,
-    private userService: UserService
-  ) {}
+  constructor(private cartService: CartService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.imgId = this.randomImgId();
+  }
 
   addToCart(): void {
-    if (!this.userService.isLogin()) {
-      this.localCartService.addItem(this.product);
-      return;
-    }
+    this.cartService.addItem(this.product);
+  }
 
-    // Default quantity at 1
-    this.customerService.addItemToCart(this.product.id, 1).subscribe(
-      (item) => {
-        this.localCartService.events.add.next(item);
-        this.notiService.showSuccess();
-      },
-      (err: HttpErrorResponse) => {
-        if (err.status === 406) {
-          this.isOutOfStock = true;
-          this.notiService.showWaring(
-            `Reach maximum ${this.product.quantity} items. This product is out of stock`
-          );
-        }
-      }
-    );
+  randomImgId(): number {
+    return Math.round(Math.random() * 50);
   }
 }

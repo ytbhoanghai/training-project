@@ -13,8 +13,9 @@ const routes: Routes = [
     path: '',
     component: ShoppingComponent,
     children: [
-      { path: '', redirectTo: 'category/all' },
-      { path: 'category/:id', component: ProductsListComponent },
+      { path: '', redirectTo: 'store/14/category/all' },
+      { path: 'store/:storeId/category/:categoryId', component: ProductsListComponent },
+      // { path: 'category/:id', component: ProductsListComponent },
       { path: 'cart', component: CartDetailComponent },
       { path: 'checkout', component: CartCheckoutComponent },
     ],

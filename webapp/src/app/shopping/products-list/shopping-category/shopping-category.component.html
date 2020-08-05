@@ -3,14 +3,14 @@
   <ul class="filter-catagories">
     <li>
       <a
-        [routerLink]="['/shopping/category', 'all']"
+        [routerLink]="['/shopping', 'store', storeId, 'category', 'all']"
         routerLinkActive="active"
-      >ALL</a
+        >ALL</a
       >
     </li>
     <li *ngFor="let category of categories">
       <a
-        [routerLink]="['/shopping/category', category.id]"
+        [routerLink]="['/shopping', 'store', storeId, 'category', category.id]"
         routerLinkActive="active"
         >{{ category.name }}</a
       >

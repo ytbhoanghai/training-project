@@ -1,3 +1,5 @@
+import { IProduct } from './../manager/product-management/product.service';
+import { ICategory } from './../manager/category-management/category.service';
 import { Observable } from 'rxjs';
 import { SERVER_URL } from './../core/constants/api.constants';
 import { HttpClient } from '@angular/common/http';
@@ -10,6 +12,12 @@ export class CustomerService {
   private REQUEST_URL = SERVER_URL + '/customer/';
 
   constructor(private http: HttpClient) {}
+
+  fetchProductsByStoreAndCategory(storeId: number, categoryId: number): Observable<IProduct[]> {
+    return this.http.get<IProduct[]>(
+      this.REQUEST_URL + `stores/${storeId}/categories/${categoryId}/products`
+    );
+  }
 
   getMyCart(): Observable<ICart> {
     return this.http.get<ICart>(this.REQUEST_URL + 'cart');
@@ -35,8 +43,17 @@ export class CustomerService {
   }
 }
 
-export interface ICart {
+export interface IShoppingProduct {
   id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  storeName: string;
+  categoryNames: string[];
+}
+
+export interface ICart {
+  id?: number;
   createdAt?: number;
   totalPrice?: number;
   items: ICartItem[];
@@ -47,6 +64,9 @@ export interface ICartItem {
   name: string;
   price: number;
   quantity: number;
+  storeProductQuantity?: number;
+  createdAt?: number;
+  categories?: ICategory[];
 }
 
 export interface ICartItemBody {

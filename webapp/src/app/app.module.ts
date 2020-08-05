@@ -48,6 +48,7 @@ import { ShoppingCartComponent } from './shopping/shopping-cart/shopping-cart.co
 import { CartDetailComponent } from './shopping/cart-detail/cart-detail.component';
 import { ProductsListComponent } from './shopping/products-list/products-list.component';
 import { CartCheckoutComponent } from './shopping/cart-checkout/cart-checkout.component';
+import { CartDetailItemComponent } from './shopping/cart-detail/cart-detail-item/cart-detail-item.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { CartCheckoutComponent } from './shopping/cart-checkout/cart-checkout.co
     ShoppingStoreComponent,
     CartDetailComponent,
     ProductsListComponent,
-    CartCheckoutComponent
+    CartCheckoutComponent,
+    CartDetailItemComponent
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,7 @@
 <div class="product-item border rounded">
   <div class="pi-pic">
 
-    <img src="https://picsum.photos/250" class="product-img" />
+    <img src="https://picsum.photos/id/{{imgId}}/250" class="product-img" />
     <img *ngIf="isOutOfStock" src="assets/img/out-of-stock.png" class="sold-out" />
 
     <div class="sale pp-sale">Sale</div>
@@ -25,7 +25,7 @@
   </div>
 
   <div class="pi-text">
-    <div class="catagory-name">{{ product.categories[0].name }}</div>
+    <div class="catagory-name">{{ product.categoryNames.join(', ') }}</div>
     <a href="#">
       <h5>{{ product.name }}</h5>
     </a>
@@ -34,4 +34,5 @@
       <!-- <span>$35.00</span> -->
     </div>
   </div>
+  <div class="text-muted small text-center mb-2"><i class="far fa-gem"></i>{{ product.storeName }}</div>
 </div>

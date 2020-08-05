@@ -17,7 +17,7 @@ export class StoreService {
   constructor(private http: HttpClient) {}
 
   fetchStores(): Observable<IStore[]> {
-    return this.http.get<IStore[]>(this.REQUEST_URL);
+    return this.http.get<IStore[]>(this.REQUEST_URL.slice(0, -1));
   }
 
   fetchById(id: number): Observable<IStore> {

@@ -1,30 +1,52 @@
-import {ICartItem, LocalCartService} from './../../service/local-cart.service';
-import {Component, OnInit} from '@angular/core';
-import {CartService} from "../../service/cart.service";
+import {
+  ICart,
+  ICartItem,
+  ICartItemBody,
+} from './../../service/customer.service';
+import { Component, OnInit } from '@angular/core';
+import { CartService } from '../../service/cart.service';
 
 @Component({
   selector: 'app-cart-detail',
   templateUrl: './cart-detail.component.html',
-  styleUrls: ['./cart-detail.component.css']
+  styleUrls: ['./cart-detail.component.css'],
 })
 export class CartDetailComponent implements OnInit {
-  items: ICartItem[] = [];
+  cart: ICart = { totalPrice: 0, items: [] };
 
-  constructor(
-    private localCartService: LocalCartService,
-    private cartService: CartService
-  ) { }
+  constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    this.fetchLocalCart();
-    // this.cartService.fetchCart();
-    this.cartService.changeListener$.subscribe(cart => {
-      console.log(cart);
-    })
+    this.cartService.fetchCart();
+    this.cartService.changeListener$.subscribe((cart) => {
+      this.cart = this.cartService.getCart();
+      // this.cart = {...this.cartService.getCart(), items: [...this.cart.items]};
+    });
   }
 
-  fetchLocalCart(): void {
-    this.items = this.localCartService.getItems();
+  removeCartItem(id: number): void {
+    this.cartService.removeItem(id);
   }
 
+  updateCart(): void {
+    let body: ICartItemBody[] = [];
+    this.cart.items.forEach((item) => {
+      body.push({ idCartItem: item.id, quantity: item.quantity });
+    });
+
+    this.cartService.updateItems(body);
+  }
+
+  handleItemChanged(newItem: ICartItem): void {
+    const index = this.cart.items.findIndex((item) => item.id === newItem.id);
+    this.cart.items[index] = newItem;
+    this.updateTotalPrice();
+  }
+
+  updateTotalPrice(): void {
+    this.cart.totalPrice = this.cart.items.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+  }
 }
