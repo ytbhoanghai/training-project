@@ -70,7 +70,6 @@ export class StoreProductComponent implements OnInit {
           }
         }
       );
-    this.resetSelected();
   }
 
   // Update product list in UI
@@ -82,6 +81,7 @@ export class StoreProductComponent implements OnInit {
     this.remainedProducts = this.remainedProducts.filter(
       (p) => p.id !== this.selectedProductId
     );
+    this.resetSelected();
     this.notiService.showSuccess();
   }
 

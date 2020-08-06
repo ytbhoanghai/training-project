@@ -1,3 +1,4 @@
+import { CheckLoginGuard } from './../config/guard/check-login.guard';
 import { CartCheckoutComponent } from './cart-checkout/cart-checkout.component';
 import { ProductsListComponent } from './products-list/products-list.component';
 import { CartDetailComponent } from './cart-detail/cart-detail.component';
@@ -14,10 +15,17 @@ const routes: Routes = [
     component: ShoppingComponent,
     children: [
       { path: '', redirectTo: 'store/14/category/all' },
-      { path: 'store/:storeId/category/:categoryId', component: ProductsListComponent },
+      {
+        path: 'store/:storeId/category/:categoryId',
+        component: ProductsListComponent,
+      },
       // { path: 'category/:id', component: ProductsListComponent },
       { path: 'cart', component: CartDetailComponent },
-      { path: 'checkout', component: CartCheckoutComponent },
+      {
+        path: 'checkout',
+        canActivate: [CheckLoginGuard],
+        component: CartCheckoutComponent,
+      },
     ],
   },
 ];

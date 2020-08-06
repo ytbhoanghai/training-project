@@ -49,6 +49,9 @@ import { CartDetailComponent } from './shopping/cart-detail/cart-detail.componen
 import { ProductsListComponent } from './shopping/products-list/products-list.component';
 import { CartCheckoutComponent } from './shopping/cart-checkout/cart-checkout.component';
 import { CartDetailItemComponent } from './shopping/cart-detail/cart-detail-item/cart-detail-item.component';
+import { StripeFormComponent } from './shopping/cart-checkout/stripe-form/stripe-form.component';
+import { UserCheckoutFormComponent } from './shopping/cart-checkout/user-checkout-form/user-checkout-form.component';
+import { PaymentModalComponent } from './modal/payment-modal/payment-modal.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +87,10 @@ import { CartDetailItemComponent } from './shopping/cart-detail/cart-detail-item
     CartDetailComponent,
     ProductsListComponent,
     CartCheckoutComponent,
-    CartDetailItemComponent
+    CartDetailItemComponent,
+    StripeFormComponent,
+    UserCheckoutFormComponent,
+    PaymentModalComponent
   ],
   imports: [
     BrowserModule,

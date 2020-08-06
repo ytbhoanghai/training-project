@@ -34,6 +34,6 @@ export class ShoppingStoreComponent implements OnInit {
   }
 
   navigateUrl(storeId: number): void {
-    this.router.navigate(['/shopping', 'store', storeId, 'category', this.categoryId]);
+    this.router.navigate(['/shopping', 'store', storeId, 'category', this.categoryId || 'all']);
   }
 }

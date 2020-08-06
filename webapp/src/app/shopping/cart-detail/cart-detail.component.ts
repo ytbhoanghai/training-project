@@ -1,3 +1,4 @@
+import { ConfirmModalService } from './../../service/confirm-modal.service';
 import {
   ICart,
   ICartItem,
@@ -14,7 +15,10 @@ import { CartService } from '../../service/cart.service';
 export class CartDetailComponent implements OnInit {
   cart: ICart = { totalPrice: 0, items: [] };
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private confirmService: ConfirmModalService
+  ) {}
 
   ngOnInit(): void {
     this.cartService.fetchCart();
@@ -48,5 +52,11 @@ export class CartDetailComponent implements OnInit {
       (total, item) => total + item.price * item.quantity,
       0
     );
+  }
+
+  clearCart(): void {
+    this.confirmService.show().onYes(() => {
+      this.cartService.clearCart(this.cart.id);
+    });
   }
 }

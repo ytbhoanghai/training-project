@@ -18,7 +18,7 @@ import { take } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class CartService {
-  private cart: ICart;
+  private cart: ICart = { totalPrice: 0, items: [] };
 
   changeEvent = new BehaviorSubject<ICart>(null);
   changeListener$ = this.changeEvent.asObservable();
@@ -43,7 +43,7 @@ export class CartService {
       this.cart = this.localCartService.getCart();
       this.changeEvent.next(this.cart);
       return;
-    };
+    }
 
     if (this.localCartService.isEmpty()) {
       this.fetchRemoteCart();
@@ -71,6 +71,7 @@ export class CartService {
         .subscribe(null, (err) => console.log('Error on merge'));
     });
     this.localCartService.clear();
+    this.fetchRemoteCart();
   }
 
   addItem(item: IProduct): void {
@@ -143,8 +144,26 @@ export class CartService {
   }
 
   doPostRemoved(id: number): void {
-      this.cart.items = this.cart.items.filter((item) => item.id !== id);
-      this.changeEvent.next(this.cart);
-      this.notiService.showQuickSuccess('Delete item successfully!');
+    this.cart.items = this.cart.items.filter((item) => item.id !== id);
+    this.changeEvent.next(this.cart);
+    this.notiService.showQuickSuccess('Delete item successfully!');
+  }
+
+  clearCart(id: number): void {
+    if (!this.userService.isLogin()) {
+      this.localCartService.clear();
+      this.doPostClearCart();
+      return;
+    }
+
+    this.customerService.clearCart(id).subscribe(() => {
+      this.doPostClearCart();
+    });
+  }
+
+  doPostClearCart(): void {
+    this.cart.items = [];
+    this.changeEvent.next(this.cart);
+    this.notiService.showQuickSuccess('Clear cart successfully!');
   }
 }

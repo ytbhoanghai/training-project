@@ -1,0 +1,18 @@
+.table-head {
+  text-align: right;
+  min-width: 2em;
+}
+
+.bg {
+  background: #f8fbfd;
+}
+
+.card-head {
+  margin: 15px 0;
+  margin-top: 0;
+  color: #32325d;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-size: 13px;
+  font-weight: 500;
+}

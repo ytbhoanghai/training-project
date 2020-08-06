@@ -1,0 +1,27 @@
+<h4>Biiling Details</h4>
+<div class="row">
+  <div class="col-lg-12">
+    <label for="fir">Full Name<span>*</span></label>
+    <input type="text" id="name" name="name" [(ngModel)]="userForm.name" disabled required />
+  </div>
+  <div class="col-lg-12">
+    <label for="street">Street Address<span>*</span></label>
+    <input type="text" class="street-first" name="address" [(ngModel)]="userForm.address" disabled />
+  </div>
+  <div class="col-lg-12">
+    <label for="town">Shipping Address</label>
+    <input type="text" name="ship-address" [(ngModel)]="userForm.shipAddress" />
+  </div>
+  <div class="col-lg-6">
+    <label for="email">Email Address<span>*</span></label>
+    <input type="text" id="email" name="email" [(ngModel)]="userForm.email" disabled required />
+  </div>
+  <div class="col-lg-6">
+    <label for="phone">Phone</label>
+    <input type="text" name="phone" [(ngModel)]="userForm.phone" />
+  </div>
+  <div class="col-lg-12 py-2">
+    <label for="phone">Credit or Debit Card<span>*</span></label>
+    <!-- <app-stripe-form (onToken)="handleToken($event)"></app-stripe-form> -->
+  </div>
+</div>

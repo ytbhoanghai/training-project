@@ -14,57 +14,52 @@
   </div>
 </div>
 
-<form action="#" class="checkout-form mt-5">
-  <div class="row">
-    <div class="col-lg-4 offset-lg-4">
-      <div class="place-order">
-        <h4>Your Order</h4>
-        <div class="order-total">
-          <ul class="order-table">
-            <li>Product <span>Total</span></li>
-            <li class="fw-normal" *ngFor="let item of cart.items">
-              {{ item.name }} x {{ item.quantity }}
-              <span>{{
-                item.price * item.quantity | currency:"USD":true:"1.0-2"
-              }}</span>
-            </li>
-            <li class="total-price">Total <span>{{ cart.totalPrice | currency:"USD":true:"1.0-2" }}</span></li>
-          </ul>
-          <!--          <div class="payment-check">-->
-          <!--            <div class="pc-item">-->
-          <!--              <label for="pc-check">-->
-          <!--                Cheque Payment-->
-          <!--                <input type="checkbox" id="pc-check" />-->
-          <!--                <span class="checkmark"></span>-->
-          <!--              </label>-->
-          <!--            </div>-->
-          <!--            <div class="pc-item">-->
-          <!--              <label for="pc-paypal">-->
-          <!--                Paypal-->
-          <!--                <input type="checkbox" id="pc-paypal" />-->
-          <!--                <span class="checkmark"></span>-->
-          <!--              </label>-->
-          <!--            </div>-->
-          <!--          </div>-->
-          <div class="checkout-content">
-            <input type="text" placeholder="Enter Your Card Number" />
-          </div>
-          <div class="order-btn">
-            <button type="submit" class="site-btn place-btn">
-              Place Order
-            </button>
+<div class="container">
+  <form class="checkout-form mt-5" (ngSubmit)="handleCheckout()">
+    <div class="row">
+      <div class="col-lg-6">
+        <app-user-checkout-form></app-user-checkout-form>
+      </div>
+      <!-- <div class="col-lg-4 offset-lg-4"> -->
+      <div class="col-lg-6">
+        <div class="place-order">
+          <h4>Your Order</h4>
+          <div class="order-total">
+            <ul class="order-table">
+              <li>Product <span>Total</span></li>
+              <li class="fw-normal" *ngFor="let item of cart.items">
+                {{ item.name }} x {{ item.quantity }}
+                <span>{{
+                  item.price * item.quantity | currency: "USD":true:"1.0-2"
+                }}</span>
+              </li>
+              <li class="total-price">
+                Total
+                <span>{{
+                  cart.totalPrice | currency: "USD":true:"1.0-2"
+                }}</span>
+              </li>
+            </ul>
+            <!-- <div class="checkout-content">
+              <input type="text" placeholder="Enter Your Card Number" />
+            </div> -->
+            <div class="order-btn">
+              <button type="submit" class="site-btn place-btn">
+                Place Order
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="cart-buttons mt-2">
-        <a class="primary-btn continue-shop" routerLink="/shopping"
-          >Continue shopping</a
-        >
-        <a class="primary-btn up-cart" routerLink="/shopping/cart"
-          ><i class="fas fa-angle-double-left"></i>Back to cart</a
-        >
+        <div class="cart-buttons mt-2">
+          <a class="primary-btn continue-shop" routerLink="/shopping"
+            >Continue shopping</a
+          >
+          <a class="primary-btn up-cart" routerLink="/shopping/cart"
+            ><i class="fas fa-angle-double-left"></i>Back to cart</a
+          >
+        </div>
       </div>
     </div>
-  </div>
-</form>
+  </form>
+</div>

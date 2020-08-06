@@ -41,6 +41,10 @@ export class CustomerService {
       this.REQUEST_URL + `cart/cart-items/${cartItemId}`
     );
   }
+
+  clearCart(cartId: number): Observable<any> {
+    return this.http.delete<any>(this.REQUEST_URL + `cart/${cartId}`);
+  }
 }
 
 export interface IShoppingProduct {

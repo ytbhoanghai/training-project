@@ -37,7 +37,6 @@ export class StoreStaffsComponent implements OnInit {
       });
 
     this.staffService.fetchAssignableStaffs().subscribe((staffs) => {
-      console.log(staffs);
       // @ts-ignore
       this.staffs = staffs;
       this.resetSelected();

@@ -27,7 +27,7 @@
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Total</th>
-                <th><i class="far fa-trash-alt fa-lg hover-shadow"></i></th>
+                <th><i class="far fa-trash-alt fa-lg hover-shadow" (click)="clearCart()"></i></th>
               </tr>
             </thead>
             <tbody>
@@ -36,8 +36,7 @@
                 *ngFor="let item of cart.items"
                 [item]="item"
                 (onItemChanged)="handleItemChanged($event)"
-              >
-              </tr>
+              ></tr>
             </tbody>
           </table>
         </div>
@@ -47,7 +46,9 @@
               <a class="primary-btn continue-shop" routerLink="/shopping"
                 >Continue shopping</a
               >
-              <a class="primary-btn up-cart" (click)="updateCart()">Update cart</a>
+              <a class="primary-btn up-cart" (click)="updateCart()"
+                >Update cart</a
+              >
             </div>
             <!-- <div class="discount-coupon">
               <h6>Discount Codes</h6>
@@ -60,10 +61,22 @@
           <div class="col-lg-4 offset-lg-4">
             <div class="proceed-checkout">
               <ul>
-                <li class="subtotal">Subtotal <span>{{ cart.totalPrice | currency:'USD':true:'1.0-2'}}</span></li>
-                <li class="cart-total">Total <span>{{ cart.totalPrice | currency:'USD':true:'1.0-2'}}</span></li>
+                <li class="subtotal">
+                  Subtotal
+                  <span>{{
+                    cart.totalPrice | currency: "USD":true:"1.0-2"
+                  }}</span>
+                </li>
+                <li class="cart-total">
+                  Total
+                  <span>{{
+                    cart.totalPrice | currency: "USD":true:"1.0-2"
+                  }}</span>
+                </li>
               </ul>
-              <a class="proceed-btn" routerLink="/shopping/checkout">PROCEED TO CHECK OUT</a>
+              <a class="proceed-btn" routerLink="/shopping/checkout"
+                >PROCEED TO CHECK OUT</a
+              >
             </div>
           </div>
         </div>

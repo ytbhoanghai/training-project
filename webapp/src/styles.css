@@ -17,6 +17,12 @@ table th * {
   font-size: 0.8rem;
 }
 
+.valid-card {
+  color: #28a745;
+  font-style: italic;
+  font-size: 0.8rem;
+}
+
 .bg-jumbotron {
   background: #e9ecef !important;
 }
