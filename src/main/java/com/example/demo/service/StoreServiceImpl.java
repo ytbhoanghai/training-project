@@ -16,7 +16,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -91,6 +90,40 @@ public class StoreServiceImpl implements StoreService {
         }
 
         return null;
+    }
+
+    @Override
+    public List<Staff> findStaffsByStore(Integer storeId) {
+        Store store = findById(storeId);
+        return staffService.findAllByStore(store);
+    }
+
+    @Override
+    public void removeStaffFromStore(Integer storeId, Integer staffId) {
+        Store store = findById(storeId);
+
+        if (checkPermissionAddAndRemoveStaffFromStore(store)) {
+            throw new AccessDeniedException("Access Denied !!!");
+        }
+
+        Staff staff = staffService.findById(staffId);
+        staff.setStore(null);
+
+        staffService.save(staff);
+    }
+
+    @Override
+    public void addStaffToStore(Integer storeId, Integer staffId) {
+        Store store = findById(storeId);
+
+        if(checkPermissionAddAndRemoveStaffFromStore(store)) {
+            throw new AccessDeniedException("Access Denied!");
+        }
+
+        Staff staff = staffService.findById(staffId);
+        staff.setStore(store);
+
+        staffService.save(staff);
     }
 
     @Override
@@ -173,6 +206,36 @@ public class StoreServiceImpl implements StoreService {
         return staffService.findAllByStoreAndIsManager(store, isManager);
     }
 
+    @Override
+    public List<StoreProductResponse> findProductsByStoreAndIsAdded(Integer storeId, Boolean isAdded) {
+        Store store = findById(storeId);
+        List<StoreProduct> productResponses = storeProductService.findAllByStore(store);
+
+//        Return product added to store
+        if (isAdded) {
+            return productResponses.stream()
+                    .map(storeProduct -> new StoreProductResponse(
+                            storeProduct.getProduct(),
+                            storeProduct.getQuantity()))
+                    .collect(Collectors.toList());
+        }
+
+//        Get list of added product id
+        List<Integer> productIds = productResponses.stream()
+                .map(storeProduct -> storeProduct.getProduct().getId())
+                .collect(Collectors.toList());
+
+//        If list empty return all
+        List<Product> products = productIds.size() == 0
+                ? productRepository.findAll()
+                : productRepository.findAllByIdIsNotIn(productIds);
+
+        return products.stream()
+                .filter(product -> product.getQuantity() > 0)
+                .map(product -> new StoreProductResponse(product, product.getQuantity()))
+                .collect(Collectors.toList());
+    }
+
     private void setAndSaveStaffListForStore(List<Staff> staffList, Store store, Boolean remove) {
         staffList.forEach(staff -> {
             if (remove) {
@@ -203,38 +266,10 @@ public class StoreServiceImpl implements StoreService {
         staffService.saveAll(staffList);
     }
 
-    @Override
-    public List<StoreProductResponse> findProductsByStoreAndIsAdded(Integer storeId, Boolean isAdded) {
-        Store store = findById(storeId);
-        List<StoreProduct> productResponses = storeProductService.findAllByStore(store);
-
-//        Return product added to store
-        if (isAdded) {
-            return productResponses.stream()
-                    .map(storeProduct -> new StoreProductResponse(
-                            storeProduct.getProduct(),
-                            storeProduct.getQuantity()))
-                    .collect(Collectors.toList());
-        }
-
-//        Get list of added product id
-        List<Integer> productIds = productResponses.stream()
-                .map(storeProduct -> storeProduct.getProduct().getId())
-                .collect(Collectors.toList());
-
-//        If list empty return all
-        if (productIds.size() == 0) {
-            return productRepository.findAll().stream()
-                    .map(product -> new StoreProductResponse(
-                            product, product.getQuantity()))
-                    .collect(Collectors.toList());
-        }
-
-//        Else return product not in that list
-        return productRepository.findAllByIdIsNotIn(productIds).stream()
-                .map(product -> new StoreProductResponse(
-                        product, product.getQuantity()))
-                .collect(Collectors.toList());
+    private boolean checkPermissionAddAndRemoveStaffFromStore(Store store) {
+        Staff currentStaff = securityUtil.getCurrentStaff();
+        return !currentStaff.isAdmin() &&
+                !(currentStaff.getIsManager() && currentStaff.getStore().equals(store));
     }
 
 }

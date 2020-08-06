@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
 import com.example.demo.form.StoreForm;
 import com.example.demo.form.StoreUpdateForm;
@@ -11,11 +12,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,6 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StoreController {
 
+    @Autowired
     private StoreService storeService;
 
     @Autowired
@@ -58,17 +62,26 @@ public class StoreController {
 
     @GetMapping(value = "{storeId}/staffs")
     @PreAuthorize("hasAuthority(\"" + StaffPermission.READ + "\")")
-    public ResponseEntity<?> getStaffsByIsManager(
+    public ResponseEntity<?> getStaffs(
             @PathVariable Integer storeId,
-            @RequestParam(value = "is_manager") Boolean isManager) {
+            @RequestParam(required = false, value = "is_manager") Boolean isManager) {
 
-        return ResponseEntity.ok(
-                storeService.findStaffsByStoreAndIsManager(storeId, isManager).stream()
-                        .peek(staff -> staff.setRoles(null))
-                        .collect(Collectors.toList()));
+        List<Staff> staffList = null;
+        if (isManager == null) {
+            staffList = storeService.findStaffsByStore(storeId).stream()
+                    .peek(staff -> staff.setRoles(null))
+                    .collect(Collectors.toList());
+        } else {
+            staffList = storeService.findStaffsByStoreAndIsManager(storeId, isManager);
+        }
+        return ResponseEntity.ok(staffList.stream()
+                .sorted(Comparator.comparing(Staff::getIsManager).reversed())
+                .peek(staff -> staff.setRoles(null))
+                .collect(Collectors.toList()));
     }
 
     @GetMapping(value = "{storeId}/products")
+    @PreAuthorize("hasAuthority(\"" + StorePermission.READ + "\")")
     public ResponseEntity<?> getProductsByIsAdded(
             @PathVariable Integer storeId,
             @RequestParam(value = "is_added") Boolean isAdded) {
@@ -93,6 +106,7 @@ public class StoreController {
     }
 
     @DeleteMapping("{storeId}/products/{productId}")
+    @PreAuthorize("hasAuthority(\"" + StorePermission.UPDATE + "\")")
     public ResponseEntity<?> deleteProductFromStore(@PathVariable Integer storeId, @PathVariable Integer productId) {
         storeService.deleteProductFromStore(storeId, productId);
         return ResponseEntity.ok(new MessageResponse("Delete product form store successfully!"));
@@ -117,5 +131,19 @@ public class StoreController {
     public ResponseEntity<?> deleteStore(@PathVariable Integer storeId) {
         String id = storeService.deleteById(storeId);
         return new ResponseEntity<>(new MessageResponse("Deleted id: " + id), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "{storeId}/staffs/{staffId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority(\"" + StorePermission.UPDATE + "\")")
+    public ResponseEntity<?> removeStaffFromStore(@PathVariable Integer storeId, @PathVariable Integer staffId) {
+        storeService.removeStaffFromStore(storeId, staffId);
+        return ResponseEntity.ok(new MessageResponse("remove staff with id " + staffId + " from store " + storeId + " successfully!"));
+    }
+
+    @PutMapping(value = "{storeId}/staffs/{staffId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority(\"" + StorePermission.UPDATE + "\")")
+    public ResponseEntity<?> addStaffToStore(@PathVariable Integer storeId, @PathVariable Integer staffId) {
+        storeService.addStaffToStore(storeId, staffId);
+        return ResponseEntity.ok(new MessageResponse("add staff with id " + staffId + " to store " + storeId + " successfully!"));
     }
 }

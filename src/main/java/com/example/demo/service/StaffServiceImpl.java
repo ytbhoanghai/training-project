@@ -107,6 +107,11 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    public Staff save(Staff staff) {
+        return staffRepository.save(staff);
+    }
+
+    @Override
     public List<Staff> saveAll(List<Staff> staff) {
         return staffRepository.saveAll(staff);
     }
@@ -157,6 +162,11 @@ public class StaffServiceImpl implements StaffService {
         currentStaff.setPassword(passwordEncoder.encode(updatePasswordForm.getNewPass()));
         staffRepository.save(currentStaff);
         return true;
+    }
+
+    @Override
+    public List<Staff> findAllByStoreIsNull() {
+        return staffRepository.findAllByStoreIsNull();
     }
 
     @Override

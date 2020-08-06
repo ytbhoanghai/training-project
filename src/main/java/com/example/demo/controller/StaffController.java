@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/staffs")
@@ -28,8 +29,18 @@ public class StaffController {
     }
 
     @GetMapping
-    public ResponseEntity<List<StaffResponse>> findAll() {
-        List<StaffResponse> staffs = staffService.findAll();
+    public ResponseEntity<List<StaffResponse>> findAll(@RequestParam(required = false, defaultValue = "All") String option) {
+        List<StaffResponse> staffs = null;
+        switch (option) {
+            case "All":
+                staffs = staffService.findAll();
+                break;
+            case "NotInStore":
+                staffs = staffService.findAllByStoreIsNull().stream()
+                        .map(staff -> new StaffResponse(staff, null, null))
+                        .collect(Collectors.toList());
+                break;
+        }
         return new ResponseEntity<>(staffs, HttpStatus.OK);
     }
 

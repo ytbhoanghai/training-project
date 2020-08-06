@@ -32,4 +32,10 @@ public interface StoreService {
     void deleteProductFromStore(Integer storeId, Integer productId);
 
     List<Store> getManageableStores();
+
+    List<Staff> findStaffsByStore(Integer storeId);
+
+    void removeStaffFromStore(Integer storeId, Integer staffId);
+
+    void addStaffToStore(Integer storeId, Integer staffId);
 }

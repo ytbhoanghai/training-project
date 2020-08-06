@@ -33,4 +33,7 @@ public interface StaffRepository extends JpaRepository<Staff, Integer> {
 
     @Query("from Staff s where s.isDeleted = false")
     List<Staff> findAll();
+
+    @Query("from Staff s where s.store is null and s.isDeleted = false and s.level <> 0")
+    List<Staff> findAllByStoreIsNull();
 }
