@@ -2,3 +2,8 @@
   user-select: none;
   cursor: pointer;
 }
+
+.cart-body {
+  max-height: 16em;
+  overflow-y: auto;
+}

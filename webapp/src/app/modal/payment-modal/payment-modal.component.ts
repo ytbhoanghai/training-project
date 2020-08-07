@@ -1,5 +1,6 @@
 import { PaymentModalService, IPaymentInfo } from './../../service/payment-modal.service';
 import { Component, OnInit } from '@angular/core';
+import {ClassGetter} from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: 'app-payment-modal',
@@ -15,5 +16,13 @@ export class PaymentModalComponent implements OnInit {
 
   hideModal(): void {
     this.paymentModal.hide();
+  }
+
+  handleToken(token: { id: string }): void {
+    this.paymentInfo.stripeToken = token.id;
+  }
+
+  handlePayment(): void {
+    console.log(this.paymentInfo)
   }
 }

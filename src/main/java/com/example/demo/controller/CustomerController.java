@@ -28,13 +28,10 @@ import java.util.Map;
 public class CustomerController {
 
     private CustomerService customerService;
-    @Value("${stripe.private.key}")
-    private String stripeSecretKey;
 
     @Autowired
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-        Stripe.apiKey = "sk_test_K5pzvFYKGyl5wMuVKas8ZPzM00wspbHd4T";
     }
 
     @GetMapping(value = "cart")
@@ -68,16 +65,5 @@ public class CustomerController {
     public ResponseEntity<MessageResponse> clearCart(@PathVariable Integer cartId) {
         customerService.clearCart(cartId);
         return ResponseEntity.ok(new MessageResponse("Clear cart successfully!"));
-    }
-
-    @PostMapping(value = "payment")
-    public ResponseEntity<Charge> checkoutPayment(@RequestBody PaymentForm paymentForm) throws StripeException {
-        Map<String, Object> chargeParams = new HashMap<>();
-        chargeParams.put("amount", 120*10);
-        chargeParams.put("currency", "USD");
-        chargeParams.put("source", paymentForm.getToken());
-        Charge charge = Charge.create(chargeParams);
-        System.out.println(charge);
-        return ResponseEntity.ok(charge);
     }
 }
