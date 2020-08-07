@@ -1,0 +1,21 @@
+<div class="filter-widget">
+  <h4 class="fw-title">Categories</h4>
+  <ul class="filter-catagories">
+    <li>
+      <a
+        [routerLink]="['/shopping', 'store', storeId, 'category', 'all']"
+        [routerLinkActiveOptions]="{ exact: false, __change_detection_hack__: storeId }"
+        routerLinkActive="active"
+        >ALL</a
+      >
+    </li>
+    <li *ngFor="let category of categories">
+      <a
+        [routerLink]="['/shopping', 'store', storeId, 'category', category.id]"
+        [routerLinkActiveOptions]="{ exact: false, __change_detection_hack__: storeId }"
+        routerLinkActive="active"
+        >{{ category.name }}</a
+      >
+    </li>
+  </ul>
+</div>

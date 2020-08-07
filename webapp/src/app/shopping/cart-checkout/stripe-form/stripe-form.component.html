@@ -1,0 +1,8 @@
+<form action="/charge" method="post" id="payment-form" (ngSubmit)="handleCardSubmit()">
+  <div class="form-row">
+    <div id="card-element"></div>
+    <div id="card-errors" role="alert" class="error"></div>
+    <div class="valid-card" *ngIf="isCardValid"><i class="fas fa-check"></i>Valid card</div>
+  </div>
+  <!-- <button type="submit" class="primary-btn btn-secondary mt-2 ml-n1">Check card</button> -->
+</form>

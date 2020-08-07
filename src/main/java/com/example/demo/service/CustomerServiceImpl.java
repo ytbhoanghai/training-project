@@ -1,19 +1,21 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Cart;
-import com.example.demo.entity.CartItem;
-import com.example.demo.entity.Product;
-import com.example.demo.entity.Staff;
+import com.example.demo.entity.*;
+import com.example.demo.exception.CartNotFoundException;
+import com.example.demo.exception.CategoryNotFoundException;
 import com.example.demo.exception.NotEnoughQuantityException;
 import com.example.demo.form.CartItemUpdateForm;
 import com.example.demo.repository.CartItemRepository;
 import com.example.demo.repository.CartRepository;
 import com.example.demo.response.CartItemResponse;
 import com.example.demo.response.CartResponse;
+import com.example.demo.response.ProductResponse;
 import com.example.demo.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Id;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,17 +26,26 @@ public class CustomerServiceImpl implements CustomerService {
     private CartRepository cartRepository;
     private CartItemRepository cartItemRepository;
     private ProductService productService;
+    private StoreService storeService;
+    private CategoryService categoryService;
+    private StoreProductService storeProductService;
 
     @Autowired
     public CustomerServiceImpl(SecurityUtil securityUtil,
                                CartRepository cartRepository,
                                CartItemRepository cartItemRepository,
-                               ProductService productService) {
+                               ProductService productService,
+                               StoreService storeService,
+                               CategoryService categoryService,
+                               StoreProductService storeProductService) {
 
-        this.securityUtil       = securityUtil;
-        this.cartRepository     = cartRepository;
-        this.cartItemRepository = cartItemRepository;
-        this.productService     = productService;
+        this.securityUtil           = securityUtil;
+        this.cartRepository         = cartRepository;
+        this.cartItemRepository     = cartItemRepository;
+        this.productService         = productService;
+        this.storeService           = storeService;
+        this.categoryService        = categoryService;
+        this.storeProductService    = storeProductService;
     }
 
     @Override
@@ -67,6 +78,7 @@ public class CustomerServiceImpl implements CustomerService {
         return CartItemResponse.build(cartItemRepository.save(cartItem));
     }
 
+    @Transactional
     @Override
     public void removeCartItem(Integer idCartItem) {
         Staff currentStaff = securityUtil.getCurrentStaff();
@@ -98,6 +110,28 @@ public class CustomerServiceImpl implements CustomerService {
         return invalid;
     }
 
+    @Override
+    public List<ProductResponse> findProductsByStoreAndCategory(Integer storeId, Integer categoryId) {
+        Store store = storeService.findById(storeId);
+
+        return storeProductService.findAllByStore(store).stream()
+                .filter(storeProduct -> {
+                    if (categoryId != -1) {
+                        return storeProduct.getProduct().getCategories().stream()
+                                .anyMatch(category -> category.getId().equals(categoryId));
+                    }
+                    return true;
+                })
+                .map(storeProduct -> ProductResponse.build(storeProduct.getProduct(), store.getName()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void clearCart(Integer cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new CartNotFoundException(String.valueOf(cartId)));
+        cartItemRepository.deleteByCart(cart);
+    }
 
     private int getQuantityFromItemUpdateForms(List<CartItemUpdateForm> itemUpdateForms, CartItem cartItem) {
         int temp = -1;
@@ -111,6 +145,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         return temp;
     }
+
     private Cart getCartByStaff(Staff staff) {
         Optional<Cart> optionalCart = cartRepository.findByStaff(staff);
         return optionalCart.orElse(null);

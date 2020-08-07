@@ -6,10 +6,15 @@ import {ToastrService} from "ngx-toastr";
 })
 export class NotificationService {
   private options: object = {
-    opacity: 0.6,
     closeButton: true,
     timeOut: 2000,
     progressBar: true
+  }
+
+  private quickToastOptions: object = {
+    closeButton: true,
+    timeOut: 500,
+    progressBar: false
   }
 
 
@@ -17,6 +22,10 @@ export class NotificationService {
 
   showSuccess(message?: string): void {
     this.toastService.success(message || "Operation perform successfully!", "200 OK", this.options);
+  }
+
+  showQuickSuccess(message?: string): void {
+    this.toastService.success(message || "Operation perform successfully!", "Success", this.quickToastOptions);
   }
 
   showWaring(message?: string): void {

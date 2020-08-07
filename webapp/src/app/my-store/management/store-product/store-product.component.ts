@@ -2,10 +2,7 @@ import { ConfirmModalService } from './../../../service/confirm-modal.service';
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { StoreService } from './../../../manager/store-management/store.service';
 import { ActivatedRoute } from '@angular/router';
-import {
-  IProduct,
-  ProductService,
-} from './../../../manager/product-management/product.service';
+import { IProduct } from './../../../manager/product-management/product.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -58,14 +55,6 @@ export class StoreProductComponent implements OnInit {
     // Exit on error
     if (!product) return;
 
-    this.addedProducts.push({
-      ...product,
-      storeProductQuantity: this.quantity,
-    });
-    this.remainedProducts = this.remainedProducts.filter(
-      (p) => p.id !== this.selectedProductId
-    );
-
     // Add to API
     this.storeService
       .addProductWithQuantity(
@@ -73,16 +62,34 @@ export class StoreProductComponent implements OnInit {
         this.selectedProductId,
         this.quantity
       )
-      .subscribe(() => {
-        this.notiService.showSuccess();
-        this.resetSelected();
-      });
+      .subscribe(
+        () => this.addProductInUI(product),
+        (err: HttpErrorResponse) => {
+          if (err.status === 406) {
+            this.notiService.showError('Not enough product in store!');
+          }
+        }
+      );
+  }
+
+  // Update product list in UI
+  addProductInUI(product: IProduct): void {
+    this.addedProducts.push({
+      ...product,
+      storeProductQuantity: this.quantity,
+    });
+    this.remainedProducts = this.remainedProducts.filter(
+      (p) => p.id !== this.selectedProductId
+    );
+    this.resetSelected();
+    this.notiService.showSuccess();
   }
 
   removeProduct(product: IProduct): void {
     this.confirmService.show().onYes(() => {
       this.remainedProducts.push(product);
       this.addedProducts = this.addedProducts.filter((p) => p !== product);
+      this.resetSelected();
 
       // Remove from API
       this.storeService.removeProduct(this.storeId, product.id).subscribe(

@@ -1,0 +1,28 @@
+<td class="cart-pic first-row">
+  <img src="https://picsum.photos/100" alt="" />
+</td>
+<td class="cart-title first-row">
+  <h5>{{ item.name }}</h5>
+</td>
+<td class="p-price first-row">
+  {{ item.price | currency: "USD":true:"1.0-2" }}
+</td>
+<td class="qua-col first-row">
+  <div class="quantity">
+    <div class="pro-qty">
+      <span class="dec qtybtn" (click)="desQuantity()">-</span>
+      <!-- <input type="text" [value]="item.quantity" /> -->
+      <input type="text" [(ngModel)]="quantity" />
+      <span class="inc qtybtn" (click)="incQuantity()">+</span>
+    </div>
+  </div>
+</td>
+<td class="total-price first-row">
+  {{ item.price * quantity | currency: "USD":true:"1.0-2" }}
+</td>
+<td class="close-td first-row">
+  <i
+    class="fas fa-times text-danger fa-lg hover-shadow"
+    (click)="removeCartItem(item.id)"
+  ></i>
+</td>

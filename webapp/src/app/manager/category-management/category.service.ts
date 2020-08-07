@@ -16,7 +16,7 @@ export class CategoryService {
   constructor(private http: HttpClient) { }
 
   fetchCategories(): Observable<ICategory[]> {
-    return this.http.get<ICategory[]>(this.REQUEST_URL);
+    return this.http.get<ICategory[]>(this.REQUEST_URL.slice(0, -1));
   }
 
   fetchCategoryById(id: number): Observable<ICategory> {

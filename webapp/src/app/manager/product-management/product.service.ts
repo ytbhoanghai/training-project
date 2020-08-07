@@ -44,9 +44,11 @@ export interface IProduct {
   // Quantity in warehouser
   quantity: number;
   // Quantity in store
-  storeProductQuantity: number;
-  createdAt: number;
-  categories: ICategory[]
+  storeName?: string;
+  storeProductQuantity?: number;
+  createdAt?: number;
+  categories?: ICategory[],
+  categoryNames?: string[]
 }
 
 export interface IProductBody {

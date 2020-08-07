@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/auth/auth.service';
 import { UserService } from 'src/app/core/auth/user.service';
-import {MDBModalRef, MDBModalService} from "ng-uikit-pro-standard";
-import {LoginModalComponent} from "../../modal/login-modal/login-modal.component";
+import { MDBModalRef, MDBModalService } from 'ng-uikit-pro-standard';
+import { LoginModalComponent } from '../../modal/login-modal/login-modal.component';
 
 @Component({
   selector: 'app-header',
@@ -10,19 +10,27 @@ import {LoginModalComponent} from "../../modal/login-modal/login-modal.component
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-
   modalLoginRef: MDBModalRef;
   name: string;
 
   constructor(
     private modalService: MDBModalService,
     private authService: AuthService,
-    private userService: UserService) {
-  }
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
-    this.userService.fetchUserInfo().subscribe(value => this.name = value?.name, err => console.log(err));
-    this.userService.currentUser$.subscribe(value => this.name = value?.name);
+    this.fetchUserInfo();
+    this.userService.currentUser$.subscribe(
+      (value) => (this.name = value?.name)
+    );
+  }
+
+  fetchUserInfo(): void {
+    this.userService.fetchUserInfo().subscribe(
+      (value) => (this.name = value?.name),
+      (err) => console.log(err)
+    );
   }
 
   isLogin(): boolean {
@@ -30,12 +38,12 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logoutUser().subscribe(_ => this.name = null);
+    this.authService.logoutUser().subscribe(() => (this.name = null));
   }
 
   openModalLogin(): void {
     this.modalLoginRef = this.modalService.show(LoginModalComponent, {
-      containerClass: 'fade left'
+      containerClass: 'fade left',
     });
   }
 }

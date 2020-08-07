@@ -1,5 +1,50 @@
-<ul class="list-group list-group-flush">
-  <li class="list-group-item">Cras justo odio</li>
-  <li class="list-group-item">Dapibus ac facilisis in</li>
-  <li class="list-group-item">Vestibulum at eros</li>
-</ul>
+<li class="cart-icon">
+  <a>
+    <i class="fas fa-shopping-cart"></i>
+    <span>{{ cart.items.length }}</span>
+  </a>
+  <div class="cart-hover shadow">
+    <div class="select-items cart-body">
+      <table>
+        <tbody>
+          <tr *ngFor="let item of cart.items">
+            <td class="si-pic">
+              <img src="https://picsum.photos/50" alt="" />
+            </td>
+            <td class="si-text">
+              <div class="product-selected">
+                <p>
+                  {{ item.price | currency: "USD":true:"1.0-2" }} x
+                  {{ item.quantity }}
+                </p>
+                <h6>{{ item.name }}</h6>
+              </div>
+            </td>
+            <td class="si-close">
+              <i
+                class="fas fa-times text-danger fa-lg"
+                (click)="removeCartItem(item.id)"
+              ></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="select-total">
+      <span>total:</span>
+      <h5>{{ cart.totalPrice | currency: "USD":true:"1.0-2" }}</h5>
+    </div>
+    <div class="select-button">
+      <a
+        class="primary-btn view-card"
+        routerLink="/shopping/cart"
+      >VIEW CARD</a>
+      <a
+        class="primary-btn checkout-btn"
+        routerLink="/shopping/checkout"
+      >CHECK OUT</a
+      >
+    </div>
+  </div>
+</li>
+<li class="cart-price">$150.00</li>

@@ -1,3 +1,6 @@
+import { ShoppingStoreComponent } from './shopping/products-list/shopping-store/shopping-store.component';
+import { ProductCardComponent } from './shopping/products-list/product-card/product-card.component';
+import { ShoppingCategoryComponent } from './shopping/products-list/shopping-category/shopping-category.component';
 import { ManagementComponent } from './my-store/management/management.component';
 import { ManagementModule } from './my-store/management/management.module';
 import { DashboardModule } from './my-store/dashboard/dashboard.module';
@@ -41,9 +44,14 @@ import { CategoryDetailsComponent } from './modal/category-details/category-deta
 import { CategoryUpdateComponent } from './modal/category-update/category-update.component';
 import { DashboardComponent } from './my-store/dashboard/dashboard.component';
 import { ShoppingComponent } from './shopping/shopping.component';
-import { ShoppingCategoryComponent } from './shopping/shopping-category/shopping-category.component';
-import { ProductCardComponent } from './shopping/product-card/product-card.component';
 import { ShoppingCartComponent } from './shopping/shopping-cart/shopping-cart.component';
+import { CartDetailComponent } from './shopping/cart-detail/cart-detail.component';
+import { ProductsListComponent } from './shopping/products-list/products-list.component';
+import { CartCheckoutComponent } from './shopping/cart-checkout/cart-checkout.component';
+import { CartDetailItemComponent } from './shopping/cart-detail/cart-detail-item/cart-detail-item.component';
+import { StripeFormComponent } from './shopping/cart-checkout/stripe-form/stripe-form.component';
+import { UserCheckoutFormComponent } from './shopping/cart-checkout/user-checkout-form/user-checkout-form.component';
+import { PaymentModalComponent } from './modal/payment-modal/payment-modal.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +82,15 @@ import { ShoppingCartComponent } from './shopping/shopping-cart/shopping-cart.co
     ShoppingComponent,
     ShoppingCategoryComponent,
     ProductCardComponent,
-    ShoppingCartComponent
+    ShoppingCartComponent,
+    ShoppingStoreComponent,
+    CartDetailComponent,
+    ProductsListComponent,
+    CartCheckoutComponent,
+    CartDetailItemComponent,
+    StripeFormComponent,
+    UserCheckoutFormComponent,
+    PaymentModalComponent
   ],
   imports: [
     BrowserModule,
