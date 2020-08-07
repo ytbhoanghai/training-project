@@ -1,0 +1,21 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "customer",
+    "version": "1.0",
+    "contact": {
+      "name": "Nguyen Hai",
+      "email": "youtobe.hoanghai@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://192.168.40.184:8080/api"
+    }
+  ],
+  "paths": {},
+  "components": {
+    "schemas": {},
+    "securitySchemes": {}
+  }
+}

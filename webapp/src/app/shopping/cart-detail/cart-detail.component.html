@@ -1,0 +1,86 @@
+<div class="breacrumb-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="breadcrumb-text product-more">
+          <a routerLink="/"><i class="fa fa-home"></i> Home</a>
+          <i class="fas fa-chevron-right fa-xs"></i>
+          <a routerLink="/shopping">Shop</a>
+          <i class="fas fa-chevron-right fa-xs"></i>
+          <span>Shopping Cart</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="shopping-cart spad">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="cart-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th class="p-name">Product Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th><i class="far fa-trash-alt fa-lg hover-shadow" (click)="clearCart()"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                app-cart-detail-item
+                *ngFor="let item of cart.items"
+                [item]="item"
+                (onItemChanged)="handleItemChanged($event)"
+              ></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="cart-buttons">
+              <a class="primary-btn continue-shop" routerLink="/shopping"
+                >Continue shopping</a
+              >
+              <a class="primary-btn up-cart" (click)="updateCart()"
+                >Update cart</a
+              >
+            </div>
+            <!-- <div class="discount-coupon">
+              <h6>Discount Codes</h6>
+              <form action="#" class="coupon-form">
+                <input type="text" placeholder="Enter your codes" />
+                <button type="submit" class="site-btn coupon-btn">Apply</button>
+              </form>
+            </div> -->
+          </div>
+          <div class="col-lg-4 offset-lg-4">
+            <div class="proceed-checkout">
+              <ul>
+                <li class="subtotal">
+                  Subtotal
+                  <span>{{
+                    cart.totalPrice | currency: "USD":true:"1.0-2"
+                  }}</span>
+                </li>
+                <li class="cart-total">
+                  Total
+                  <span>{{
+                    cart.totalPrice | currency: "USD":true:"1.0-2"
+                  }}</span>
+                </li>
+              </ul>
+              <a class="proceed-btn" routerLink="/shopping/checkout"
+                >PROCEED TO CHECK OUT</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

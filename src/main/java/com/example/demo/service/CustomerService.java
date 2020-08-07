@@ -18,4 +18,6 @@ public interface CustomerService {
     List<Integer> updateQuantityCartItems(List<CartItemUpdateForm> itemUpdateForms);
 
     List<ProductResponse> findProductsByStoreAndCategory(Integer storeId, Integer categoryId);
+
+    void clearCart(Integer cartId);
 }

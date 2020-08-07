@@ -52,5 +52,9 @@ public class CustomerController {
         return ResponseEntity.ok(responses);
     }
 
-
+    @DeleteMapping(value = "cart/{cartId}")
+    public ResponseEntity<MessageResponse> clearCart(@PathVariable Integer cartId) {
+        customerService.clearCart(cartId);
+        return ResponseEntity.ok(new MessageResponse("Clear cart successfully!"));
+    }
 }

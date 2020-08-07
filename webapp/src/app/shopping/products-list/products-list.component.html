@@ -1,0 +1,58 @@
+<!-- Breadcrumb Section Begin -->
+<div class="breacrumb-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="breadcrumb-text">
+          <a routerLink="/"><i class="fas fa-home"></i> Home</a>
+          <i class="fas fa-chevron-right fa-xs"></i>
+          <span>Shop</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Breadcrumb Section End -->
+
+<section class="product-shop spad">
+  <div class="container">
+    <div class="row">
+      <div
+        class="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter"
+      >
+        <app-shopping-category></app-shopping-category>
+        <app-shopping-store></app-shopping-store>
+      </div>
+      <div class="col-lg-9 order-1 order-lg-2">
+        <div class="product-show-option">
+          <div class="row">
+            <div class="col-lg-7 col-md-7"></div>
+            <div class="col-lg-5 col-md-5 text-right">
+              <p>Show 01- 09 Of 36 Product</p>
+            </div>
+          </div>
+        </div>
+        <div class="product-list">
+          <div class="row">
+            <div class="col-lg-4 col-sm-6" *ngFor="let product of products">
+              <app-product-card [product]="product"></app-product-card>
+            </div>
+          </div>
+          <div class="row d-flex justify-content-center" *ngIf="isEmptyResult()">
+            <img src="assets/img/no-result-found.png" />
+          </div>
+        </div>
+        <!-- <div class="loading-more" *ngIf="!isEmptyResult()">
+          <button class="btn btn-sm">
+            <div class="spinner-border text-warning" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </button>
+          <a href="#">
+            Loading More
+          </a>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</section>

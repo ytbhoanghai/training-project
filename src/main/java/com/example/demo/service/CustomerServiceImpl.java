@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.*;
-import com.example.demo.exception.CategoryNotFoundException;
+import com.example.demo.exception.CartNotFoundException;
 import com.example.demo.exception.NotEnoughQuantityException;
 import com.example.demo.form.CartItemUpdateForm;
 import com.example.demo.repository.CartItemRepository;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Id;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -122,6 +123,13 @@ public class CustomerServiceImpl implements CustomerService {
                 })
                 .map(storeProduct -> ProductResponse.build(storeProduct.getProduct(), store.getName()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void clearCart(Integer cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new CartNotFoundException(String.valueOf(cartId)));
+        cartItemRepository.deleteByCart(cart);
     }
 
     private int getQuantityFromItemUpdateForms(List<CartItemUpdateForm> itemUpdateForms, CartItem cartItem) {

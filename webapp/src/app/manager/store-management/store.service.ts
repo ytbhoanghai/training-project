@@ -17,7 +17,7 @@ export class StoreService {
   constructor(private http: HttpClient) {}
 
   fetchStores(): Observable<IStore[]> {
-    return this.http.get<IStore[]>(this.REQUEST_URL);
+    return this.http.get<IStore[]>(this.REQUEST_URL.slice(0, -1));
   }
 
   fetchById(id: number): Observable<IStore> {
@@ -28,9 +28,15 @@ export class StoreService {
     return this.http.get<string[]>(this.REQUEST_URL + 'status');
   }
 
+  fetchAllStaffsInStore(storeId: number): Observable<ISimpleStaff[]> {
+    return this.http.get<ISimpleStaff[]>(
+      this.REQUEST_URL + `${storeId}/staffs`
+    );
+  }
+
   fetchIfManagersByStoreId(
     storeId: number,
-    isManager: boolean
+    isManager?: boolean
   ): Observable<ISimpleStaff[]> {
     return this.http.get<ISimpleStaff[]>(
       this.REQUEST_URL + `${storeId}/staffs`,
@@ -75,6 +81,14 @@ export class StoreService {
     return this.http.delete<any>(
       this.REQUEST_URL + `${storeId}/products/${productId}`
     );
+  }
+
+  addStaffToStore(storeId: number, staffId: number): Observable<any> {
+    return this.http.put<any>(this.REQUEST_URL + `${storeId}/staffs/${staffId}`, null);
+  }
+
+  deleteStaffFromStore(storeId: number, staffId: number): Observable<any> {
+    return this.http.delete<any>(this.REQUEST_URL + `${storeId}/staffs/${staffId}`);
   }
 
   update(id: number, body: IStore): Observable<IStore> {
