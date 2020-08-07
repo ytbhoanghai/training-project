@@ -4,26 +4,38 @@ import com.example.demo.entity.*;
 import com.example.demo.exception.CartNotFoundException;
 import com.example.demo.exception.NotEnoughQuantityException;
 import com.example.demo.form.CartItemUpdateForm;
+import com.example.demo.form.PaymentForm;
 import com.example.demo.repository.CartItemRepository;
 import com.example.demo.repository.CartRepository;
+import com.example.demo.repository.OrderItemRepository;
+import com.example.demo.repository.OrderRepository;
 import com.example.demo.response.CartItemResponse;
 import com.example.demo.response.CartResponse;
 import com.example.demo.response.ProductResponse;
 import com.example.demo.security.SecurityUtil;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Id;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service(value = "customerService")
 public class CustomerServiceImpl implements CustomerService {
 
+    @Value("${stripe.secret.key}")
+    private String stripe_api_key;
+
     private SecurityUtil securityUtil;
     private CartRepository cartRepository;
     private CartItemRepository cartItemRepository;
+    private OrderRepository orderRepository;
+    private OrderItemRepository orderItemRepository;
+
     private ProductService productService;
     private StoreService storeService;
     private CategoryService categoryService;
@@ -33,6 +45,8 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerServiceImpl(SecurityUtil securityUtil,
                                CartRepository cartRepository,
                                CartItemRepository cartItemRepository,
+                               OrderRepository orderRepository,
+                               OrderItemRepository orderItemRepository,
                                ProductService productService,
                                StoreService storeService,
                                CategoryService categoryService,
@@ -41,6 +55,9 @@ public class CustomerServiceImpl implements CustomerService {
         this.securityUtil           = securityUtil;
         this.cartRepository         = cartRepository;
         this.cartItemRepository     = cartItemRepository;
+        this.orderRepository        = orderRepository;
+        this.orderItemRepository    = orderItemRepository;
+
         this.productService         = productService;
         this.storeService           = storeService;
         this.categoryService        = categoryService;
@@ -97,10 +114,10 @@ public class CustomerServiceImpl implements CustomerService {
             int temp = getQuantityFromItemUpdateForms(itemUpdateForms, cartItem);
             if (temp != -1) { // is exists
                 Product product = cartItem.getProduct();
-                if(cartItem.getQuantity() + temp > product.getQuantity()) {
+                if(temp > product.getQuantity()) {
                     invalid.add(cartItem.getId());
                 } else {
-                    cartItem.setQuantity(cartItem.getQuantity() + temp);
+                    cartItem.setQuantity(temp);
                 }
             }
         });
@@ -132,10 +149,41 @@ public class CustomerServiceImpl implements CustomerService {
         cartItemRepository.deleteByCart(cart);
     }
 
+    @Override
+    public Charge paymentCheckout(PaymentForm paymentForm) throws StripeException {
+        Charge charge = pay(paymentForm);
+
+        Cart cart = cartRepository.findByStaff(securityUtil.getCurrentStaff())
+                .orElseThrow(() -> new CartNotFoundException("... unknown"));
+        List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
+
+        Order order = Order.build(cart, cartItems, paymentForm, charge.getId());
+        List<OrderItem> orderItems = cartItems.stream()
+                .map(cartItem -> OrderItem.build(cartItem, order))
+                .collect(Collectors.toList());
+
+        cartItemRepository.deleteAll(cartItems);
+
+        orderRepository.save(order);
+        orderItemRepository.saveAll(orderItems);
+
+        return charge;
+    }
+
+    @Override
+    public List<Order> findAllOrder() {
+        return orderRepository.findAllByStaff(securityUtil.getCurrentStaff());
+    }
+
     private int getQuantityFromItemUpdateForms(List<CartItemUpdateForm> itemUpdateForms, CartItem cartItem) {
         int temp = -1;
         Optional<CartItemUpdateForm> optionalCartItemUpdateForm = itemUpdateForms.stream()
-                .filter(e -> e.getIdCartItem().equals(cartItem.getId()))
+                .filter(e -> {
+                    boolean flag1 = e.getIdCartItem().equals(cartItem.getId());
+                    boolean flag2 = !e.getQuantity().equals(cartItem.getQuantity());
+
+                    return flag1 && flag2;
+                })
                 .findFirst();
         if (optionalCartItemUpdateForm.isPresent()) {
             CartItemUpdateForm itemUpdateForm = optionalCartItemUpdateForm.get();
@@ -148,5 +196,17 @@ public class CustomerServiceImpl implements CustomerService {
     private Cart getCartByStaff(Staff staff) {
         Optional<Cart> optionalCart = cartRepository.findByStaff(staff);
         return optionalCart.orElse(null);
+    }
+
+    private Charge pay(PaymentForm paymentForm) throws StripeException {
+        Stripe.apiKey = stripe_api_key;
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("amount", paymentForm.getTotalPrice() * 100);
+        params.put("currency", "usd");
+        params.put("source", paymentForm.getStripeToken());
+        params.put("description", "Charge With User " + securityUtil.getCurrentStaff().getId());
+
+        return Charge.create(params);
     }
 }

@@ -29,4 +29,9 @@ public class OrderItem {
     private Integer quantity;
 
     private Date createdAt;
+
+    public static OrderItem build(CartItem cartItem, Order order) {
+        return new OrderItem(null, order, cartItem.getProduct(), cartItem.getQuantity(), new Date());
+    }
+
 }

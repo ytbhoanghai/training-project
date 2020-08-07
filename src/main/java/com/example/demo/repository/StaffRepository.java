@@ -19,21 +19,21 @@ public interface StaffRepository extends JpaRepository<Staff, Integer> {
     @Query("from Staff s where s.username = ?1 and s.isDeleted = false")
     Optional<Staff> findByUsername(String username);
 
-    @Query("from Staff s where s.store = ?1 and s.isDeleted = false")
+    @Query("from Staff s where s.store = ?1 and s.isDeleted = false and s.type = 1")
     List<Staff> findAllByStore(Store store);
 
-    @Query("from Staff s where s.store = ?1 and s.isManager = ?2 and s.isDeleted = false")
+    @Query("from Staff s where s.store = ?1 and s.isManager = ?2 and s.isDeleted = false and s.type = 1")
     List<Staff> findAllByStoreAndIsManager(Store store, Boolean isManager);
 
-    @Query("from Staff s where s.id in ?1 and s.isDeleted = false")
+    @Query("from Staff s where s.id in ?1 and s.isDeleted = false and s.type = 1")
     List<Staff> findAllByIdIsIn(Set<Integer> ids);
 
     @Query("from Staff s where s.createdBy = ?1 and s.isDeleted = false")
     List<Staff> findAllByCreatedBy(Staff staff);
 
-    @Query("from Staff s where s.isDeleted = false")
+    @Query("from Staff s where s.isDeleted = false and s.type = 1")
     List<Staff> findAll();
 
-    @Query("from Staff s where s.store is null and s.isDeleted = false and s.level <> 0")
+    @Query("from Staff s where s.store is null and s.isDeleted = false and s.level <> 0 and s.type = 1")
     List<Staff> findAllByStoreIsNull();
 }

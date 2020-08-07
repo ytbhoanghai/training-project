@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentForm {
-    private String token;
 
-    public String getToken() {
-        return token;
-    }
+    private String shipAddress;
+    private String stripeToken;
+    private String phone;
+    private Integer totalPrice;
+
 }
