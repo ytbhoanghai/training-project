@@ -1,3 +1,4 @@
+import { CheckLoginGuard } from './config/guard/check-login.guard';
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {CheckAuthoritiesGuard} from './config/guard/check-authorities.guard';
@@ -19,6 +20,7 @@ const routes: Routes = [
   },
   {
     path: 'my-store',
+    canActivate: [CheckLoginGuard],
     loadChildren: () =>
       import('./my-store/my-store-routing.module').then(
         (m) => m.MyStoreRoutingModule

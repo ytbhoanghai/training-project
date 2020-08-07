@@ -1,0 +1,19 @@
+.order-id {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.order-price {
+  color: #e7ab3c;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.order-time {
+  font-size: 0.6em;
+}
+
+.order-status {
+  font-size: 0.8rem;
+  font-weight: 500;
+}

@@ -14,7 +14,7 @@
             <td class="si-text">
               <div class="product-selected">
                 <p>
-                  {{ item.price | currency: "USD":true:"1.0-2" }} x
+                  {{ item.price | currency:"USD":true:"1.0-2" }} x
                   {{ item.quantity }}
                 </p>
                 <h6>{{ item.name }}</h6>
@@ -47,4 +47,4 @@
     </div>
   </div>
 </li>
-<li class="cart-price">$150.00</li>
+<li class="cart-price">{{ cart.totalPrice | currency: "USD":true:"1.0-2" }}</li>

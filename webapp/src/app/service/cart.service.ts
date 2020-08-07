@@ -1,14 +1,13 @@
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IProduct } from './../manager/product-management/product.service';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { UserService } from './../core/auth/user.service';
 import {
   CustomerService,
   ICart,
   ICartItem,
   ICartItemBody,
-  IShoppingProduct,
 } from './customer.service';
 import { LocalCartService } from './local-cart.service';
 import { Injectable } from '@angular/core';
@@ -68,7 +67,7 @@ export class CartService {
     this.localCartService.getItems().map((item) => {
       this.customerService
         .addItemToCart(item.id, item.quantity)
-        .subscribe(null, (err) => console.log('Error on merge'));
+        .subscribe(null, () => console.log('Error on merge'));
     });
     this.localCartService.clear();
     this.fetchRemoteCart();
@@ -101,14 +100,14 @@ export class CartService {
 
   doPostAddded(item: IProduct): void {
     this.checkExistedAndUpdateItemInCart(item);
-    this.changeEvent.next(this.cart);
     this.notiService.showQuickSuccess('Add item successfully!');
+    this.changeEvent.next(this.cart);
   }
 
   checkExistedAndUpdateItemInCart(item: ICartItem): void {
     const index = this.cart.items.findIndex((elem) => elem.id === item.id);
     if (index >= 0) {
-      let cartItem = this.cart.items[index];
+      const cartItem = this.cart.items[index];
       this.cart.items[index] = {
         ...cartItem,
         quantity: cartItem.quantity + 1,
@@ -119,6 +118,16 @@ export class CartService {
   }
 
   updateItems(body: ICartItemBody[]): void {
+    if (!body.length) {
+      return this.notiService.showQuickWarning('Nothing has change!');
+    }
+
+    if (!this.userService.isLogin()) {
+      this.localCartService.updateItems(body);
+      this.notiService.showQuickSuccess('Cart updated successfully!');
+      return;
+    }
+
     this.customerService
       .updateCartItemQuantity(body)
       .subscribe((failedIds: number[]) => {

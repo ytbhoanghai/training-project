@@ -17,7 +17,7 @@ type JwtToken = {
 })
 export class AuthService {
 
-  private jwtLocalStorageName: string = 'authenticationToken';
+  private jwtLocalStorageName = 'authenticationToken';
 
   constructor(
     private http: HttpClient,
@@ -25,7 +25,7 @@ export class AuthService {
     private router: Router
   ) {}
 
-  loginUser(username: String, password: String): Observable<any> {
+  loginUser(username: string, password: string): Observable<any> {
     return this.http
       .post<JwtToken>(`${SERVER_URL}/authenticate`, {
         username,
@@ -47,6 +47,7 @@ export class AuthService {
   // Store jwt into local storage after authenticate success
   private authenticateSuccess(jwt: JwtToken) {
     localStorage.setItem(this.jwtLocalStorageName, jwt.id_token);
+    this.router.navigateByUrl(location.pathname, {skipLocationChange: true});
     this.userService.fetchUserInfo().subscribe(null);
   }
 

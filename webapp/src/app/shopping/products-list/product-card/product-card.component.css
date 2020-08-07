@@ -9,3 +9,10 @@ a {
   user-select: none;
   cursor: pointer;
 }
+
+.categories {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 8px;
+}

@@ -25,7 +25,9 @@
   </div>
 
   <div class="pi-text">
-    <div class="catagory-name">{{ product.categoryNames.join(', ') }}</div>
+    <div class="catagory-name categories" [title]="product.categoryNames.join(', ')">
+      {{ product.categoryNames.join(', ') }}
+    </div>
     <a href="#">
       <h5>{{ product.name }}</h5>
     </a>

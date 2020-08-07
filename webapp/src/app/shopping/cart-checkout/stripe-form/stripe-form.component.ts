@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
-declare var Stripe: any;
+declare let Stripe;
 @Component({
   selector: 'app-stripe-form',
   templateUrl: './stripe-form.component.html',
@@ -9,9 +9,9 @@ declare var Stripe: any;
 export class StripeFormComponent implements OnInit {
   @Output() onToken = new EventEmitter();
 
-  isCardValid: boolean = false;
-  card: any;
-  stripe: any;
+  isCardValid = false;
+  card;
+  stripe;
 
   constructor() {}
 
@@ -19,7 +19,7 @@ export class StripeFormComponent implements OnInit {
     this.stripe = new Stripe('pk_test_QOOyeVrCYofsYsT36rGSO9Ij00IaJ3SQYt');
 
     const elements = this.stripe.elements();
-    var style = {
+    const style = {
       base: {
         color: '#32325d',
         fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
@@ -46,37 +46,28 @@ export class StripeFormComponent implements OnInit {
     });
   }
 
-  handleCardSubmit(): void {
-    this.stripe.createToken(this.card).then((result) => {
-      if (result.error) {
-        console.log('Error creating payment method.');
-        const errorElement = document.getElementById('card-errors');
-        errorElement.textContent = result.error.message;
-      } else {
-        // At this point, you should send the token ID
-        // to your server so it can attach
-        // the payment source to a customer
-        this.isCardValid = true;
-        console.log('Token acquired!');
-        console.log(result.token);
-        console.log(result.token.id);
-        this.handleStripeToken(result.token);
-        this.onToken.emit(result.token);
-      }
+  handleCardSubmit(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.stripe.createToken(this.card).then((result) => {
+        if (result.error) {
+          console.log('Error creating payment method.');
+          const errorElement = document.getElementById('card-errors');
+          errorElement.textContent = result.error.message;
+          this.isCardValid = false;
+          return reject(result.error);
+        } else {
+          // At this point, you should send the token ID
+          // to your server so it can attach
+          // the payment source to a customer
+          this.isCardValid = true;
+          console.log('Token acquired!');
+          console.log(result.token);
+          console.log(result.token.id);
+          this.onToken.emit(result.token);
+          return resolve(result.token);
+        }
+      });
     });
-  }
-
-  handleStripeToken(token: { id: string }): void {
-    // Insert the token ID into the form so it gets submitted to the server
-    var form = document.getElementById('payment-form');
-    var hiddenInput = document.createElement('input');
-    hiddenInput.setAttribute('type', 'hidden');
-    hiddenInput.setAttribute('name', 'stripeToken');
-    hiddenInput.setAttribute('value', token.id);
-    form.appendChild(hiddenInput);
-
-    // Submit the form
-    // form.submit();
   }
 
 }
