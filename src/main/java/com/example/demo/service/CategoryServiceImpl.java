@@ -46,8 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category save(CategoryForm categoryForm) {
-        Staff createByStaff = staffService.findByUsername(
-                securityUtil.getCurrentPrincipal().getUsername());
+        Staff createByStaff = securityUtil.getCurrentStaff();
         Category category = CategoryForm.buildCategory(categoryForm, createByStaff);
         return categoryRepository.save(category);
     }
