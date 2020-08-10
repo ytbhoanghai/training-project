@@ -23,9 +23,15 @@ export class ShoppingComponent implements OnInit {
 
   // If store don't have page then redirect to page 1
   ngOnInit(): void {
-    if (this.route.snapshot.params.storeId === undefined) {
-      this.fetchStores();
-    }
+    this.route.params.subscribe(params => {
+      if (params.storeId === undefined) {
+        this.fetchStores();
+      }
+    })
+
+    // if (this.route.snapshot.params.storeId === undefined) {
+    //   this.fetchStores();
+    // }
   }
 
   // Fetch default store

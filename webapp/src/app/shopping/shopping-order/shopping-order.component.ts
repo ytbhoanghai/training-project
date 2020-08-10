@@ -17,7 +17,6 @@ export class ShoppingOrderComponent implements OnInit {
 
   fetchOrders(): void {
     this.customerService.fetchOrders().subscribe(orders => {
-      console.log(orders);
       this.orders = orders;
     })
   }

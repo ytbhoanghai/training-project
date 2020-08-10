@@ -54,6 +54,7 @@ import { UserCheckoutFormComponent } from './shopping/cart-checkout/user-checkou
 import { PaymentModalComponent } from './modal/payment-modal/payment-modal.component';
 import { ShoppingOrderComponent } from './shopping/shopping-order/shopping-order.component';
 import { PaginationComponent } from './shopping/products-list/pagination/pagination.component';
+import { RegisterFormComponent } from './modal/login-modal/register-form/register-form.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { PaginationComponent } from './shopping/products-list/pagination/paginat
     UserCheckoutFormComponent,
     PaymentModalComponent,
     ShoppingOrderComponent,
-    PaginationComponent
+    PaginationComponent,
+    RegisterFormComponent
   ],
   imports: [
     BrowserModule,

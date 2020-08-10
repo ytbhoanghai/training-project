@@ -11,6 +11,7 @@ const routes: Routes = [
   // { path: 'category/:id', component: ShoppingComponent },
   {
     path: '',
+    component: ShoppingComponent,
     children: [
       { path: '', pathMatch: 'full', component: ShoppingComponent },
       {
