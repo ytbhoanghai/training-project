@@ -35,14 +35,14 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
   }
 
   handleCheckout(): void {
+    const curentCart = this.cartService.getCart();
+    if (!curentCart.items.length) {
+      this.notiService.showQuickWarning('Empty cart');
+      return;
+    }
+
     const body = this.checkoutComponent.userForm;
     body.totalPrice = this.cartService.getCart().totalPrice;
     this.paymentModal.show(body);
-    return;
-    if (!body.stripeToken) {
-      this.notiService.showWaring('Please check your credit card!');
-      return;
-    }
-    console.log(body);
   }
 }

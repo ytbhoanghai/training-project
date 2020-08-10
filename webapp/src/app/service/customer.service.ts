@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { SERVER_URL } from './../core/constants/api.constants';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { IPaymentInfo } from './payment-modal.service';
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +46,16 @@ export class CustomerService {
   clearCart(cartId: number): Observable<any> {
     return this.http.delete<any>(this.REQUEST_URL + `cart/${cartId}`);
   }
+
+  // PAYMENT
+  checkoutPayment(body: IPaymentInfo): Observable<any> {
+    return this.http.post<any>(this.REQUEST_URL + 'payment', body);
+  }
+
+  // ORDERS
+  fetchOrders(): Observable<IOrder[]> {
+    return this.http.get<IOrder[]>(this.REQUEST_URL + 'orders');
+  }
 }
 
 export interface IShoppingProduct {
@@ -76,4 +87,14 @@ export interface ICartItem {
 export interface ICartItemBody {
   idCartItem: number;
   quantity: number;
+}
+
+export interface IOrder {
+  id: number;
+  totalPrice: number;
+  createdAt: number;
+  phone: string;
+  shipAddress: string;
+  transactionId: string;
+  status: string;
 }

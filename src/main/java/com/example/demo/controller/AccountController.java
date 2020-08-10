@@ -26,9 +26,8 @@ public class AccountController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getInfoAccount(Principal principal) {
-        String username = principal.getName();
-        Staff staff = staffService.findByUsername(username);
+    public ResponseEntity<?> getInfoAccount() {
+        Staff staff = securityUtil.getCurrentStaff();
         return ResponseEntity.ok(AccountResponse.build(staff));
     }
 

@@ -17,7 +17,7 @@ export class StoreProductComponent implements OnInit {
 
   storeId: number;
   selectedProductId: number;
-  quantity: number = 1;
+  quantity = 1;
 
   constructor(
     private storeService: StoreService,
@@ -49,7 +49,7 @@ export class StoreProductComponent implements OnInit {
   }
 
   addProduct(): void {
-    let product: IProduct = this.remainedProducts.find(
+    const product: IProduct = this.remainedProducts.find(
       (p) => p.id === this.selectedProductId
     );
     // Exit on error

@@ -9,7 +9,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ProductCardComponent implements OnInit {
   @Input() product: IProduct;
-  isOutOfStock: boolean = false;
+  isOutOfStock = false;
   imgId: number;
 
   constructor(private cartService: CartService) {}
@@ -19,7 +19,7 @@ export class ProductCardComponent implements OnInit {
   }
 
   addToCart(): void {
-    this.cartService.addItem(this.product);
+    this.cartService.addItem({...this.product, quantity: 1});
   }
 
   randomImgId(): number {

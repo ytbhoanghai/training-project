@@ -20,6 +20,7 @@
   "experimentalDecorators": true,
   "compilerOptions": {
     "experimentalDecorators": true,
-    "allowJs": true
+    "allowJs": true,
+    "baseUrl": "src"
   }
 }

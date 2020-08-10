@@ -20,13 +20,13 @@ export class CartDetailItemComponent implements OnInit {
   }
 
   incQuantity(): void {
-    this.quantity = this.quantity + 1;
+    this.quantity = +this.quantity + 1;
     this.emitItemChanged();
   }
 
   desQuantity(): void {
     if (this.quantity <= 1) return;
-    this.quantity = this.quantity - 1;
+    this.quantity = +this.quantity - 1;
     this.emitItemChanged();
   }
 
@@ -38,7 +38,4 @@ export class CartDetailItemComponent implements OnInit {
     this.cartService.removeItem(id);
   }
 
-  onChange(): void {
-    console.log("ksjdljfks");
-  }
 }

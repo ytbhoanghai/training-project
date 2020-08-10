@@ -14,6 +14,7 @@ import { CartService } from '../../service/cart.service';
 })
 export class CartDetailComponent implements OnInit {
   cart: ICart = { totalPrice: 0, items: [] };
+  cartBeforeUpdate: ICart;
 
   constructor(
     private cartService: CartService,
@@ -22,9 +23,8 @@ export class CartDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.cartService.fetchCart();
-    this.cartService.changeListener$.subscribe((cart) => {
-      this.cart = this.cartService.getCart();
-      // this.cart = {...this.cartService.getCart(), items: [...this.cart.items]};
+    this.cartService.changeListener$.subscribe(() => {
+      this.cart = Object.assign({}, this.cartService.getCart());
     });
   }
 
@@ -33,7 +33,8 @@ export class CartDetailComponent implements OnInit {
   }
 
   updateCart(): void {
-    let body: ICartItemBody[] = [];
+    const body: ICartItemBody[] = [];
+
     this.cart.items.forEach((item) => {
       body.push({ idCartItem: item.id, quantity: item.quantity });
     });

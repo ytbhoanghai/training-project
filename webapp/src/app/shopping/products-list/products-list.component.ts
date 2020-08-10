@@ -1,9 +1,6 @@
 import { ActivatedRoute } from '@angular/router';
 import { CustomerService } from './../../service/customer.service';
-import {
-  IProduct,
-  ProductService,
-} from './../../manager/product-management/product.service';
+import { IProduct } from './../../manager/product-management/product.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -29,7 +26,7 @@ export class ProductsListComponent implements OnInit {
     });
   }
 
-  fetchProducts(storeId: number = 14, categoryId: number = -1): void {
+  fetchProducts(storeId = 14, categoryId = -1): void {
     this.customerService
       .fetchProductsByStoreAndCategory(storeId, categoryId)
       .subscribe((products) => {

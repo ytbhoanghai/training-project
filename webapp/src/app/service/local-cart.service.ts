@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { IProduct } from './../manager/product-management/product.service';
 import { Injectable } from '@angular/core';
-import { ICart, ICartItem } from './customer.service';
+import { ICart, ICartItem, ICartItemBody } from './customer.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +21,7 @@ export class LocalCartService {
     onChange$: this.events.change.asObservable(),
   };
 
-  private cartName: string = 'tps_training_user_cart';
+  private cartName = 'tps_training_user_cart';
   private defaultCart: ICart = {
     totalPrice: 0,
     items: [],
@@ -33,6 +33,7 @@ export class LocalCartService {
     if (this.isEmpty()) return this.defaultCart;
 
     const cart: ICart = JSON.parse(localStorage.getItem(this.cartName));
+    console.log('cart', cart)
     return cart;
   }
 
@@ -44,15 +45,16 @@ export class LocalCartService {
   }
 
   addItem(item: IProduct): void {
-    let items: ICartItem[] = this.getItems();
-    let index = items.findIndex((elem) => elem.id === item.id);
+    const items: ICartItem[] = this.getItems();
+    const index = items.findIndex((elem) => elem.id === item.id);
 
     // FOUND
     if (index >= 0) {
       items[index] = { ...items[index], quantity: items[index].quantity + 1 };
       // NOT FOUND
     } else {
-      items.push({ ...item, quantity: 1 });
+      const newItem: ICartItem = { ...item, quantity: 1};
+      items.push(newItem);
     }
 
     this.save(items);
@@ -70,8 +72,17 @@ export class LocalCartService {
     this.events.change.next();
   }
 
+  updateItems(items: ICartItemBody[]): void {
+    const cartItems = this.getItems();
+    items.map((item) => {
+      const index = cartItems.findIndex((i) => i.id === item.idCartItem);
+      cartItems[index] = { ...cartItems[index], quantity: item.quantity };
+    });
+    this.save(cartItems);
+  }
+
   deleteItemById(id: number): void {
-    let items = this.getItems().filter((item) => item.id !== id);
+    const items = this.getItems().filter((item) => item.id !== id);
     this.save(items);
   }
 

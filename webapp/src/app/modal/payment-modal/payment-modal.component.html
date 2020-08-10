@@ -1,4 +1,5 @@
 <div class="border p-3 rounded shadow bg">
+  <div class="h4 mb-2">Payment Checkout</div>
   <mdb-card>
     <mdb-card-body class="pb-0">
       <div class="card-head">SHIPPING & BILLING INFORMATION</div>
@@ -41,7 +42,15 @@
       </div>
     </mdb-card-body>
   </mdb-card>
-  <button (click)="handlePayment()" class="btn btn-block shadow btn-primary mt-2 font-weight-bold">
+
+  <button
+    (click)="handlePayment()"
+    class="btn btn-block shadow btn-primary mt-2 font-weight-bold"
+    [disabled]="isLoading"
+  >
     Pay {{ paymentInfo.totalPrice | currency: "USD":true:"1.0-2" }}
+    <div class="spinner-border" *ngIf="isLoading">
+      <span class="sr-only">Loading...</span>
+    </div>
   </button>
 </div>

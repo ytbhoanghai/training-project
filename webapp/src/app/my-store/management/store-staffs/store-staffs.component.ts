@@ -1,9 +1,9 @@
-import { NotificationService } from './../../../layouts/notification/notification.service';
-import { ActivatedRoute } from '@angular/router';
-import { StoreService } from './../../../manager/store-management/store.service';
-import { Component, OnInit } from '@angular/core';
-import { ISimpleStaff } from 'src/app/manager/store-management/store.service';
-import { UserManagementService } from '../../../manager/user-management/user-management.service';
+import {NotificationService} from '../../../layouts/notification/notification.service';
+import {ActivatedRoute} from '@angular/router';
+import {StoreService} from '../../../manager/store-management/store.service';
+import {Component, OnInit} from '@angular/core';
+import {ISimpleStaff} from 'src/app/manager/store-management/store.service';
+import {UserManagementService} from '../../../manager/user-management/user-management.service';
 
 @Component({
   selector: 'app-store-staffs',

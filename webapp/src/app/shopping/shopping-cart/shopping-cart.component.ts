@@ -18,7 +18,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.cartService.fetchCart();
     this.listener = this.cartService.changeListener$.subscribe((cart) => {
-      this.cart = this.cartService.getCart();
+      this.cart = Object.assign({}, this.cartService.getCart());
     });
   }
 
