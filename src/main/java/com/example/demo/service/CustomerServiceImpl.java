@@ -98,7 +98,6 @@ public class CustomerServiceImpl implements CustomerService {
         return invalid;
     }
 
-
     private int getQuantityFromItemUpdateForms(List<CartItemUpdateForm> itemUpdateForms, CartItem cartItem) {
         int temp = -1;
         Optional<CartItemUpdateForm> optionalCartItemUpdateForm = itemUpdateForms.stream()
@@ -111,6 +110,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         return temp;
     }
+
     private Cart getCartByStaff(Staff staff) {
         Optional<Cart> optionalCart = cartRepository.findByStaff(staff);
         return optionalCart.orElse(null);
