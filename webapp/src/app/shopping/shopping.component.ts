@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {UserService} from "../core/auth/user.service";
 
 @Component({
   selector: 'app-shopping',
@@ -6,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./shopping.component.css'],
 })
 export class ShoppingComponent implements OnInit {
-  constructor() {}
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {}
+
+  isLogin(): boolean {
+    return this.userService.isLogin();
+  }
 }

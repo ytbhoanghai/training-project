@@ -6,9 +6,10 @@ import { RouterModule } from '@angular/router';
 import { ManagementComponent } from './management.component';
 import { StoreProductComponent } from './store-product/store-product.component';
 import { StoreStaffsComponent } from './store-staffs/store-staffs.component';
+import { StoreOrdersComponent } from './store-orders/store-orders.component';
 
 @NgModule({
-  declarations: [StoreProductComponent, StoreStaffsComponent],
+  declarations: [StoreProductComponent, StoreStaffsComponent, StoreOrdersComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -19,6 +20,6 @@ import { StoreStaffsComponent } from './store-staffs/store-staffs.component';
       { path: 'staffs', component: StoreStaffsComponent, outlet: 'tabs' },
     ]),
   ],
-  exports: [StoreProductComponent, StoreStaffsComponent],
+  exports: [StoreProductComponent, StoreStaffsComponent, StoreOrdersComponent],
 })
 export class ManagementModule {}

@@ -531,15 +531,12 @@ ol {
 	top: 40px;
 }
 
-<<<<<<< HEAD
 .inner-header .nav-right li.order-icon:hover .order-hover {
 	opacity: 1;
 	visibility: visible;
 	top: 40px;
 }
 
-=======
->>>>>>> be
 .cart-hover tr:hover {
   background-color: #f9f9f9;
 }
@@ -550,15 +547,12 @@ ol {
 	display: inline-block;
 }
 
-<<<<<<< HEAD
 .inner-header .nav-right li.order-icon a {
 	color: #252525;
 	position: relative;
 	display: inline-block;
 }
 
-=======
->>>>>>> be
 .inner-header .nav-right li.cart-icon a span {
 	position: absolute;
 	right: -8px;
@@ -574,7 +568,6 @@ ol {
 	line-height: 15px;
 }
 
-<<<<<<< HEAD
 .inner-header .nav-right li.order-icon a span {
 	position: absolute;
 	right: -8px;
@@ -590,8 +583,6 @@ ol {
 	line-height: 15px;
 }
 
-=======
->>>>>>> be
 .inner-header .nav-right li.cart-icon .cart-hover {
 	position: absolute;
 	right: -70px;
@@ -610,7 +601,6 @@ ol {
 	transition: all 0.3s;
 }
 
-<<<<<<< HEAD
 .inner-header .nav-right li.order-icon .order-hover {
   position: absolute;
 	right: -10px;
@@ -629,8 +619,6 @@ ol {
 	transition: all 0.3s;
 }
 
-=======
->>>>>>> be
 .inner-header .nav-right li.cart-icon .cart-hover .select-items table {
 	width: 100%;
 }
@@ -2741,12 +2729,8 @@ ol {
 }
 
 .cart-table table tr td.first-row {
-<<<<<<< HEAD
   padding-top: 24px;
   padding-bottom: 24px;
-=======
-	padding-top: 30px;
->>>>>>> be
 }
 
 .cart-table table tr td.cart-pic {
@@ -4234,12 +4218,9 @@ ol {
 	.inner-header .nav-right li.cart-icon .cart-hover {
 		left: -50px;
 	}
-<<<<<<< HEAD
 	.inner-header .nav-right li.order-icon .order-hover {
 		left: -50px;
 	}
-=======
->>>>>>> be
 	.product-show-option p {
 		text-align: left;
 	}
@@ -4326,13 +4307,10 @@ ol {
 		width: 270px;
 		padding: 20px;
 	}
-<<<<<<< HEAD
 	.inner-header .nav-right li.order-icon .order-hover {
 		width: 270px;
 		padding: 20px;
 	}
-=======
->>>>>>> be
 	.countdown-timer .cd-item {
 		margin-right: 5px;
 		padding: 10px 6px;
