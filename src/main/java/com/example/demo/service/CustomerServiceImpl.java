@@ -11,18 +11,19 @@ import com.example.demo.repository.OrderItemRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.response.CartItemResponse;
 import com.example.demo.response.CartResponse;
+import com.example.demo.response.PageableProductResponse;
 import com.example.demo.response.ProductResponse;
 import com.example.demo.security.SecurityUtil;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
 @Service(value = "customerService")
@@ -122,6 +123,32 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public PageableProductResponse findProductsByStoreAndCategory(Integer storeId, Integer categoryId, Pageable pageable) {
+        Store store = storeService.findById(storeId);
+
+        Page<StoreProduct> productPages = storeProductService.findAllByStore(store, pageable);
+
+        List<ProductResponse> productResponses = productPages.getContent().stream()
+                .filter(storeProduct -> {
+                    if (categoryId != -1) {
+                        return storeProduct.getProduct().getCategories().stream()
+                                .anyMatch(category -> category.getId().equals(categoryId));
+                    }
+                    return true;
+                })
+                .map(storeProduct -> ProductResponse.build(storeProduct.getProduct(), store.getName()))
+                .collect(Collectors.toList());
+
+        return PageableProductResponse.builder()
+                .currentPage(productPages.getPageable().getPageNumber() + 1)
+                .totalPages(productPages.getTotalPages())
+                .totalElements((int) productPages.getTotalElements())
+                .size(productResponses.size())
+                .products(productResponses)
+                .build();
+    }
+
+    @Override
     public void clearCart(Integer cartId) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new CartNotFoundException(String.valueOf(cartId)));
@@ -151,9 +178,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Order> findAllOrder() {
-        return orderRepository.findAllByStaff(securityUtil.getCurrentStaff());
-    }
+    public List<Order> findAllOrder() { return orderRepository.findAllByStaff(securityUtil.getCurrentStaff()); }
 
     private int getQuantityFromCartItemUpdateForms(List<CartItemUpdateForm> itemUpdateForms, CartItem cartItem) {
         int temp = -1;
@@ -225,10 +250,14 @@ public class CustomerServiceImpl implements CustomerService {
     private void updateProductQuantity(List<CartItem> cartItems) {
         List<Product> products = cartItems.stream().peek(cartItem -> {
             Product product = cartItem.getProduct();
+            if (product.getQuantity() == 0) {
+                throw new NotEnoughQuantityException("product not enough quantity");
+            }
             product.setQuantity(product.getQuantity() - cartItem.getQuantity());
         })
                 .map(CartItem::getProduct)
                 .collect(Collectors.toList());
+        products.forEach(product -> System.out.println(product.getName() + " : " + product.getQuantity()));
         productService.save(products);
     }
 
@@ -264,4 +293,5 @@ public class CustomerServiceImpl implements CustomerService {
         cartItemRepository.saveAll(cartItems);
         return invalid;
     }
+
 }
