@@ -4,7 +4,9 @@ import com.example.demo.entity.Cart;
 import com.example.demo.entity.CartItem;
 import com.example.demo.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +19,8 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
     Optional<CartItem> findByCartAndProduct(Cart cart, Product product);
 
     void deleteByIdAndCart(Integer id, Cart cart);
+
+    @Modifying
+    @Transactional
+    void deleteByCart(Cart cart);
 }

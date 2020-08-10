@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Category;
-import com.example.demo.entity.Product;
-import com.example.demo.entity.Role;
-import com.example.demo.entity.Staff;
+import com.example.demo.entity.*;
 import com.example.demo.exception.ProductNotFoundException;
 import com.example.demo.form.ProductForm;
 import com.example.demo.repository.CategoryRepository;
@@ -45,16 +42,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findAllByStore() {
-        return null;
-    }
-
-    @Override
     public Product save(ProductForm productForm) {
         Staff createByStaff = securityUtil.getCurrentStaff();
         Set<Category> categories = categoryRepository.findAllByIdIsIn(productForm.getCategories());
         return productRepository.save(
                 ProductForm.buildProduct(productForm, createByStaff, categories));
+    }
+
+    @Override
+    public Product save(Product product) {
+        return productRepository.save(product);
     }
 
     @Override
@@ -68,6 +65,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Integer id) {
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public void save(List<Product> products) {
+        productRepository.saveAll(products);
     }
 
 }

@@ -152,7 +152,7 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public boolean updatePassword(UpdatePasswordForm updatePasswordForm) {
-        Staff currentStaff = findByUsername(securityUtil.getCurrentPrincipal().getUsername());
+        Staff currentStaff = securityUtil.getCurrentStaff();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 //        Throw Error if password doesn't match
         if (!passwordEncoder.matches(updatePasswordForm.getOldPass(), currentStaff.getPassword())) {

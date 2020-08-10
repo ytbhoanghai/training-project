@@ -10,9 +10,14 @@
           name="selectedProduct"
           [(ngModel)]="selectedProductId"
         >
-          <option *ngFor="let product of remainedProducts" [ngValue]="product.id">
-            [{{ product.id }}] {{ product.name }}
-          </option>
+          <ng-container *ngFor="let product of remainedProducts">
+            <option
+              *ngIf="product.storeProductQuantity > 0"
+              [ngValue]="product.id"
+            >
+              [{{ product.id }}] {{ product.name }}
+            </option>
+          </ng-container>
           <option *ngIf="!remainedProducts.length" disabled>Empty</option>
         </select>
       </div>

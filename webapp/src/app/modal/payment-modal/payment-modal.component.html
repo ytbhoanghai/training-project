@@ -1,0 +1,56 @@
+<div class="border p-3 rounded shadow bg">
+  <div class="h4 mb-2">Payment Checkout</div>
+  <mdb-card>
+    <mdb-card-body class="pb-0">
+      <div class="card-head">SHIPPING & BILLING INFORMATION</div>
+      <table class="table">
+        <tbody>
+          <tr>
+            <th class="table-head">Full name</th>
+            <td>{{ paymentInfo?.name }}</td>
+          </tr>
+          <tr>
+            <th class="table-head">Ship to</th>
+            <td>{{ paymentInfo?.shipAddress || "Unknown" }}</td>
+          </tr>
+          <tr>
+            <th class="table-head">Email</th>
+            <td>{{ paymentInfo?.email }}</td>
+          </tr>
+          <tr>
+            <th class="table-head">Phone</th>
+            <td>{{ paymentInfo?.phone || "Unknown" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </mdb-card-body>
+  </mdb-card>
+  <mdb-card class="mt-3">
+    <mdb-card-body>
+      <div class="card-head">PAYMENT INFORMATION</div>
+
+      <app-stripe-form (onToken)="handleToken($event)"></app-stripe-form>
+
+      <a class="btn-link small text-muted" (click)="test.toggle()">
+        For testing <i class="fas fa-chevron-down"></i>
+      </a>
+
+      <div mdbCollapse [isCollapsed]="true" #test="bs-collapse" class="small text-muted allow-copy">
+        <div><b>U.S Visa Card:</b> 4242424242424242</div>
+        <div><b>Mastercard:</b> 5555555555554444</div>
+        <div><b>Authentication:</b> 4000002760003184</div>
+      </div>
+    </mdb-card-body>
+  </mdb-card>
+
+  <button
+    (click)="handlePayment()"
+    class="btn btn-block shadow btn-primary mt-2 font-weight-bold"
+    [disabled]="isLoading"
+  >
+    Pay {{ paymentInfo.totalPrice | currency: "USD":true:"1.0-2" }}
+    <div class="spinner-border" *ngIf="isLoading">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </button>
+</div>

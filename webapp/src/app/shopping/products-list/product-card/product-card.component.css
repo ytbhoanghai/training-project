@@ -1,0 +1,18 @@
+.btn-cart {
+  -webkit-border-radius: 999px;
+  -moz-border-radius: 999px;
+  border-radius: 999px;
+  background: #fd7e14;
+}
+
+a {
+  user-select: none;
+  cursor: pointer;
+}
+
+.categories {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 8px;
+}

@@ -1,24 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import {IProduct, ProductService} from "../manager/product-management/product.service";
+import {UserService} from "../core/auth/user.service";
 
 @Component({
   selector: 'app-shopping',
   templateUrl: './shopping.component.html',
-  styleUrls: ['./shopping.component.css']
+  styleUrls: ['./shopping.component.css'],
 })
 export class ShoppingComponent implements OnInit {
-  products: IProduct[] = [];
+  constructor(private userService: UserService) {}
 
-  constructor(private productService: ProductService) { }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
-    this.fetchProducts();
+  isLogin(): boolean {
+    return this.userService.isLogin();
   }
-
-  fetchProducts(): void {
-    this.productService.fetchProducts().subscribe(products => {
-      this.products = products;
-    })
-  }
-
 }

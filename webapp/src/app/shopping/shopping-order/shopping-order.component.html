@@ -1,0 +1,34 @@
+<li class="order-icon">
+  <a>
+    <i class="fas fa-truck"></i>
+    <span>{{ orders.length }}</span>
+  </a>
+
+  <div class="order-hover shadow">
+    <ul
+      class="list-group list-group-flush w-100"
+      *ngFor="let order of orders"
+    >
+      <li class="list-group-item list-group-item-action ml-0">
+        <div class="row">
+          <div class="col-3 p-0">
+            <img src="assets/img/delivery.png" alt="Shipping" *ngIf="isShipping(order.status); else delivered">
+            <ng-template #delivered>
+              <img class="img-fluid" src="assets/img/delivered2.png" alt="Delivered">
+            </ng-template>
+          </div>
+          <div class="col-9">
+            <div class="order-id">{{ getId(order.transactionId) }}</div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="order-price">{{ order.totalPrice | currency:'USD':true:'1.0-2' }}</div>
+              <div class="order-status" [ngClass]="isShipping(order.status) ? 'text-danger' : 'text-success'">
+                {{ order.status }}
+              </div>
+            </div>
+            <div class="order-time text-muted">{{ order.createdAt | date:'medium' }}</div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</li>

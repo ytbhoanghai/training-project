@@ -16,7 +16,7 @@ public class CartResponse {
 
     private Integer id;
     private Date createdAt;
-    private List<CartItemResponse> cartItems;
+    private List<CartItemResponse> items;
 
     public static CartResponse build(Cart cart, List<CartItem> cartItems) {
         return new CartResponse(
