@@ -53,6 +53,7 @@ import { StripeFormComponent } from './shopping/cart-checkout/stripe-form/stripe
 import { UserCheckoutFormComponent } from './shopping/cart-checkout/user-checkout-form/user-checkout-form.component';
 import { PaymentModalComponent } from './modal/payment-modal/payment-modal.component';
 import { ShoppingOrderComponent } from './shopping/shopping-order/shopping-order.component';
+import { PaginationComponent } from './shopping/products-list/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -92,7 +93,8 @@ import { ShoppingOrderComponent } from './shopping/shopping-order/shopping-order
     StripeFormComponent,
     UserCheckoutFormComponent,
     PaymentModalComponent,
-    ShoppingOrderComponent
+    ShoppingOrderComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule,

@@ -12,6 +12,7 @@ import com.example.demo.repository.OrderItemRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.response.CartItemResponse;
 import com.example.demo.response.CartResponse;
+import com.example.demo.response.PageableProductResponse;
 import com.example.demo.response.ProductResponse;
 import com.example.demo.security.SecurityUtil;
 import com.stripe.Stripe;
@@ -19,6 +20,9 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -114,6 +118,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         cartItems.forEach(cartItem -> {
             int temp = getQuantityFromItemUpdateForms(itemUpdateForms, cartItem);
+
             if (temp != -1) { // is exists
                 Product product = cartItem.getProduct();
                 if(temp > product.getQuantity()) {
@@ -142,6 +147,32 @@ public class CustomerServiceImpl implements CustomerService {
                 })
                 .map(storeProduct -> ProductResponse.build(storeProduct.getProduct(), store.getName()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PageableProductResponse findProductsByStoreAndCategory(Integer storeId, Integer categoryId, Pageable pageable) {
+        Store store = storeService.findById(storeId);
+
+        Page<StoreProduct> productPages = storeProductService.findAllByStore(store, pageable);
+
+        List<ProductResponse> productResponses = productPages.getContent().stream()
+                .filter(storeProduct -> {
+                    if (categoryId != -1) {
+                        return storeProduct.getProduct().getCategories().stream()
+                                .anyMatch(category -> category.getId().equals(categoryId));
+                    }
+                    return true;
+                })
+                .map(storeProduct -> ProductResponse.build(storeProduct.getProduct(), store.getName()))
+                .collect(Collectors.toList());
+
+        return PageableProductResponse.builder()
+                .currentPage(productPages.getPageable().getPageNumber() + 1)
+                .totalPages(productPages.getTotalPages())
+                .totalElements((int) productPages.getTotalElements())
+                .size(productResponses.size())
+                .products(productResponses)
+                .build();
     }
 
     @Override

@@ -5,7 +5,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: '[app-cart-detail-item]',
   templateUrl: './cart-detail-item.component.html',
-  styleUrls: ['./cart-detail-item.component.css']
+  styleUrls: ['./cart-detail-item.component.css'],
 })
 export class CartDetailItemComponent implements OnInit {
   @Input() item: ICartItem;
@@ -13,7 +13,7 @@ export class CartDetailItemComponent implements OnInit {
   quantity: number;
   @Output() onItemChanged = new EventEmitter();
 
-  constructor(private cartService: CartService) { }
+  constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
     this.quantity = this.item.quantity;
@@ -30,12 +30,15 @@ export class CartDetailItemComponent implements OnInit {
     this.emitItemChanged();
   }
 
+  onChange(): void {
+    this.onItemChanged.emit({ ...this.item, quantity: this.quantity });
+  }
+
   emitItemChanged(): void {
-    this.onItemChanged.emit({...this.item, quantity: this.quantity});
+    this.onItemChanged.emit({ ...this.item, quantity: this.quantity });
   }
 
   removeCartItem(id: number): void {
     this.cartService.removeItem(id);
   }
-
 }

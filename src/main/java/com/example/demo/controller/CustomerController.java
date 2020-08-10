@@ -2,15 +2,14 @@ package com.example.demo.controller;
 
 import com.example.demo.form.CartItemUpdateForm;
 import com.example.demo.form.PaymentForm;
-import com.example.demo.response.CartItemResponse;
-import com.example.demo.response.CartResponse;
-import com.example.demo.response.MessageResponse;
-import com.example.demo.response.ProductResponse;
+import com.example.demo.response.*;
 import com.example.demo.service.CustomerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -55,8 +54,14 @@ public class CustomerController {
     }
 
     @GetMapping(value = "stores/{storeId}/categories/{categoryId}/products")
-    public ResponseEntity<List<ProductResponse>> findProductsByStoreAndCategory(@PathVariable Integer storeId, @PathVariable Integer categoryId) {
-        List<ProductResponse> responses = customerService.findProductsByStoreAndCategory(storeId, categoryId);
+    public ResponseEntity<PageableProductResponse> findProductsByStoreAndCategory(
+            @PathVariable Integer storeId, @PathVariable Integer categoryId,
+            @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "6") Integer size
+    ) {
+//        Page starts from 0
+        Pageable pageable = PageRequest.of(page - 1, size);
+        PageableProductResponse responses = customerService.findProductsByStoreAndCategory(storeId, categoryId, pageable);
         return ResponseEntity.ok(responses);
     }
 

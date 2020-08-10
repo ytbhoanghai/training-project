@@ -28,7 +28,7 @@
           <div class="row">
             <div class="col-lg-7 col-md-7"></div>
             <div class="col-lg-5 col-md-5 text-right">
-              <p>Show 01- 09 Of 36 Product</p>
+              <p>Show {{ pageableProducts?.size }} of {{ pageableProducts?.totalElements }} Products</p>
             </div>
           </div>
         </div>
@@ -52,6 +52,7 @@
             Loading More
           </a>
         </div> -->
+        <app-pagination [pagination]="pageableProducts" *ngIf="pageableProducts"></app-pagination>
       </div>
     </div>
   </div>

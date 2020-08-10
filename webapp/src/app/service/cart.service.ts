@@ -73,11 +73,11 @@ export class CartService {
     this.fetchRemoteCart();
   }
 
-  addItem(item: IProduct): void {
+  addItem(item: IProduct): boolean {
     if (!this.userService.isLogin()) {
       this.localCartService.addItem(item);
       this.doPostAddded(item);
-      return;
+      return true;
     }
 
     // Default quantity at 1
@@ -91,7 +91,7 @@ export class CartService {
         );
         if (err.status === 406) {
           this.notiService.showWaring(
-            `Reach maximum ${currentProduct?.quantity} items. This product is out of stock`
+            `Reach maximum items. This product is out of stock`
           );
         }
       }
@@ -135,7 +135,10 @@ export class CartService {
         if (!failedIds.length) {
           this.notiService.showQuickSuccess('Cart updated successfully!');
         } else {
-          this.notiService.showWaring('Out of stock');
+          failedIds.map(id => {
+            const item = this.cart.items.find(item => item.id === id);
+            this.notiService.showWaring(`${item.name} is out of stock`);
+          })
         }
       });
   }

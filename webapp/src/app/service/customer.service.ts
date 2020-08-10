@@ -14,9 +14,15 @@ export class CustomerService {
 
   constructor(private http: HttpClient) {}
 
-  fetchProductsByStoreAndCategory(storeId: number, categoryId: number): Observable<IProduct[]> {
-    return this.http.get<IProduct[]>(
-      this.REQUEST_URL + `stores/${storeId}/categories/${categoryId}/products`
+  fetchProductsByStoreAndCategory(
+    storeId: number,
+    categoryId: number,
+    page?: number,
+    size?: number
+  ): Observable<IPageableProduct> {
+    return this.http.get<IPageableProduct>(
+      this.REQUEST_URL + `stores/${storeId}/categories/${categoryId}/products`,
+      { params: { page: String(page), size: String(size) } }
     );
   }
 
@@ -58,6 +64,14 @@ export class CustomerService {
   }
 }
 
+export interface IPageableProduct {
+  currentPage: number;
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  products: IProduct[];
+}
+
 export interface IShoppingProduct {
   id: number;
   name: string;
@@ -97,4 +111,15 @@ export interface IOrder {
   shipAddress: string;
   transactionId: string;
   status: string;
+}
+
+export interface IProductFilter {
+  params: {
+    storeId: number;
+    categoryId: number;
+  };
+  query?: {
+    page: number;
+    size: number;
+  };
 }
