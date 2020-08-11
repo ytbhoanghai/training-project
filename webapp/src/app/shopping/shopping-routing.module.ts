@@ -7,13 +7,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { ShoppingComponent } from './shopping.component';
 
 const routes: Routes = [
-  // { path: '', redirectTo: 'category/all' },
-  // { path: 'category/:id', component: ShoppingComponent },
   {
     path: '',
     component: ShoppingComponent,
     children: [
-      // { path: '', pathMatch: 'full', component: ShoppingComponent },
+      { path: '', pathMatch: 'full', component: ProductsListComponent },
       {
         path: 'store/:storeId/category/:categoryId',
         component: ProductsListComponent,

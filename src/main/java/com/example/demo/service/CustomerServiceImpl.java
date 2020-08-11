@@ -24,7 +24,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service(value = "customerService")
 public class CustomerServiceImpl implements CustomerService {
@@ -54,16 +56,16 @@ public class CustomerServiceImpl implements CustomerService {
                                CategoryService categoryService,
                                StoreProductService storeProductService) {
 
-        this.securityUtil           = securityUtil;
-        this.cartRepository         = cartRepository;
-        this.cartItemRepository     = cartItemRepository;
-        this.orderRepository        = orderRepository;
-        this.orderItemRepository    = orderItemRepository;
+        this.securityUtil = securityUtil;
+        this.cartRepository = cartRepository;
+        this.cartItemRepository = cartItemRepository;
+        this.orderRepository = orderRepository;
+        this.orderItemRepository = orderItemRepository;
 
-        this.productService         = productService;
-        this.storeService           = storeService;
-        this.categoryService        = categoryService;
-        this.storeProductService    = storeProductService;
+        this.productService = productService;
+        this.storeService = storeService;
+        this.categoryService = categoryService;
+        this.storeProductService = storeProductService;
     }
 
     @Override
@@ -97,7 +99,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void removeCartItem(Integer idCartItem) {
-        Cart  cart = getCartByCurrentStaff();
+        Cart cart = getCartByCurrentStaff();
         cartItemRepository.deleteByIdAndCart(idCartItem, cart);
     }
 
@@ -126,9 +128,9 @@ public class CustomerServiceImpl implements CustomerService {
     public PageableProductResponse findProductsByStoreAndCategory(Integer storeId, Integer categoryId, Pageable pageable) {
         Store store = storeService.findById(storeId);
 
-        Page<StoreProduct> productPages = storeProductService.findAllByStore(store, pageable);
+        List<StoreProduct> storeProductList = storeProductService.findAllByStore(store);
 
-        List<ProductResponse> productResponses = productPages.getContent().stream()
+        Supplier<Stream<ProductResponse>> streamSupplier = () -> storeProductList.stream()
                 .filter(storeProduct -> {
                     if (categoryId != -1) {
                         return storeProduct.getProduct().getCategories().stream()
@@ -136,13 +138,19 @@ public class CustomerServiceImpl implements CustomerService {
                     }
                     return true;
                 })
-                .map(storeProduct -> ProductResponse.build(storeProduct.getProduct(), store.getName()))
+                .map(storeProduct -> ProductResponse.build(storeProduct.getProduct(), store.getName()));
+
+        int totalElements = (int) streamSupplier.get().count();
+
+        List<ProductResponse> productResponses = streamSupplier.get()
+                .skip(pageable.getPageNumber() * pageable.getPageSize())
+                .limit(pageable.getPageSize())
                 .collect(Collectors.toList());
 
         return PageableProductResponse.builder()
-                .currentPage(productPages.getPageable().getPageNumber() + 1)
-                .totalPages(productPages.getTotalPages())
-                .totalElements((int) productPages.getTotalElements())
+                .currentPage(pageable.getPageNumber() + 1)
+                .totalPages(totalElements / pageable.getPageSize() + 1)
+                .totalElements(totalElements)
                 .size(productResponses.size())
                 .products(productResponses)
                 .build();
@@ -155,7 +163,8 @@ public class CustomerServiceImpl implements CustomerService {
         cartItemRepository.deleteByCart(cart);
     }
 
-    @Override public Charge paymentCheckout(PaymentForm paymentForm) throws StripeException {
+    @Override
+    public Charge paymentCheckout(PaymentForm paymentForm) throws StripeException {
         Charge charge = pay(paymentForm);
 
         Cart cart = cartRepository.findByStaff(securityUtil.getCurrentStaff())
@@ -178,7 +187,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Order> findAllOrder() { return orderRepository.findAllByStaff(securityUtil.getCurrentStaff()); }
+    public List<Order> findAllOrder() {
+        return orderRepository.findAllByStaff(securityUtil.getCurrentStaff());
+    }
 
     private int getQuantityFromCartItemUpdateForms(List<CartItemUpdateForm> itemUpdateForms, CartItem cartItem) {
         int temp = -1;
@@ -235,7 +246,7 @@ public class CustomerServiceImpl implements CustomerService {
             int temp = getQuantityFromCartItemUpdateForms(cartItemUpdateForms, cartItem);
             if (temp != -1) { // is exists
                 Product product = cartItem.getProduct();
-                if(temp > product.getQuantity()) {
+                if (temp > product.getQuantity()) {
                     invalid.add(cartItem.getId());
                 } else {
                     cartItem.setQuantity(temp);

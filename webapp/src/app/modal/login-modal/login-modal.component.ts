@@ -1,42 +1,45 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import {AuthService} from "../../core/auth/auth.service";
-import {MDBModalRef, SBItemComponent} from "ng-uikit-pro-standard";
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { AuthService } from '../../core/auth/auth.service';
+import { MDBModalRef } from 'ng-uikit-pro-standard';
 
 @Component({
   selector: 'app-login-modal',
   templateUrl: './login-modal.component.html',
-  styleUrls: ['./login-modal.component.css']
+  styleUrls: ['./login-modal.component.css'],
 })
 export class LoginModalComponent implements OnInit {
-
   username: string;
   password: string;
   messageError: string;
 
-  isHidden = false;
-  @ViewChild('regItem') regItem: SBItemComponent;
+  isRegHidden = true;
+  @ViewChild('loginBtn') loginBtn: ElementRef;
+  @ViewChild('regBtn') regBtn: ElementRef;
 
   constructor(
     private modalRef: MDBModalRef,
-    private authService: AuthService) {
-  }
+    private authService: AuthService
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   authenticate(): void {
-    this.authService.loginUser(this.username, this.password).subscribe(_ => this.modalRef.hide(), error => {
-      this.messageError = error.error.message;
-    });
+    this.authService.loginUser(this.username, this.password).subscribe(
+      () => this.modalRef.hide(),
+      (error) => {
+        this.messageError = error.error.message;
+      }
+    );
   }
 
   closeModal(): void {
     this.modalRef.hide();
   }
 
-  toggle(): void {
-    this.isHidden = !this.isHidden;
-    this.regItem.toggle(true);
+  registerClick(): void {
+    this.isRegHidden = !this.isRegHidden;
+    if (this.isRegHidden) {
+      this.loginBtn.nativeElement.click();
+    }
   }
-
 }

@@ -19,7 +19,7 @@
           <th scope="row">{{ i + 1 }}</th>
           <td>{{ order.transactionId }}</td>
           <td>{{ order.totalPrice | currency:'USD':true:'1.0-2' }}</td>
-          <td [ngClass]="isShipping(order) ? 'text-danger' : 'text-success'" class="font-weight-bold">{{ order.status }}</td>
+          <td [ngClass]="isShipping(order) ? 'text-danger' : 'text-success'">{{ order.status }}</td>
           <td>
             {{ order.createdAt | date:'short'}}
           </td>

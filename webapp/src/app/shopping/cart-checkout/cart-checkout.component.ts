@@ -41,8 +41,18 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (!this.isValidForm()) {
+      this.notiService.showQuickWarning('Please fill in your information');
+      return;
+    }
+
     const body = this.checkoutComponent.userForm;
     body.totalPrice = this.cartService.getCart().totalPrice;
     this.paymentModal.show(body);
+  }
+
+  isValidForm(): boolean {
+    const body = this.checkoutComponent.userForm;
+    return body.shipAddress !== '' && body.phone !== '';
   }
 }

@@ -29,7 +29,7 @@ export class CheckAuthoritiesGuard implements CanActivate {
     | boolean
     | UrlTree {
     const currentUser = this.userService.getCurrentUser();
-    if (currentUser) {
+    if (currentUser && currentUser.type !== 'CUSTOMER') {
       return true;
     }
     // this.router.navigate(['/accessdenied']);

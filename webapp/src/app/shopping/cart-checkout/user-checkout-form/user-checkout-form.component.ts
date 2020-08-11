@@ -12,9 +12,9 @@ export class UserCheckoutFormComponent implements OnInit {
   userForm = {
     name: '',
     address: '',
-    shipAddress: '',
+    shipAddress: 'Ward 2, Tan Binh District, HCMC',
     email: '',
-    phone: '',
+    phone: '0123321123',
     stripeToken: '',
     totalPrice: 0
   };
@@ -36,4 +36,5 @@ export class UserCheckoutFormComponent implements OnInit {
   handleToken(token: { id: string }): void {
     this.userForm.stripeToken = token.id;
   }
+
 }

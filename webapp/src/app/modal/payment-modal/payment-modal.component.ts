@@ -54,7 +54,6 @@ export class PaymentModalComponent implements OnInit {
   }
 
   checkoutPayment(): void {
-    console.log(this.paymentInfo);
     this.isLoading = true;
     this.customerService.checkoutPayment(this.paymentInfo).subscribe(
       (charge) => {
@@ -68,8 +67,7 @@ export class PaymentModalComponent implements OnInit {
       (err: HttpErrorResponse) => {
         if (err.status === 406) {
           this.notiService.showError('Not enough product in store');
-        }
-        else {
+        } else {
           this.notiService.showError('Error on payment');
         }
         this.isLoading = false;

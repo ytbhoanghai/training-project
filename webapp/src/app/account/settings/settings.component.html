@@ -1,0 +1,133 @@
+<div class="jumbotron bg-jumbotron">
+  <div class="row">
+    <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3">
+      <div class="btn btn-link" (click)="back()">
+        <i class="fas fa-reply"></i>Back
+      </div>
+      <form
+        class="p-2"
+        [formGroup]="accountForm"
+        (ngSubmit)="handleUpdateAccount()"
+      >
+        <p class="h4 mb-4">Account Settings</p>
+
+        <input
+          type="text"
+          formControlName="name"
+          class="form-control mb-4"
+          placeholder="Full name"
+        />
+
+        <div class="form-row mb-4">
+          <div class="col">
+            <!-- Email -->
+            <input
+              type="email"
+              formControlName="email"
+              class="form-control"
+              placeholder="Email"
+              disabled
+            />
+          </div>
+          <div class="col">
+            <!-- Address -->
+            <input
+              type="text"
+              formControlName="address"
+              class="form-control"
+              placeholder="Address"
+            />
+          </div>
+        </div>
+
+        <!-- Username -->
+        <input
+          type="text"
+          formControlName="username"
+          class="form-control mb-4"
+          placeholder="Username"
+          autocomplete="username"
+          disabled
+        />
+        <button
+          class="mt-4 btn btn-info btn-block"
+          type="submit"
+          [disabled]="accountForm.invalid"
+        >
+          Update account
+        </button>
+      </form>
+
+      <hr />
+      <!-- Password -->
+      <form
+        class="p-2"
+        [formGroup]="passwordForm"
+        (ngSubmit)="handleUpdatePassword()"
+      >
+        <p class="h4 mb-4">Update your password</p>
+
+        <input
+          type="password"
+          formControlName="oldPass"
+          class="form-control mt-2"
+          placeholder="Old password"
+          autocomplete="old-password"
+        />
+        <small
+          class="form-text mb-2 error"
+          *ngIf="
+            passwordForm.get('oldPass').invalid &&
+            passwordForm.get('oldPass').dirty
+          "
+        >
+          At least 4 characters
+        </small>
+
+        <input
+          type="password"
+          formControlName="newPass"
+          class="form-control mt-2"
+          placeholder="Password"
+          autocomplete="password"
+        />
+        <small
+          class="form-text mb-2 error"
+          *ngIf="
+            passwordForm.get('newPass').invalid &&
+            passwordForm.get('newPass').dirty
+          "
+        >
+          At least 4 characters
+        </small>
+
+        <input
+          type="password"
+          formControlName="rePass"
+          class="form-control mt-2"
+          placeholder="Retype Password"
+          autocomplete="repassword"
+        />
+        <small
+          class="form-text mb-2 error"
+          *ngIf="
+            passwordForm.get('rePass').invalid &&
+            passwordForm.get('rePass').dirty
+          "
+        >
+          At least 4 characters
+        </small>
+
+        <!-- Phone number -->
+
+        <!-- Sign up button -->
+        <button
+          class="mt-4 btn btn-warning text-light btn-block"
+          type="submit"
+        >
+          Update password
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

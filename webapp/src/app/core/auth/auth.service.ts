@@ -1,3 +1,4 @@
+import { CartService } from './../../service/cart.service';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -21,8 +22,9 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
+    private router: Router,
     private userService: UserService,
-    private router: Router
+    private cartService: CartService
   ) {}
 
   loginUser(username: string, password: string): Observable<any> {
@@ -40,6 +42,7 @@ export class AuthService {
       localStorage.removeItem(this.jwtLocalStorageName);
       this.router.navigate(['']);
       this.userService.removeCurrentUser();
+      this.cartService.clearLocalCart();
       observer.next();
     });
   }
@@ -48,7 +51,10 @@ export class AuthService {
   private authenticateSuccess(jwt: JwtToken) {
     localStorage.setItem(this.jwtLocalStorageName, jwt.id_token);
     this.router.navigateByUrl(location.pathname, {skipLocationChange: true});
-    this.userService.fetchUserInfo().subscribe(null);
+    this.userService.fetchUserInfo().subscribe(() => {
+      // Do after fetched info
+      this.cartService.fetchCart();
+    });
   }
 
   getAuthToken(): string {

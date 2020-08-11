@@ -62,7 +62,7 @@ public class StaffController {
     @PreAuthorize("hasAuthority(\"" + StaffPermission.UPDATE + "\")")
     public ResponseEntity<MessageResponse> update(@PathVariable Integer staffId, @Valid @RequestBody StaffForm staffForm) {
         staffService.update(staffId, staffForm);
-        return new ResponseEntity<>(new MessageResponse("Update role successfully"), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse("Update account successfully"), HttpStatus.OK);
     }
 
     @PutMapping("password")

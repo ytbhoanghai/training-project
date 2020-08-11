@@ -1,4 +1,4 @@
-<nav aria-label="Page navigation example">
+<nav aria-label="Page navigation example" *ngIf="pagination.products.length">
   <ul class="pagination justify-content-center">
     <li class="page-item" [ngClass]="{ disabled: isFirstPage()}">
       <a class="page-link"

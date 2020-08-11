@@ -94,5 +94,6 @@ export class LocalCartService {
 
   clear(): void {
     localStorage.removeItem(this.cartName);
+    this.events.change.next();
   }
 }

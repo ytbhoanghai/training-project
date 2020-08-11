@@ -1,3 +1,4 @@
+import { SettingsComponent } from './account/settings/settings.component';
 import { ShoppingStoreComponent } from './shopping/products-list/shopping-store/shopping-store.component';
 import { ProductCardComponent } from './shopping/products-list/product-card/product-card.component';
 import { ShoppingCategoryComponent } from './shopping/products-list/shopping-category/shopping-category.component';
@@ -98,6 +99,7 @@ import { RegisterFormComponent } from './modal/login-modal/register-form/registe
     PaginationComponent,
     RegisterFormComponent,
     ShoppingOrderComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,

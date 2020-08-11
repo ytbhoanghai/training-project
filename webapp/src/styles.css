@@ -56,3 +56,7 @@ html {
 	top: 20px;
 	padding: 5px 10px;
 }
+
+#accordion-body .card-body {
+  padding: 0;
+}

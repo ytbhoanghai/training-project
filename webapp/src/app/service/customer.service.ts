@@ -5,6 +5,7 @@ import { SERVER_URL } from './../core/constants/api.constants';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IPaymentInfo } from './payment-modal.service';
+import { IUser } from '../core/auth/user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +31,10 @@ export class CustomerService {
     return this.http.get<ICart>(this.REQUEST_URL + 'cart');
   }
 
+  createCustomer(body: ICustomerBody): Observable<IUser> {
+    return this.http.post<IUser>(this.REQUEST_URL, body);
+  }
+
   addItemToCart(productId: number, quantity: number): Observable<ICartItem> {
     return this.http.put<ICartItem>(this.REQUEST_URL + 'cart', null, {
       params: {
@@ -41,6 +46,13 @@ export class CustomerService {
 
   updateCartItemQuantity(body: ICartItemBody[]): Observable<number[]> {
     return this.http.put<number[]>(this.REQUEST_URL + 'cart/cart-items', body);
+  }
+
+  mergeCart(body: IMergeCartBody[]): Observable<number[]> {
+    return this.http.put<number[]>(
+      this.REQUEST_URL + 'cart/cart-items/merge',
+      body
+    );
   }
 
   removeCartItem(cartItemId: number): Observable<any> {
@@ -103,6 +115,11 @@ export interface ICartItemBody {
   quantity: number;
 }
 
+export interface IMergeCartBody {
+  idProduct: number;
+  quantity: number;
+}
+
 export interface IOrder {
   id: number;
   totalPrice: number;
@@ -122,4 +139,12 @@ export interface IProductFilter {
     page: number;
     size: number;
   };
+}
+
+export interface ICustomerBody {
+  name: string;
+  email: string;
+  address: string;
+  username: string;
+  password: string;
 }

@@ -5,8 +5,8 @@
       <a
         [routerLink]="['/shopping', 'store', storeId, 'category', 'all']"
         [routerLinkActiveOptions]="{ exact: false, __change_detection_hack__: storeId }"
+        [queryParams]="{ page: 1 }"
         routerLinkActive="active"
-        queryParamsHandling="preserve"
         >ALL</a
       >
     </li>
@@ -14,8 +14,8 @@
       <a
         [routerLink]="['/shopping', 'store', storeId, 'category', category.id]"
         [routerLinkActiveOptions]="{ exact: false, __change_detection_hack__: storeId }"
+        [queryParams]="{ page: 1 }"
         routerLinkActive="active"
-        queryParamsHandling="preserve"
         >{{ category.name }}</a
       >
     </li>

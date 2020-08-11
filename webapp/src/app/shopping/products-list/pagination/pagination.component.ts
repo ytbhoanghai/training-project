@@ -3,7 +3,6 @@ import {
   OnInit,
   Input,
   OnChanges,
-  SimpleChanges,
 } from '@angular/core';
 import { IPageableProduct } from 'src/app/service/customer.service';
 
@@ -22,7 +21,7 @@ export class PaginationComponent implements OnInit, OnChanges {
     this.convertInput();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.convertInput();
   }
 

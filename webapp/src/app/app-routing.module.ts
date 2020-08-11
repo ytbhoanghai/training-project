@@ -33,6 +33,13 @@ const routes: Routes = [
         m => m.ShoppingRoutingModule
       )
   },
+  {
+    path: 'account',
+    loadChildren: () =>
+      import('./account/account-routing.module').then(
+        m => m.AccountRoutingModule
+      )
+  },
   ...errorRoute,
 ];
 
