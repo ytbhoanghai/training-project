@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.*;
 import com.example.demo.exception.CartNotFoundException;
 import com.example.demo.exception.NotEnoughQuantityException;
+import com.example.demo.form.CartItemMergeForm;
 import com.example.demo.form.CartItemUpdateForm;
 import com.example.demo.form.PaymentForm;
 import com.example.demo.repository.CartItemRepository;
@@ -42,6 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
     private StoreService storeService;
     private CategoryService categoryService;
     private StoreProductService storeProductService;
+    private StaffService staffService;
 
     @Autowired
     public CustomerServiceImpl(SecurityUtil securityUtil,
@@ -52,7 +54,8 @@ public class CustomerServiceImpl implements CustomerService {
                                ProductService productService,
                                StoreService storeService,
                                CategoryService categoryService,
-                               StoreProductService storeProductService) {
+                               StoreProductService storeProductService,
+                               StaffService staffService) {
 
         this.securityUtil           = securityUtil;
         this.cartRepository         = cartRepository;
@@ -64,6 +67,7 @@ public class CustomerServiceImpl implements CustomerService {
         this.storeService           = storeService;
         this.categoryService        = categoryService;
         this.storeProductService    = storeProductService;
+        this.staffService           = staffService;
     }
 
     @Override
@@ -102,8 +106,44 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Integer> updateQuantityCartItems(List<CartItemUpdateForm> itemUpdateForms, Boolean isMerge) {
-        return isMerge ? mergeCart(itemUpdateForms) : updateCart(itemUpdateForms);
+    public List<Integer> updateQuantityCartItems(List<CartItemUpdateForm> itemUpdateForms) {
+        return updateCart(itemUpdateForms);
+    }
+
+    @Override
+    public List<Integer> mergeCart(List<CartItemMergeForm> cartItemMergeForms) {
+        List<Integer> invalid = new ArrayList<>();
+
+        Cart cart = getCartByCurrentStaff();
+        List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
+
+        cartItemMergeForms.forEach(cartItemMergeForm -> {
+            CartItem cartItem = getCartItemInCart(cartItemMergeForm, cartItems);
+
+            int quantity = (cartItem == null)
+                    ? cartItemMergeForm.getQuantity()
+                    : cartItem.getQuantity() + cartItemMergeForm.getQuantity();
+
+
+            Product product = (cartItem == null)
+                    ? productService.findById(cartItemMergeForm.getIdProduct())
+                    : cartItem.getProduct();
+
+            if (cartItem == null) {
+                cartItem = new CartItem(null, cart, product, Integer.MAX_VALUE, new Date());
+                cartItems.add(cartItem);
+            }
+
+            if (product.getQuantity() < quantity) {
+                invalid.add(cartItemMergeForm.getIdProduct());
+                cartItem.setQuantity(product.getQuantity());
+            } else {
+                cartItem.setQuantity(quantity);
+            }
+        });
+
+        cartItemRepository.saveAll(cartItems);
+        return invalid;
     }
 
     @Override
@@ -155,7 +195,8 @@ public class CustomerServiceImpl implements CustomerService {
         cartItemRepository.deleteByCart(cart);
     }
 
-    @Override public Charge paymentCheckout(PaymentForm paymentForm) throws StripeException {
+    @Override
+    public Charge paymentCheckout(PaymentForm paymentForm) throws StripeException {
         Charge charge = pay(paymentForm);
 
         Cart cart = cartRepository.findByStaff(securityUtil.getCurrentStaff())
@@ -198,10 +239,13 @@ public class CustomerServiceImpl implements CustomerService {
         return temp;
     }
 
-    private CartItem getCartItemInCart(CartItemUpdateForm cartItemUpdateForm, List<CartItem> cartItems) {
+    private CartItem getCartItemInCart(CartItemMergeForm cartItemMergeForm, List<CartItem> cartItems) {
         CartItem temp = null;
         Optional<CartItem> optionalCartItem = cartItems.stream()
-                .filter(cartItem -> cartItem.getId().equals(cartItemUpdateForm.getIdCartItem()))
+                .filter(cartItem -> {
+                    Product product = cartItem.getProduct();
+                    return product.getId().equals(cartItemMergeForm.getIdProduct());
+                })
                 .findFirst();
         if (optionalCartItem.isPresent()) temp = optionalCartItem.get();
 
@@ -259,39 +303,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .collect(Collectors.toList());
         products.forEach(product -> System.out.println(product.getName() + " : " + product.getQuantity()));
         productService.save(products);
-    }
-
-    private List<Integer> mergeCart(List<CartItemUpdateForm> cartItemMergeForms) {
-        List<Integer> invalid = new ArrayList<>();
-
-        Cart cart = getCartByCurrentStaff();
-        List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
-
-        cartItemMergeForms.forEach(cartItemMergeForm -> {
-            CartItem cartItem = getCartItemInCart(cartItemMergeForm, cartItems);
-            int quantity = (cartItem == null)
-                    ? cartItemMergeForm.getQuantity()
-                    : cartItem.getQuantity() + cartItemMergeForm.getQuantity();
-
-            Product product = cartItem != null
-                    ? cartItem.getProduct()
-                    : productService.findById(cartItemMergeForm.getIdCartItem());
-
-            if (cartItem == null) {
-                cartItem = new CartItem(null, cart, product, Integer.MAX_VALUE, new Date());
-                cartItems.add(cartItem);
-            }
-
-            if (product.getQuantity() < quantity) {
-                invalid.add(cartItemMergeForm.getIdCartItem());
-                cartItem.setQuantity(product.getQuantity());
-            } else {
-                cartItem.setQuantity(quantity);
-            }
-        });
-
-        cartItemRepository.saveAll(cartItems);
-        return invalid;
     }
 
 }

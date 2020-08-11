@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.form.CartItemMergeForm;
 import com.example.demo.form.CartItemUpdateForm;
 import com.example.demo.form.PaymentForm;
 import com.example.demo.response.CartItemResponse;
@@ -45,10 +46,16 @@ public class CustomerController {
 
     @PutMapping(value = "cart/cart-items")
     public ResponseEntity<List<Integer>> updateQuantityCartItems(
-            @NotNull @RequestBody List<CartItemUpdateForm> itemUpdateForms,
-            @RequestParam(required = false, defaultValue = "false") Boolean isMerge) {
+            @NotNull @RequestBody List<CartItemUpdateForm> cartItemUpdateForms) {
 
-        return ResponseEntity.ok(customerService.updateQuantityCartItems(itemUpdateForms, isMerge));
+        return ResponseEntity.ok(customerService.updateQuantityCartItems(cartItemUpdateForms));
+    }
+
+    @PutMapping(value = "cart/cart-items/merge")
+    public ResponseEntity<List<Integer>> mergeCart(
+            @NotNull @RequestBody List<CartItemMergeForm> cartItemMergeForms) {
+
+        return ResponseEntity.ok(customerService.mergeCart(cartItemMergeForms));
     }
 
     @DeleteMapping(value = "cart/cart-items/{idCartItem}")
