@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import com.example.demo.entity.*;
 import com.example.demo.exception.CartNotFoundException;
-import com.example.demo.exception.CategoryNotFoundException;
 import com.example.demo.exception.NotEnoughQuantityException;
 import com.example.demo.form.CartItemUpdateForm;
 import com.example.demo.form.PaymentForm;
@@ -21,12 +20,9 @@ import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Id;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,21 +68,20 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CartResponse getMyCart() {
-        Staff staff = securityUtil.getCurrentStaff();
-
-        Cart cart = getCartByStaff(staff);
+        Cart cart = getCartByCurrentStaff();
         if (cart != null) {
             List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
             return CartResponse.build(cart, cartItems);
         }
 
+        Staff staff = securityUtil.getCurrentStaff();
         cart = cartRepository.save(new Cart(null, staff, new Date()));
         return CartResponse.build(cart, Collections.emptyList());
     }
 
     @Override
     public CartItemResponse addCartItem(Integer productId, Integer quantity) {
-        Cart cart = getCartByStaff(securityUtil.getCurrentStaff());
+        Cart cart = getCartByCurrentStaff();
         Product product = productService.findById(productId);
 
         CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product)
@@ -100,37 +95,15 @@ public class CustomerServiceImpl implements CustomerService {
         return CartItemResponse.build(cartItemRepository.save(cartItem));
     }
 
-    @Transactional
     @Override
     public void removeCartItem(Integer idCartItem) {
-        Staff currentStaff = securityUtil.getCurrentStaff();
-        Cart  cart = getCartByStaff(currentStaff);
-
+        Cart  cart = getCartByCurrentStaff();
         cartItemRepository.deleteByIdAndCart(idCartItem, cart);
     }
 
     @Override
-    public List<Integer> updateQuantityCartItems(List<CartItemUpdateForm> itemUpdateForms) {
-        List<Integer> invalid = new ArrayList<>();
-
-        Cart cart = getCartByStaff(securityUtil.getCurrentStaff());
-        List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
-
-        cartItems.forEach(cartItem -> {
-            int temp = getQuantityFromItemUpdateForms(itemUpdateForms, cartItem);
-
-            if (temp != -1) { // is exists
-                Product product = cartItem.getProduct();
-                if(temp > product.getQuantity()) {
-                    invalid.add(cartItem.getId());
-                } else {
-                    cartItem.setQuantity(temp);
-                }
-            }
-        });
-
-        cartItemRepository.saveAll(cartItems);
-        return invalid;
+    public List<Integer> updateQuantityCartItems(List<CartItemUpdateForm> itemUpdateForms, Boolean isMerge) {
+        return isMerge ? mergeCart(itemUpdateForms) : updateCart(itemUpdateForms);
     }
 
     @Override
@@ -194,6 +167,8 @@ public class CustomerServiceImpl implements CustomerService {
                 .map(cartItem -> OrderItem.build(cartItem, order))
                 .collect(Collectors.toList());
 
+        updateProductQuantity(cartItems);
+
         cartItemRepository.deleteAll(cartItems);
 
         orderRepository.save(order);
@@ -203,11 +178,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Order> findAllOrder() {
-        return orderRepository.findAllByStaff(securityUtil.getCurrentStaff());
-    }
+    public List<Order> findAllOrder() { return orderRepository.findAllByStaff(securityUtil.getCurrentStaff()); }
 
-    private int getQuantityFromItemUpdateForms(List<CartItemUpdateForm> itemUpdateForms, CartItem cartItem) {
+    private int getQuantityFromCartItemUpdateForms(List<CartItemUpdateForm> itemUpdateForms, CartItem cartItem) {
         int temp = -1;
         Optional<CartItemUpdateForm> optionalCartItemUpdateForm = itemUpdateForms.stream()
                 .filter(e -> {
@@ -225,8 +198,18 @@ public class CustomerServiceImpl implements CustomerService {
         return temp;
     }
 
-    private Cart getCartByStaff(Staff staff) {
-        Optional<Cart> optionalCart = cartRepository.findByStaff(staff);
+    private CartItem getCartItemInCart(CartItemUpdateForm cartItemUpdateForm, List<CartItem> cartItems) {
+        CartItem temp = null;
+        Optional<CartItem> optionalCartItem = cartItems.stream()
+                .filter(cartItem -> cartItem.getId().equals(cartItemUpdateForm.getIdCartItem()))
+                .findFirst();
+        if (optionalCartItem.isPresent()) temp = optionalCartItem.get();
+
+        return temp;
+    }
+
+    private Cart getCartByCurrentStaff() {
+        Optional<Cart> optionalCart = cartRepository.findByStaff(securityUtil.getCurrentStaff());
         return optionalCart.orElse(null);
     }
 
@@ -241,4 +224,74 @@ public class CustomerServiceImpl implements CustomerService {
 
         return Charge.create(params);
     }
+
+    private List<Integer> updateCart(List<CartItemUpdateForm> cartItemUpdateForms) {
+        List<Integer> invalid = new ArrayList<>();
+
+        Cart cart = getCartByCurrentStaff();
+        List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
+
+        cartItems.forEach(cartItem -> {
+            int temp = getQuantityFromCartItemUpdateForms(cartItemUpdateForms, cartItem);
+            if (temp != -1) { // is exists
+                Product product = cartItem.getProduct();
+                if(temp > product.getQuantity()) {
+                    invalid.add(cartItem.getId());
+                } else {
+                    cartItem.setQuantity(temp);
+                }
+            }
+        });
+
+        cartItemRepository.saveAll(cartItems);
+        return invalid;
+    }
+
+    private void updateProductQuantity(List<CartItem> cartItems) {
+        List<Product> products = cartItems.stream().peek(cartItem -> {
+            Product product = cartItem.getProduct();
+            if (product.getQuantity() == 0) {
+                throw new NotEnoughQuantityException("product not enough quantity");
+            }
+            product.setQuantity(product.getQuantity() - cartItem.getQuantity());
+        })
+                .map(CartItem::getProduct)
+                .collect(Collectors.toList());
+        products.forEach(product -> System.out.println(product.getName() + " : " + product.getQuantity()));
+        productService.save(products);
+    }
+
+    private List<Integer> mergeCart(List<CartItemUpdateForm> cartItemMergeForms) {
+        List<Integer> invalid = new ArrayList<>();
+
+        Cart cart = getCartByCurrentStaff();
+        List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
+
+        cartItemMergeForms.forEach(cartItemMergeForm -> {
+            CartItem cartItem = getCartItemInCart(cartItemMergeForm, cartItems);
+            int quantity = (cartItem == null)
+                    ? cartItemMergeForm.getQuantity()
+                    : cartItem.getQuantity() + cartItemMergeForm.getQuantity();
+
+            Product product = cartItem != null
+                    ? cartItem.getProduct()
+                    : productService.findById(cartItemMergeForm.getIdCartItem());
+
+            if (cartItem == null) {
+                cartItem = new CartItem(null, cart, product, Integer.MAX_VALUE, new Date());
+                cartItems.add(cartItem);
+            }
+
+            if (product.getQuantity() < quantity) {
+                invalid.add(cartItemMergeForm.getIdCartItem());
+                cartItem.setQuantity(product.getQuantity());
+            } else {
+                cartItem.setQuantity(quantity);
+            }
+        });
+
+        cartItemRepository.saveAll(cartItems);
+        return invalid;
+    }
+
 }

@@ -1,10 +1,6 @@
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import {
-  CustomerService,
-  IPageableProduct,
-  IProductFilter,
-} from './../../service/customer.service';
+import { CustomerService, IPageableProduct, IProductFilter } from './../../service/customer.service';
 import { IProduct } from './../../manager/product-management/product.service';
 import { Component, OnInit } from '@angular/core';
 import { combineLatest } from 'rxjs';
@@ -51,6 +47,7 @@ export class ProductsListComponent implements OnInit {
     if (String(categoryId) === 'all') {
       categoryId = -1;
     }
+
     this.customerService
       .fetchProductsByStoreAndCategory(storeId, categoryId, page, size)
       .subscribe((res) => {

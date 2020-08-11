@@ -15,8 +15,11 @@ public interface ProductService {
 
     Product save(ProductForm productForm);
 
+    Product save(Product product);
+
     Product update(Integer id, ProductForm productForm);
 
     void delete(Integer id);
 
+    void save(List<Product> products);
 }

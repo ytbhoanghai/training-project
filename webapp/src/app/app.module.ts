@@ -96,7 +96,8 @@ import { RegisterFormComponent } from './modal/login-modal/register-form/registe
     PaymentModalComponent,
     ShoppingOrderComponent,
     PaginationComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+    ShoppingOrderComponent,
   ],
   imports: [
     BrowserModule,

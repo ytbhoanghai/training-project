@@ -8,9 +8,7 @@
   </div>
   <mdb-accordion [multiple]="false">
     <mdb-accordion-item [collapsed]="false">
-     <!-- <mdb-accordion-item-head id="login-accordion">
-       <div class="small">Login</div>
-     </mdb-accordion-item-head> -->
+
       <mdb-accordion-item-body>
 
         <form class="form needs-validation" role="form" (ngSubmit)="authenticate()" ngNativeValidate>
@@ -48,6 +46,7 @@
         </form>
       </mdb-accordion-item-body>
     </mdb-accordion-item>
+
 
     <mdb-accordion-item #regItem>
       <mdb-accordion-item-head id="login-accordion">

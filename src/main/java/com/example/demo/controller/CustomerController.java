@@ -2,9 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.form.CartItemUpdateForm;
 import com.example.demo.form.PaymentForm;
-import com.example.demo.response.*;
+import com.example.demo.response.CartItemResponse;
+import com.example.demo.response.CartResponse;
+import com.example.demo.response.MessageResponse;
+import com.example.demo.response.PageableProductResponse;
 import com.example.demo.service.CustomerService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
@@ -43,8 +44,11 @@ public class CustomerController {
     }
 
     @PutMapping(value = "cart/cart-items")
-    public ResponseEntity<List<Integer>> updateQuantityCartItems(@NotNull @RequestBody List<CartItemUpdateForm> itemUpdateForms) {
-        return ResponseEntity.ok(customerService.updateQuantityCartItems(itemUpdateForms));
+    public ResponseEntity<List<Integer>> updateQuantityCartItems(
+            @NotNull @RequestBody List<CartItemUpdateForm> itemUpdateForms,
+            @RequestParam(required = false, defaultValue = "false") Boolean isMerge) {
+
+        return ResponseEntity.ok(customerService.updateQuantityCartItems(itemUpdateForms, isMerge));
     }
 
     @DeleteMapping(value = "cart/cart-items/{idCartItem}")

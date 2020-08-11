@@ -2,16 +2,19 @@ import { NotificationService } from './../layouts/notification/notification.serv
 import { IStore } from 'src/app/manager/store-management/store.service';
 import { StoreService } from './../manager/store-management/store.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { UserService } from '../core/auth/user.service';
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-shopping',
   templateUrl: './shopping.component.html',
   styleUrls: ['./shopping.component.css'],
 })
-export class ShoppingComponent implements OnInit {
+export class ShoppingComponent implements OnInit, OnDestroy {
+
   stores: IStore[] = [];
+  listener: Subscription;
 
   constructor(
     private userService: UserService,
@@ -23,15 +26,16 @@ export class ShoppingComponent implements OnInit {
 
   // If store don't have page then redirect to page 1
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      if (params.storeId === undefined) {
+    this.listener = this.route.params.subscribe(params => {
+      console.log(params)
+      if (params.storeId === undefined || !params.storeId) {
         this.fetchStores();
       }
     })
+  }
 
-    // if (this.route.snapshot.params.storeId === undefined) {
-    //   this.fetchStores();
-    // }
+  ngOnDestroy(): void {
+    this.listener.unsubscribe();
   }
 
   // Fetch default store
