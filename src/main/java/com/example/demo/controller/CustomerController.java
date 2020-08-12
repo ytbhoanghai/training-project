@@ -1,22 +1,24 @@
 package com.example.demo.controller;
 
+import com.example.demo.form.CartItemMergeForm;
 import com.example.demo.form.CartItemUpdateForm;
 import com.example.demo.form.PaymentForm;
 import com.example.demo.response.CartItemResponse;
 import com.example.demo.response.CartResponse;
 import com.example.demo.response.MessageResponse;
-import com.example.demo.response.ProductResponse;
+import com.example.demo.response.PageableProductResponse;
 import com.example.demo.service.CustomerService;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.example.demo.service.OrderUpdateForm;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
@@ -44,8 +46,17 @@ public class CustomerController {
     }
 
     @PutMapping(value = "cart/cart-items")
-    public ResponseEntity<List<Integer>> updateQuantityCartItems(@NotNull @RequestBody List<CartItemUpdateForm> itemUpdateForms) {
-        return ResponseEntity.ok(customerService.updateQuantityCartItems(itemUpdateForms));
+    public ResponseEntity<List<Integer>> updateQuantityCartItems(
+            @NotNull @RequestBody List<CartItemUpdateForm> cartItemUpdateForms) {
+
+        return ResponseEntity.ok(customerService.updateQuantityCartItems(cartItemUpdateForms));
+    }
+
+    @PutMapping(value = "cart/cart-items/merge")
+    public ResponseEntity<List<Integer>> mergeCart(
+            @NotNull @RequestBody List<CartItemMergeForm> cartItemMergeForms) {
+
+        return ResponseEntity.ok(customerService.mergeCart(cartItemMergeForms));
     }
 
     @DeleteMapping(value = "cart/cart-items/{idCartItem}")
@@ -55,8 +66,14 @@ public class CustomerController {
     }
 
     @GetMapping(value = "stores/{storeId}/categories/{categoryId}/products")
-    public ResponseEntity<List<ProductResponse>> findProductsByStoreAndCategory(@PathVariable Integer storeId, @PathVariable Integer categoryId) {
-        List<ProductResponse> responses = customerService.findProductsByStoreAndCategory(storeId, categoryId);
+    public ResponseEntity<PageableProductResponse> findProductsByStoreAndCategory(
+            @PathVariable Integer storeId, @PathVariable Integer categoryId,
+            @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "6") Integer size
+    ) {
+//        Page starts from 0
+        Pageable pageable = PageRequest.of(page - 1, size);
+        PageableProductResponse responses = customerService.findProductsByStoreAndCategory(storeId, categoryId, pageable);
         return ResponseEntity.ok(responses);
     }
 
@@ -78,5 +95,10 @@ public class CustomerController {
     @GetMapping(value = "orders")
     public ResponseEntity<?> findAllOrder() {
         return ResponseEntity.ok(customerService.findAllOrder());
+    }
+
+    @PutMapping(value = "orders/{id}/status")
+    public ResponseEntity<?> updateOrderStatus(@PathVariable Integer id, @RequestBody OrderUpdateForm orderUpdateForm) {
+        return ResponseEntity.ok(customerService.updateOrderStatus(id, orderUpdateForm));
     }
 }

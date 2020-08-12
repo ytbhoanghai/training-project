@@ -7,19 +7,36 @@ import { ManagementComponent } from './management.component';
 import { StoreProductComponent } from './store-product/store-product.component';
 import { StoreStaffsComponent } from './store-staffs/store-staffs.component';
 import { StoreOrdersComponent } from './store-orders/store-orders.component';
+import { StoreStatisticsComponent } from './store-statistics/store-statistics.component';
 
 @NgModule({
-  declarations: [StoreProductComponent, StoreStaffsComponent, StoreOrdersComponent],
+  declarations: [
+    StoreProductComponent,
+    StoreStaffsComponent,
+    StoreOrdersComponent,
+    StoreStatisticsComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild([
-      { path: '', component: ManagementComponent },
-      { path: 'products', component: StoreProductComponent, outlet: 'tabs' },
-      { path: 'staffs', component: StoreStaffsComponent, outlet: 'tabs' },
+      {
+        path: '',
+        component: ManagementComponent,
+        children: [
+          { path: 'products', component: StoreProductComponent },
+          { path: 'staffs', component: StoreStaffsComponent },
+          { path: 'orders', component: StoreOrdersComponent },
+        ],
+      },
     ]),
   ],
-  exports: [StoreProductComponent, StoreStaffsComponent, StoreOrdersComponent],
+  exports: [
+    StoreProductComponent,
+    StoreStaffsComponent,
+    StoreOrdersComponent,
+    StoreStatisticsComponent,
+  ],
 })
 export class ManagementModule {}

@@ -33,7 +33,6 @@ export class LocalCartService {
     if (this.isEmpty()) return this.defaultCart;
 
     const cart: ICart = JSON.parse(localStorage.getItem(this.cartName));
-    console.log('cart', cart)
     return cart;
   }
 
@@ -95,5 +94,6 @@ export class LocalCartService {
 
   clear(): void {
     localStorage.removeItem(this.cartName);
+    this.events.change.next();
   }
 }

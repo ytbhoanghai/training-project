@@ -3,7 +3,7 @@ import {
   ICategory,
   CategoryService,
 } from './../../../manager/category-management/category.service';
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-shopping-category',

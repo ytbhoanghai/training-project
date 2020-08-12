@@ -13,6 +13,8 @@ import com.example.demo.repository.StoreProductRepository;
 import com.example.demo.repository.StoreRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,11 @@ public class StoreProductServiceImpl implements StoreProductService {
     @Override
     public List<StoreProduct> findAllByStore(Store store) {
         return storeProductRepository.findAllByStore(store);
+    }
+
+    @Override
+    public Page<StoreProduct> findAllByStore(Store store, Pageable pageable) {
+        return storeProductRepository.findAllByStore(store, pageable);
     }
 
     @Override

@@ -23,7 +23,7 @@ export class UserFormComponent implements OnInit {
   @Output() onCancel = new EventEmitter();
   stores: IStore[] = [];
   roles: IRole[] = [];
-  isPasswordMatched: boolean = true;
+  isPasswordMatched = true;
 
   userForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.minLength(4)]],
@@ -78,9 +78,9 @@ export class UserFormComponent implements OnInit {
   }
 
   validatePass(): void {
-    let pass = this.userForm.get('password').value;
-    let repass = this.userForm.get('repassword').value;
-    let isMatched = pass === repass;
+    const pass = this.userForm.get('password').value;
+    const repass = this.userForm.get('repassword').value;
+    const isMatched = pass === repass;
     // Set invalid form if password not matched
     if (!isMatched) {
       this.userForm.setErrors({ isMatched: false });

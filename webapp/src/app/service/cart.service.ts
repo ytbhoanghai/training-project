@@ -8,6 +8,7 @@ import {
   ICart,
   ICartItem,
   ICartItemBody,
+  IMergeCartBody,
 } from './customer.service';
 import { LocalCartService } from './local-cart.service';
 import { Injectable } from '@angular/core';
@@ -64,20 +65,40 @@ export class CartService {
 
   mergeCart(): void {
     console.log('START MERGING CART');
-    this.localCartService.getItems().map((item) => {
-      this.customerService
-        .addItemToCart(item.id, item.quantity)
-        .subscribe(null, () => console.log('Error on merge'));
+    const body: IMergeCartBody[] = this.localCartService
+      .getItems()
+      .map((item) => ({ idProduct: item.id, quantity: item.quantity }));
+
+    this.customerService.mergeCart(body).subscribe((failedIds: number[]) => {
+      if (!failedIds.length) {
+        this.notiService.showQuickSuccess('Merged');
+        this.doAfterMerge();
+      } else {
+        console.log(failedIds);
+        this.showMergeFailedMessage(failedIds);
+        this.doAfterMerge();
+      }
     });
-    this.localCartService.clear();
-    this.fetchRemoteCart();
   }
 
-  addItem(item: IProduct): void {
+  doAfterMerge(): void {
+    this.localCartService.clear();
+    this.fetchRemoteCart();
+    this.doPostClearCart();
+  }
+
+  showMergeFailedMessage(failedIds: number[]): void {
+    failedIds.map(id => {
+      const item = this.cart.items.find(item => item.id === id);
+      this.notiService.showWaring(`${item.name} is out stock`);
+    })
+  }
+
+  addItem(item: IProduct): boolean {
     if (!this.userService.isLogin()) {
       this.localCartService.addItem(item);
       this.doPostAddded(item);
-      return;
+      return true;
     }
 
     // Default quantity at 1
@@ -86,12 +107,9 @@ export class CartService {
         this.doPostAddded(item);
       },
       (err: HttpErrorResponse) => {
-        const currentProduct = this.cart.items.find(
-          (elem) => elem.id === item.id
-        );
         if (err.status === 406) {
           this.notiService.showWaring(
-            `Reach maximum ${currentProduct?.quantity} items. This product is out of stock`
+            `Reach maximum items. This product is out of stock`
           );
         }
       }
@@ -135,7 +153,10 @@ export class CartService {
         if (!failedIds.length) {
           this.notiService.showQuickSuccess('Cart updated successfully!');
         } else {
-          this.notiService.showWaring('Out of stock');
+          failedIds.map((id) => {
+            const item = this.cart.items.find((item) => item.id === id);
+            this.notiService.showWaring(`${item.name} is out of stock`);
+          });
         }
       });
   }
@@ -174,5 +195,11 @@ export class CartService {
     this.cart.items = [];
     this.changeEvent.next(this.cart);
     this.notiService.showQuickSuccess('Clear cart successfully!');
+  }
+
+  clearLocalCart(): void {
+    this.localCartService.clear();
+    this.cart.items = [];
+    this.changeEvent.next(this.cart);
   }
 }

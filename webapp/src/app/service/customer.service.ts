@@ -5,6 +5,7 @@ import { SERVER_URL } from './../core/constants/api.constants';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IPaymentInfo } from './payment-modal.service';
+import { IUser } from '../core/auth/user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,14 +15,24 @@ export class CustomerService {
 
   constructor(private http: HttpClient) {}
 
-  fetchProductsByStoreAndCategory(storeId: number, categoryId: number): Observable<IProduct[]> {
-    return this.http.get<IProduct[]>(
-      this.REQUEST_URL + `stores/${storeId}/categories/${categoryId}/products`
+  fetchProductsByStoreAndCategory(
+    storeId: number,
+    categoryId: number,
+    page?: number,
+    size?: number
+  ): Observable<IPageableProduct> {
+    return this.http.get<IPageableProduct>(
+      this.REQUEST_URL + `stores/${storeId}/categories/${categoryId}/products`,
+      { params: { page: String(page), size: String(size) } }
     );
   }
 
   getMyCart(): Observable<ICart> {
     return this.http.get<ICart>(this.REQUEST_URL + 'cart');
+  }
+
+  createCustomer(body: ICustomerBody): Observable<IUser> {
+    return this.http.post<IUser>(this.REQUEST_URL, body);
   }
 
   addItemToCart(productId: number, quantity: number): Observable<ICartItem> {
@@ -35,6 +46,13 @@ export class CustomerService {
 
   updateCartItemQuantity(body: ICartItemBody[]): Observable<number[]> {
     return this.http.put<number[]>(this.REQUEST_URL + 'cart/cart-items', body);
+  }
+
+  mergeCart(body: IMergeCartBody[]): Observable<number[]> {
+    return this.http.put<number[]>(
+      this.REQUEST_URL + 'cart/cart-items/merge',
+      body
+    );
   }
 
   removeCartItem(cartItemId: number): Observable<any> {
@@ -56,6 +74,21 @@ export class CustomerService {
   fetchOrders(): Observable<IOrder[]> {
     return this.http.get<IOrder[]>(this.REQUEST_URL + 'orders');
   }
+
+  updateOrderStatus(id: number, body: { status: string }): Observable<IOrder> {
+    return this.http.put<IOrder>(
+      this.REQUEST_URL + `orders/${id}/status`,
+      body
+    );
+  }
+}
+
+export interface IPageableProduct {
+  currentPage: number;
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  products: IProduct[];
 }
 
 export interface IShoppingProduct {
@@ -89,6 +122,11 @@ export interface ICartItemBody {
   quantity: number;
 }
 
+export interface IMergeCartBody {
+  idProduct: number;
+  quantity: number;
+}
+
 export interface IOrder {
   id: number;
   totalPrice: number;
@@ -97,4 +135,23 @@ export interface IOrder {
   shipAddress: string;
   transactionId: string;
   status: string;
+}
+
+export interface IProductFilter {
+  params: {
+    storeId: number;
+    categoryId: number;
+  };
+  query?: {
+    page: number;
+    size: number;
+  };
+}
+
+export interface ICustomerBody {
+  name: string;
+  email: string;
+  address: string;
+  username: string;
+  password: string;
 }

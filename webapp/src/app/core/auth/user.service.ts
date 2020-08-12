@@ -11,12 +11,19 @@ export type IUser = {
   email: string;
   address: string;
   roles: [{ id: string; name: string; createdAt: number }];
+  type: string;
   idStore?: number;
   createdAt: number;
   createdBy: number;
   allowDelete: boolean;
   allowUpdate: boolean;
 };
+
+export enum UserType {
+  CUSTOMER,
+  ADMIN,
+  OTHER,
+}
 
 @Injectable({
   providedIn: 'root',
@@ -48,6 +55,14 @@ export class UserService {
     return this.http.get<number[]>(this.REQUEST_URL + 'permissions');
   }
 
+  updateAccount(body: IUser): Observable<IUser> {
+    return this.http.put<IUser>(this.REQUEST_URL, body);
+  }
+
+  updatePassword(body: IUpdatePass): Observable<unknown> {
+    return this.http.put<unknown>(this.REQUEST_URL + 'password', body);
+  }
+
   getCurrentUser(): IUser {
     return this.currentUserSubject.value;
   }
@@ -59,4 +74,13 @@ export class UserService {
   isLogin(): boolean {
     return this.getCurrentUser() !== null;
   }
+
+  updateCurrentUser(newInfo: IUser): void {
+    this.currentUserSubject.next({ ...this.getCurrentUser(), ...newInfo });
+  }
+}
+
+export interface IUpdatePass {
+  oldPass: string;
+  newPass: string;
 }

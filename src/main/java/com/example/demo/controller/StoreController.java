@@ -42,7 +42,7 @@ public class StoreController {
         return new ResponseEntity<>(stores, HttpStatus.OK);
     }
 
-    @GetMapping("{storeId}")
+    @GetMapping(value = "{storeId}")
     @PreAuthorize("hasAuthority(\"" + StorePermission.READ + "\")")
     public ResponseEntity<Store> findById(@PathVariable Integer storeId) {
         Store store = storeService.findById(storeId);

@@ -14,9 +14,7 @@ const routes: Routes = [
   {
     path: 'manage/:id',
     loadChildren: () =>
-      import('./management/management.module').then(
-        (m) => m.ManagementModule
-      ),
+      import('./management/management.module').then((m) => m.ManagementModule),
   },
 ];
 

@@ -8,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ShoppingOrderComponent implements OnInit {
   orders: IOrder[] = [];
+  isHidden = false;
+
 
   constructor(private customerService: CustomerService) { }
 
@@ -17,7 +19,6 @@ export class ShoppingOrderComponent implements OnInit {
 
   fetchOrders(): void {
     this.customerService.fetchOrders().subscribe(orders => {
-      console.log(orders);
       this.orders = orders;
     })
   }
@@ -28,6 +29,10 @@ export class ShoppingOrderComponent implements OnInit {
 
   isShipping(status: string): boolean {
     return status === 'Shipping';
+  }
+
+  toggleHidden(): void {
+    this.isHidden = !this.isHidden;
   }
 
 }

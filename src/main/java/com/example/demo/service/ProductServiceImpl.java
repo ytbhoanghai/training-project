@@ -50,6 +50,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Product save(Product product) {
+        return productRepository.save(product);
+    }
+
+    @Override
     public Product update(Integer id, ProductForm productForm) {
         Product product = findById(id);
         Set<Category> categories = categoryRepository.findAllByIdIsIn(productForm.getCategories());
@@ -60,6 +65,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Integer id) {
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public void save(List<Product> products) {
+        productRepository.saveAll(products);
     }
 
 }

@@ -1,0 +1,38 @@
+<form class="p-2" [formGroup]="registerForm" (ngSubmit)="handleSubmit()">
+  <p class="h4 mb-4">Sign up</p>
+
+  <input type="text" formControlName="name" class="form-control mb-4" placeholder="Full name" />
+
+  <div class="form-row mb-4">
+    <div class="col">
+      <!-- Email -->
+      <input type="email" formControlName="email" class="form-control" placeholder="Email" />
+    </div>
+    <div class="col">
+      <!-- Address -->
+      <input type="text" formControlName="address" class="form-control" placeholder="Address" />
+    </div>
+  </div>
+
+  <!-- Username -->
+  <input type="text" formControlName="username" class="form-control mb-4" placeholder="Username" autocomplete="username" />
+
+  <!-- Password -->
+  <input type="password" formControlName="password" class="form-control mb-4" placeholder="Password" autocomplete="password" />
+  <small class="form-text text-muted mt-n3" *ngIf="registerForm.get('password').invalid">
+    At least 4 characters
+  </small>
+
+  <input type="password" formControlName="repassword" class="form-control" placeholder="Retype Password" autocomplete="repassword" />
+  <small class="form-text text-muted mb-2" *ngIf="registerForm.hasError('notMatched')">
+    Password is not matched
+  </small>
+
+  <!-- Phone number -->
+
+  <!-- Sign up button -->
+  <button
+    class="mt-4 btn btn-info btn-block"
+    type="submit"
+    [disabled]="registerForm.invalid"
+  >Sign up</button>

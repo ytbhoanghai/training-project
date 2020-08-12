@@ -6,3 +6,21 @@
   padding: 0 !important;
   border: 1px solid red;
 }
+
+.login-accordion {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.small {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+#card-body {
+  padding: 0 !important;
+  border: 1px solid red;
+}
+
+.lead {
+  margin: 0;
+}

@@ -35,8 +35,6 @@ public interface StaffService {
 
     List<Integer> getPermissionIdsOfCurrentStaff(Staff currentStaff);
 
-    boolean updatePassword(UpdatePasswordForm updatePasswordForm);
-
     List<Staff> findAllByStoreIsNull();
 
 }

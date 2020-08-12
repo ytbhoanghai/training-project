@@ -1,10 +1,10 @@
 <li class="order-icon">
-  <a>
+  <a (click)="toggleHidden()">
     <i class="fas fa-truck"></i>
     <span>{{ orders.length }}</span>
   </a>
 
-  <div class="order-hover shadow">
+  <div class="order-hover shadow" [ngClass]="{'order-click': isHidden}">
     <ul
       class="list-group list-group-flush w-100"
       *ngFor="let order of orders"

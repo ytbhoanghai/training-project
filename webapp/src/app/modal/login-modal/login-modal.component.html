@@ -8,10 +8,11 @@
   </div>
   <mdb-accordion [multiple]="false">
     <mdb-accordion-item [collapsed]="false">
-<!--      <mdb-accordion-item-head>-->
-<!--        <div class="small">Login</div>-->
-<!--      </mdb-accordion-item-head>-->
-      <mdb-accordion-item-body>
+
+      <mdb-accordion-item-head class="login-accordion" style="display: none;">
+        <div class="small btn-link text-info" #loginBtn>Login</div>
+      </mdb-accordion-item-head>
+      <mdb-accordion-item-body id="accordion-body">
 
         <form class="form needs-validation" role="form" (ngSubmit)="authenticate()" ngNativeValidate>
           <!--Body-->
@@ -49,11 +50,18 @@
       </mdb-accordion-item-body>
     </mdb-accordion-item>
 
-    <mdb-accordion-item>
-      <mdb-accordion-item-head class="link-head">
-        <div class="small">Register an account</div>
+
+    <mdb-accordion-item #regItem>
+      <mdb-accordion-item-head class="login-accordion" (click)="registerClick()">
+        <div class="small btn-link text-info" #regBtn>
+          {{isRegHidden ? 'Register an account?' : 'Login now!'}}
+        </div>
       </mdb-accordion-item-head>
-      <mdb-accordion-item-body>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore eum minus nam numquam omnis possimus quaerat quis quisquam soluta voluptates! Dolor dolore ducimus enim est, facilis mollitia quae sed voluptas.</mdb-accordion-item-body>
+      <mdb-accordion-item-body>
+        <!-- Default form register -->
+        <app-register-form></app-register-form>
+        <!-- Default form register -->
+      </mdb-accordion-item-body>
     </mdb-accordion-item>
   </mdb-accordion>
 </div>

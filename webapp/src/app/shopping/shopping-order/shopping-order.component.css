@@ -21,3 +21,8 @@
 .list-group-item-action {
   cursor: pointer;
 }
+
+.order-hover {
+  max-height: 30rem;
+  overflow: auto;
+}

@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { CartService } from './../../service/cart.service';
 import { CustomerService } from './../../service/customer.service';
 import { StripeFormComponent } from './../../shopping/cart-checkout/stripe-form/stripe-form.component';
@@ -53,15 +54,26 @@ export class PaymentModalComponent implements OnInit {
   }
 
   checkoutPayment(): void {
-    console.log(this.paymentInfo);
     this.isLoading = true;
-    this.customerService.checkoutPayment(this.paymentInfo).subscribe((charge) => {
-      console.log(charge)
-      this.isLoading = false;
-      this.hideModal();
-      this.notiService.showSuccess('Checkout successfully!');
-      this.cartService.clearCart(this.cartService.getCart().id);
-      this.router.navigate(['/shopping']);
-    })
+    this.customerService.checkoutPayment(this.paymentInfo).subscribe(
+      (charge) => {
+        console.log(charge);
+        this.isLoading = false;
+        this.hideModal();
+        this.notiService.showSuccess('Checkout successfully!');
+        this.cartService.clearCart(this.cartService.getCart().id);
+        this.router.navigate(['/shopping']);
+      },
+      (err: HttpErrorResponse) => {
+        if (err.status === 406) {
+          this.notiService.showError('Not enough product in store');
+        } else {
+          this.notiService.showError('Error on payment');
+        }
+        this.isLoading = false;
+        this.hideModal();
+        console.log(err);
+      }
+    );
   }
 }

@@ -1,7 +1,16 @@
-import { ActivatedRoute } from '@angular/router';
-import { CustomerService } from './../../service/customer.service';
+import { IStore } from 'src/app/manager/store-management/store.service';
+import { NotificationService } from './../../layouts/notification/notification.service';
+import { StoreService } from './../../manager/store-management/store.service';
+import { map } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  CustomerService,
+  IPageableProduct,
+  IProductFilter,
+} from './../../service/customer.service';
 import { IProduct } from './../../manager/product-management/product.service';
 import { Component, OnInit } from '@angular/core';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-products-list',
@@ -9,29 +18,67 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./products-list.component.css'],
 })
 export class ProductsListComponent implements OnInit {
+  pageableProducts: IPageableProduct;
   products: IProduct[] = [];
+  stores: IStore[] = [];
+  isLoading = true;
 
   constructor(
     private customerService: CustomerService,
-    private route: ActivatedRoute
+    private storeService: StoreService,
+    private notiService: NotificationService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.fetchProducts();
-    this.route.params.subscribe((params) => {
-      this.fetchProducts(
-        params.storeId,
-        params.categoryId === 'all' ? -1 : params.categoryId
-      );
-    });
+    combineLatest(this.route.params, this.route.queryParams)
+      .pipe(
+        map((result) => ({ params: result[0], query: result[1] } as IProductFilter))
+      )
+      .subscribe((filter: IProductFilter) => {
+        const { params, query } = filter;
+        if (params.storeId === undefined || !params.storeId) {
+          this.fetchStores();
+          return;
+        }
+
+        this.fetchProducts(
+          params.storeId,
+          params.categoryId,
+          query.page,
+          query.size
+        );
+      });
   }
 
-  fetchProducts(storeId = 14, categoryId = -1): void {
+  fetchProducts(storeId: number, categoryId = -1, page = 1, size = 6): void {
+    if (String(categoryId) === 'all') {
+      categoryId = -1;
+    }
+
     this.customerService
-      .fetchProductsByStoreAndCategory(storeId, categoryId)
-      .subscribe((products) => {
-        this.products = products;
+      .fetchProductsByStoreAndCategory(storeId, categoryId, page, size)
+      .subscribe((res) => {
+        this.pageableProducts = res;
+        this.products = res.products;
+        this.isLoading = false;
       });
+  }
+
+  fetchStores(): void {
+    this.storeService.fetchStores().subscribe((stores) => {
+      if (!stores.length) {
+        this.notiService.showError('No store has been created!');
+        return;
+      }
+
+      this.stores = stores;
+      this.router.navigate(
+        ['/shopping/store', this.stores[0].id, 'category', 'all'],
+        { queryParams: { page: 1 } }
+      );
+    });
   }
 
   isEmptyResult(): boolean {
