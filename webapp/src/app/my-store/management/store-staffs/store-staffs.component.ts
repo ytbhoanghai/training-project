@@ -25,7 +25,7 @@ export class StoreStaffsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.storeId = this.route.snapshot.params.id;
+    this.storeId = this.route.parent.snapshot.params.id;
     this.fetchStaffs();
   }
 
@@ -37,7 +37,6 @@ export class StoreStaffsComponent implements OnInit {
       });
 
     this.staffService.fetchAssignableStaffs().subscribe((staffs) => {
-      // @ts-ignore
       this.staffs = staffs;
       this.resetSelected();
     });

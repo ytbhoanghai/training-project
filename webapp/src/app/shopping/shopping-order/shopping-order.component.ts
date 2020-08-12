@@ -1,30 +1,39 @@
 import { CustomerService, IOrder } from './../../service/customer.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-shopping-order',
   templateUrl: './shopping-order.component.html',
-  styleUrls: ['./shopping-order.component.css']
+  styleUrls: ['./shopping-order.component.css'],
 })
 export class ShoppingOrderComponent implements OnInit {
   orders: IOrder[] = [];
-  isHidden = false;
+  isShown = false;
 
+  @HostListener('document:click', ['$event'])
+  clickout(event: Event): void {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.isShown = false;
+    }
+  }
 
-  constructor(private customerService: CustomerService) { }
+  constructor(
+    private customerService: CustomerService,
+    private eRef: ElementRef
+  ) {}
 
   ngOnInit(): void {
     this.fetchOrders();
   }
 
   fetchOrders(): void {
-    this.customerService.fetchOrders().subscribe(orders => {
+    this.customerService.fetchOrders().subscribe((orders) => {
       this.orders = orders;
-    })
+    });
   }
 
   getId(transactionId: string): string {
-    return transactionId.split("_")[1];
+    return transactionId.split('_')[1];
   }
 
   isShipping(status: string): boolean {
@@ -32,7 +41,6 @@ export class ShoppingOrderComponent implements OnInit {
   }
 
   toggleHidden(): void {
-    this.isHidden = !this.isHidden;
+    this.isShown = !this.isShown;
   }
-
 }

@@ -88,28 +88,31 @@ export class CartService {
   }
 
   showMergeFailedMessage(failedIds: number[]): void {
-    failedIds.map(id => {
-      const item = this.cart.items.find(item => item.id === id);
+    failedIds.map((id) => {
+      const item = this.cart.items.find((item) => item.id === id);
       this.notiService.showWaring(`${item.name} is out stock`);
-    })
+    });
   }
 
-  addItem(item: IProduct): boolean {
+  addItem(product: IProduct, quantity = 1): boolean {
+    // Item id and product in cart id are not same
+    product.productId = product.id;
+
     if (!this.userService.isLogin()) {
-      this.localCartService.addItem(item);
-      this.doPostAddded(item);
+      this.localCartService.addItem(product);
+      this.doPostAddded(product);
       return true;
     }
 
-    // Default quantity at 1
-    this.customerService.addItemToCart(item.id, 1).subscribe(
+    this.customerService.addItemToCart(product.id, quantity).subscribe(
       (item) => {
-        this.doPostAddded(item);
+        // This is cart item, not product
+        this.doPostAddded({ ...item, productId: product.id });
       },
       (err: HttpErrorResponse) => {
         if (err.status === 406) {
           this.notiService.showWaring(
-            `Reach maximum items. This product is out of stock`
+            `Reach maximum quantity. This product is out of stock`
           );
         }
       }

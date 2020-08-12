@@ -4,7 +4,7 @@
     <span>{{ orders.length }}</span>
   </a>
 
-  <div class="order-hover shadow" [ngClass]="{'order-click': isHidden}">
+  <div class="order-hover shadow" [ngClass]="{'order-click': isShown}">
     <ul
       class="list-group list-group-flush w-100"
       *ngFor="let order of orders"

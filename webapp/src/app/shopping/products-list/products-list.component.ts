@@ -52,7 +52,7 @@ export class ProductsListComponent implements OnInit {
       });
   }
 
-  fetchProducts(storeId: number, categoryId = -1, page = 1, size = 6): void {
+  fetchProducts(storeId: number, categoryId = -1, page = 1, size = 9): void {
     if (String(categoryId) === 'all') {
       categoryId = -1;
     }

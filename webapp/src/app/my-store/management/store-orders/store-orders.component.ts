@@ -32,7 +32,7 @@ export class StoreOrdersComponent implements OnInit {
   }
 
   markAsShipped(id: number): void {
-    this.confirmService.show().onYes(() => {
+    this.confirmService.show('Mark as shipped?').onYes(() => {
       this.customerService
         .updateOrderStatus(id, { status: 'Shipped' })
         .subscribe((order) => {

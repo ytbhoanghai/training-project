@@ -25,9 +25,11 @@ import { StoreStatisticsComponent } from './store-statistics/store-statistics.co
         path: '',
         component: ManagementComponent,
         children: [
+          { path: '', pathMatch: 'full', redirectTo: 'products' },
           { path: 'products', component: StoreProductComponent },
           { path: 'staffs', component: StoreStaffsComponent },
           { path: 'orders', component: StoreOrdersComponent },
+          { path: 'statistics', component: StoreStatisticsComponent },
         ],
       },
     ]),

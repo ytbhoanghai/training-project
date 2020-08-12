@@ -16,13 +16,15 @@ public class CartItemResponse {
     private String name;
     private BigDecimal price;
     private Integer quantity;
+    private Integer productId;
 
     public static CartItemResponse build(CartItem cartItem) {
         return new CartItemResponse(
                 cartItem.getId(),
                 cartItem.getProduct().getName(),
                 cartItem.getProduct().getPrice(),
-                cartItem.getQuantity());
+                cartItem.getQuantity(),
+                cartItem.getProduct().getId());
     }
 
 }

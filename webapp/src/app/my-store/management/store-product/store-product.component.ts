@@ -27,8 +27,12 @@ export class StoreProductComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.storeId = this.route.snapshot.params.id;
+    this.storeId = this.route.parent.snapshot.params.id;
     this.fetchProducts();
+    // this.route.parent.params.subscribe(params => {
+    //   this.storeId = params.storeId;
+    //   this.fetchProducts();
+    // })
   }
 
   fetchProducts(): void {

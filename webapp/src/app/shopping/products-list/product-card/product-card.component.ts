@@ -1,3 +1,4 @@
+import { ShoppingModalService } from './../../../service/shopping-modal.service';
 import { CartService } from './../../../service/cart.service';
 import { IProduct } from './../../../manager/product-management/product.service';
 import { Component, Input, OnInit } from '@angular/core';
@@ -10,19 +11,27 @@ import { Component, Input, OnInit } from '@angular/core';
 export class ProductCardComponent implements OnInit {
   @Input() product: IProduct;
   isOutOfStock = false;
-  imgId: number;
+  imgUrl: string;
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private shoppingModalService: ShoppingModalService
+  ) {}
 
   ngOnInit(): void {
-    this.imgId = this.randomImgId();
+    this.imgUrl = `https://picsum.photos/id/${this.randomImgId()}/400`;
   }
 
-  addToCart(): void {
-    this.cartService.addItem({...this.product, quantity: 1});
+  addToCart(event: Event): void {
+    event.stopPropagation();
+    this.cartService.addItem({ ...this.product, quantity: 1 });
   }
 
   randomImgId(): number {
     return Math.round(Math.random() * 50);
+  }
+
+  showProductModal(): void {
+    this.shoppingModalService.show({ ...this.product, imgUrl: this.imgUrl });
   }
 }
