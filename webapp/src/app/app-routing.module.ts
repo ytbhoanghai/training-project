@@ -35,6 +35,7 @@ const routes: Routes = [
   },
   {
     path: 'account',
+    canActivate: [CheckLoginGuard],
     loadChildren: () =>
       import('./account/account-routing.module').then(
         m => m.AccountRoutingModule

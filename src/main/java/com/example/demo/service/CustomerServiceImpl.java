@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.*;
 import com.example.demo.exception.CartNotFoundException;
 import com.example.demo.exception.NotEnoughQuantityException;
+import com.example.demo.exception.OrderNotFoundException;
 import com.example.demo.form.CartItemMergeForm;
 import com.example.demo.form.CartItemUpdateForm;
 import com.example.demo.form.PaymentForm;
@@ -20,7 +21,6 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -180,7 +180,7 @@ public class CustomerServiceImpl implements CustomerService {
                 })
                 .map(storeProduct -> ProductResponse.build(storeProduct.getProduct(), store.getName()));
 
-        int totalElements = (int) streamSupplier.get().count();
+        double totalElements = streamSupplier.get().count();
 
         List<ProductResponse> productResponses = streamSupplier.get()
                 .skip(pageable.getPageNumber() * pageable.getPageSize())
@@ -189,8 +189,8 @@ public class CustomerServiceImpl implements CustomerService {
 
         return PageableProductResponse.builder()
                 .currentPage(pageable.getPageNumber() + 1)
-                .totalPages(totalElements / pageable.getPageSize() + 1)
-                .totalElements(totalElements)
+                .totalPages((int) Math.ceil(totalElements / pageable.getPageSize()))
+                .totalElements((int) totalElements)
                 .size(productResponses.size())
                 .products(productResponses)
                 .build();
@@ -229,6 +229,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Order> findAllOrder() {
         return orderRepository.findAllByStaff(securityUtil.getCurrentStaff());
+    }
+
+    @Override
+    public Order updateOrderStatus(Integer orderId, OrderUpdateForm orderUpdateForm) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(OrderNotFoundException::new);
+        order.setStatus(orderUpdateForm.getStatus());
+        return orderRepository.save(order);
     }
 
     private int getQuantityFromCartItemUpdateForms(List<CartItemUpdateForm> itemUpdateForms, CartItem cartItem) {

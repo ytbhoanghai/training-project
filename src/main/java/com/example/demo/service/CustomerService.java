@@ -1,19 +1,17 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Order;
-import com.example.demo.entity.Staff;
 import com.example.demo.form.CartItemMergeForm;
 import com.example.demo.form.CartItemUpdateForm;
 import com.example.demo.form.PaymentForm;
-import com.example.demo.form.StaffForm;
 import com.example.demo.response.CartItemResponse;
 import com.example.demo.response.CartResponse;
 import com.example.demo.response.PageableProductResponse;
 import com.example.demo.response.ProductResponse;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,4 +37,5 @@ public interface CustomerService {
 
     List<Order> findAllOrder();
 
+    Order updateOrderStatus(Integer orderId, OrderUpdateForm orderUpdateForm);
 }

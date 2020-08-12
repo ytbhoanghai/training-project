@@ -5,7 +5,7 @@ import {
   CustomerService,
 } from './../../../service/customer.service';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-register-form',
@@ -13,14 +13,19 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./register-form.component.css'],
 })
 export class RegisterFormComponent implements OnInit {
-  registerForm = this.formBuilder.group({
-    name: ['', [Validators.required, Validators.minLength(4)]],
-    email: ['', [Validators.required, Validators.email]],
-    address: [''],
-    username: ['', [Validators.required, Validators.minLength(4)]],
-    password: ['', [Validators.required, Validators.minLength(4)]],
-    repassword: ['', [Validators.required, Validators.minLength(4)]],
-  });
+  registerForm = this.formBuilder.group(
+    {
+      name: ['', [Validators.required, Validators.minLength(4)]],
+      email: ['', [Validators.required, Validators.email]],
+      address: [''],
+      username: ['', [Validators.required, Validators.minLength(4)]],
+      password: ['', [Validators.required, Validators.minLength(4)]],
+      repassword: ['', [Validators.required, Validators.minLength(4)]],
+    },
+    {
+      validators: this.checkMatchedPass,
+    }
+  );
 
   constructor(
     private formBuilder: FormBuilder,
@@ -38,5 +43,11 @@ export class RegisterFormComponent implements OnInit {
       this.notiService.showSuccess('Account created!');
       this.router.navigate(['']);
     });
+  }
+
+  checkMatchedPass(form: FormGroup): Record<string, unknown> {
+    const pass = form.get('password').value;
+    const repass = form.get('repassword').value;
+    return pass === repass ? null : { notMatched: true };
   }
 }

@@ -21,6 +21,7 @@ export class ProductsListComponent implements OnInit {
   pageableProducts: IPageableProduct;
   products: IProduct[] = [];
   stores: IStore[] = [];
+  isLoading = true;
 
   constructor(
     private customerService: CustomerService,
@@ -61,6 +62,7 @@ export class ProductsListComponent implements OnInit {
       .subscribe((res) => {
         this.pageableProducts = res;
         this.products = res.products;
+        this.isLoading = false;
       });
   }
 

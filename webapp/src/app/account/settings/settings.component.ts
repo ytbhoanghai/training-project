@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { NotificationService } from './../../layouts/notification/notification.service';
 import { UserService, IUser } from './../../core/auth/user.service';
-import { Validators, FormBuilder } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -25,6 +25,8 @@ export class SettingsComponent implements OnInit {
     oldPass: ['', [Validators.required, Validators.minLength(4)]],
     newPass: ['', [Validators.required, Validators.minLength(4)]],
     rePass: ['', [Validators.required, Validators.minLength(4)]],
+  }, {
+    validators: this.checkPassword
   });
 
   constructor(
@@ -77,5 +79,11 @@ export class SettingsComponent implements OnInit {
 
   back(): void {
     this.location.back();
+  }
+
+  checkPassword(form: FormGroup): Record<string, unknown> {
+    const newPass = form.get('newPass').value;
+    const rePass = form.get('rePass').value;
+    return newPass === rePass ? null : { notMatched: true };
   }
 }

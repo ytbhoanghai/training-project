@@ -110,12 +110,9 @@
         />
         <small
           class="form-text mb-2 error"
-          *ngIf="
-            passwordForm.get('rePass').invalid &&
-            passwordForm.get('rePass').dirty
-          "
+          *ngIf="passwordForm.hasError('notMatched')"
         >
-          At least 4 characters
+          Password is not matched
         </small>
 
         <!-- Phone number -->

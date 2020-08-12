@@ -56,6 +56,7 @@ import { PaymentModalComponent } from './modal/payment-modal/payment-modal.compo
 import { ShoppingOrderComponent } from './shopping/shopping-order/shopping-order.component';
 import { PaginationComponent } from './shopping/products-list/pagination/pagination.component';
 import { RegisterFormComponent } from './modal/login-modal/register-form/register-form.component';
+import { LoadingComponent } from './layouts/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -100,6 +101,7 @@ import { RegisterFormComponent } from './modal/login-modal/register-form/registe
     RegisterFormComponent,
     ShoppingOrderComponent,
     SettingsComponent,
+    LoadingComponent,
   ],
   imports: [
     BrowserModule,

@@ -532,9 +532,16 @@ ol {
 }
 
 .inner-header .nav-right li.order-icon:hover .order-hover {
-	opacity: 1;
+  /* ANIMATION */
+	/* opacity: 1;
 	visibility: visible;
-	top: 40px;
+	top: 40px; */
+}
+
+.order-click {
+	opacity: 1 !important;
+	visibility: visible !important;
+	top: 40px !important;
 }
 
 .cart-hover tr:hover {
@@ -608,10 +615,15 @@ ol {
 	width: 300px;
 	background: #ffffff;
 	z-index: 99;
-	text-align: left;
-	/* padding: 30px; */
+  text-align: left;
+  /* Trigger on hover */
 	opacity: 0;
   visibility: hidden;
+
+  /* Trigger on click */
+  /* opacity: 1;
+  visibility: visible; */
+
 	-webkit-box-shadow: 0 13px 32px rgba(51, 51, 51, 0.1);
 	box-shadow: 0 13px 32px rgba(51, 51, 51, 0.1);
 	-webkit-transition: all 0.3s;

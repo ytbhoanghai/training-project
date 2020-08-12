@@ -18,14 +18,14 @@
   <input type="text" formControlName="username" class="form-control mb-4" placeholder="Username" autocomplete="username" />
 
   <!-- Password -->
-  <input type="password" formControlName="password" class="form-control" placeholder="Password" autocomplete="password" />
-  <small class="form-text text-muted mb-2">
-    At least 8 characters and 1 digit
+  <input type="password" formControlName="password" class="form-control mb-4" placeholder="Password" autocomplete="password" />
+  <small class="form-text text-muted mt-n3" *ngIf="registerForm.get('password').invalid">
+    At least 4 characters
   </small>
 
   <input type="password" formControlName="repassword" class="form-control" placeholder="Retype Password" autocomplete="repassword" />
-  <small class="form-text text-muted mb-2">
-    At least 8 characters and 1 digit
+  <small class="form-text text-muted mb-2" *ngIf="registerForm.hasError('notMatched')">
+    Password is not matched
   </small>
 
   <!-- Phone number -->

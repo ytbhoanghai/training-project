@@ -74,6 +74,13 @@ export class CustomerService {
   fetchOrders(): Observable<IOrder[]> {
     return this.http.get<IOrder[]>(this.REQUEST_URL + 'orders');
   }
+
+  updateOrderStatus(id: number, body: { status: string }): Observable<IOrder> {
+    return this.http.put<IOrder>(
+      this.REQUEST_URL + `orders/${id}/status`,
+      body
+    );
+  }
 }
 
 export interface IPageableProduct {

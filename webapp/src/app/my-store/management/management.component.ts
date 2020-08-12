@@ -1,5 +1,8 @@
 import { ActivatedRoute } from '@angular/router';
-import { StoreService, StatusType } from './../../manager/store-management/store.service';
+import {
+  StoreService,
+  StatusType,
+} from './../../manager/store-management/store.service';
 import { IStore } from 'src/app/manager/store-management/store.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -22,12 +25,12 @@ export class ManagementComponent implements OnInit {
   }
 
   fetchCurrentStore(): void {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.storeId = params.id;
-      this.storeService.fetchById(this.storeId).subscribe(store => {
+      this.storeService.fetchById(this.storeId).subscribe((store) => {
         this.store = store;
-      })
-    })
+      });
+    });
   }
 
   isClosed(): boolean {

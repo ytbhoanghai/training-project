@@ -8,6 +8,7 @@ import com.example.demo.response.CartResponse;
 import com.example.demo.response.MessageResponse;
 import com.example.demo.response.PageableProductResponse;
 import com.example.demo.service.CustomerService;
+import com.example.demo.service.OrderUpdateForm;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,5 +95,10 @@ public class CustomerController {
     @GetMapping(value = "orders")
     public ResponseEntity<?> findAllOrder() {
         return ResponseEntity.ok(customerService.findAllOrder());
+    }
+
+    @PutMapping(value = "orders/{id}/status")
+    public ResponseEntity<?> updateOrderStatus(@PathVariable Integer id, @RequestBody OrderUpdateForm orderUpdateForm) {
+        return ResponseEntity.ok(customerService.updateOrderStatus(id, orderUpdateForm));
     }
 }

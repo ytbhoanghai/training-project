@@ -57,7 +57,7 @@
       <tr *ngFor="let product of addedProducts">
         <th scope="row">{{ product.id }}</th>
         <td>{{ product.name }}</td>
-        <td>{{ product.price }}</td>
+        <td>{{ product.price | currency:'USD':true:'1.0-2' }}</td>
         <td>{{ printCategories(product) }}</td>
         <td>{{ product.storeProductQuantity }}</td>
         <td class="text-center">
