@@ -151,20 +151,6 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public boolean updatePassword(UpdatePasswordForm updatePasswordForm) {
-        Staff currentStaff = securityUtil.getCurrentStaff();
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//        Throw Error if password doesn't match
-        if (!passwordEncoder.matches(updatePasswordForm.getOldPass(), currentStaff.getPassword())) {
-            throw new WrongOldPasswordException();
-        }
-//        Set new hashed password to user
-        currentStaff.setPassword(passwordEncoder.encode(updatePasswordForm.getNewPass()));
-        staffRepository.save(currentStaff);
-        return true;
-    }
-
-    @Override
     public List<Staff> findAllByStoreIsNull() {
         return staffRepository.findAllByStoreIsNull();
     }
