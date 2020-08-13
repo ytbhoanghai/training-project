@@ -28,6 +28,7 @@
             <button
               type="button"
               class="btn"
+              data-toggle="tooltip" data-placement="top" title="Mark as shipped"
               [ngClass]="isShipping(order) && 'text-secondary'"
               [disabled]="!isShipping(order)"
               (click)="markAsShipped(order.id)"

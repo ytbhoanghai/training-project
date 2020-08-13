@@ -48,7 +48,10 @@ export interface IProduct {
   storeProductQuantity?: number;
   createdAt?: number;
   categories?: ICategory[],
-  categoryNames?: string[]
+  categoryNames?: string[],
+  imgUrl?: string;
+  productId?: number;
+  cartItemId?: number;
 }
 
 export interface IProductBody {

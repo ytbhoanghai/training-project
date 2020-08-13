@@ -1,0 +1,63 @@
+<div class="modal-content">
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-6 d-flex justify-content-center align-items-center">
+        <img [src]="product.imgUrl" class="img-fluid" alt="Product" />
+      </div>
+      <div class="col-lg-6">
+        <div class="h2 text-muted">{{ product.name }}</div>
+        <div>
+          <i class="rate fas fa-star"></i>
+          <i class="rate fas fa-star"></i>
+          <i class="rate fas fa-star"></i>
+          <i class="rate fas fa-star-half-alt"></i>
+          <i class="rate far fa-star"></i>
+        </div>
+        <div class="price">
+          {{ product.price | currency: "USD":true:"1.0-2" }}
+        </div>
+        <hr />
+
+        <div class="item">
+          <div class="item-header">IN STOCK</div>
+          {{ product.quantity }} item(s)
+        </div>
+
+        <div class="item mt-2">
+          <div class="item-header">ADDED</div>
+          {{ addedQuantity }} item(s)
+        </div>
+
+        <div class="mt-2 item">
+          <div class="item-header">QUANTITY</div>
+          <div class="quantity">
+            <div class="pro-qty">
+              <span class="dec qtybtn" (click)="desQuantity()">-</span>
+
+              <input
+                type="number"
+                [(ngModel)]="quantity"
+                min="1"
+                required
+              />
+
+              <span class="inc qtybtn" (click)="incQuantity()">+</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="select-button d-flex mt-3">
+          <a
+           class="primary-btn view-card text-light mr-1"
+           (click)="addToCart()"
+          >ADD TO CART</a>
+
+          <a
+            class="primary-btn checkout-btn bg-dark text-light"
+            (click)="addToCartAndCheckout()"
+          >CHECK OUT</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

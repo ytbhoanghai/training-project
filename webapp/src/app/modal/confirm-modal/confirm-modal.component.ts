@@ -9,11 +9,11 @@ import {MDBModalRef} from "ng-uikit-pro-standard";
 })
 export class ConfirmModalComponent implements OnInit {
 
-  public static YES: boolean = true;
-  public static NO: boolean = false;
+  public static YES = true;
+  public static NO = false;
 
   action: Subject<any> = new Subject();
-  key: string;
+  title: string;
 
   constructor(private modalRef: MDBModalRef) { }
 
@@ -21,11 +21,11 @@ export class ConfirmModalComponent implements OnInit {
   }
 
   onButtonYesClick(): void {
-    this.action.next({value: ConfirmModalComponent.YES, key: this.key});
+    this.action.next({value: ConfirmModalComponent.YES, key: this.title});
   }
 
   onButtonNoClick(): void {
-    this.action.next({value: ConfirmModalComponent.NO, key: this.key});
+    this.action.next({value: ConfirmModalComponent.NO, key: this.title});
     this.modalRef.hide();
   }
 }

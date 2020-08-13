@@ -11,16 +11,16 @@ export class ConfirmModalService {
 
   constructor(private modalService: MDBModalService) {}
 
-  show(key?: string): ConfirmModalService {
+  show(title?: string): ConfirmModalService {
     this.modalRef = this.modalService.show(ConfirmModalComponent, {
       containerClass: 'modal fade top',
       class: 'modal-dialog modal-frame modal-top',
-      data: { key },
+      data: { title },
     });
     return this;
   }
 
-  onYes(fn: Function): any {
+  onYes(fn: () => any): any {
     this.modalRef.content.action.subscribe(({value, key}) => {
       if (value === ConfirmModalComponent.YES) {
         fn();

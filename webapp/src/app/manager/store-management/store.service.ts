@@ -104,7 +104,7 @@ export type ISimpleStaff = {
   id: number;
   name: string;
   email: string;
-  isManager: boolean;
+  isManager?: boolean;
 };
 
 export type IStore = {

@@ -17,6 +17,7 @@ export type IUser = {
   createdBy: number;
   allowDelete: boolean;
   allowUpdate: boolean;
+  isManager?: boolean;
 };
 
 export enum UserType {

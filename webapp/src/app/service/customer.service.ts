@@ -115,6 +115,7 @@ export interface ICartItem {
   storeProductQuantity?: number;
   createdAt?: number;
   categories?: ICategory[];
+  productId?: number;
 }
 
 export interface ICartItemBody {

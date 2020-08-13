@@ -57,6 +57,7 @@ import { ShoppingOrderComponent } from './shopping/shopping-order/shopping-order
 import { PaginationComponent } from './shopping/products-list/pagination/pagination.component';
 import { RegisterFormComponent } from './modal/login-modal/register-form/register-form.component';
 import { LoadingComponent } from './layouts/loading/loading.component';
+import { ShoppingDetailsComponent } from './modal/shopping-details/shopping-details.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +103,7 @@ import { LoadingComponent } from './layouts/loading/loading.component';
     ShoppingOrderComponent,
     SettingsComponent,
     LoadingComponent,
+    ShoppingDetailsComponent,
   ],
   imports: [
     BrowserModule,

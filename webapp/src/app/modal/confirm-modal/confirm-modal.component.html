@@ -1,6 +1,6 @@
 <div class="modal-content">
   <div class="modal-body">
-    Are you sure ???
+    {{ title || 'Are you sure ???' }}
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" (click)="onButtonYesClick()">Yes</button>
