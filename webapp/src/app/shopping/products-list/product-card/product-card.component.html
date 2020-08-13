@@ -3,6 +3,7 @@
 
     <img [src]="imgUrl" class="product-img" />
     <img *ngIf="isOutOfStock" src="assets/img/out-of-stock.png" class="sold-out" />
+    <img *ngIf="!product.quantity" src="assets/img/sold-out.png" alt="Sold out" class="sold-out">
 
     <div class="sale pp-sale">Sale</div>
     <div class="icon">
@@ -25,8 +26,8 @@
   </div>
 
   <div class="pi-text">
-    <div class="catagory-name categories" [title]="product.categoryNames.join(', ')">
-      {{ product.categoryNames.join(', ') }}
+    <div class="catagory-name categories" [title]="printCategories()">
+      {{ printCategories() }}
     </div>
     <a>
       <h5>{{ product.name }}</h5>

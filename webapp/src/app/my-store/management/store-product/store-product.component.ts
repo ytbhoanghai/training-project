@@ -29,10 +29,6 @@ export class StoreProductComponent implements OnInit {
   ngOnInit(): void {
     this.storeId = this.route.parent.snapshot.params.id;
     this.fetchProducts();
-    // this.route.parent.params.subscribe(params => {
-    //   this.storeId = params.storeId;
-    //   this.fetchProducts();
-    // })
   }
 
   fetchProducts(): void {
@@ -57,7 +53,9 @@ export class StoreProductComponent implements OnInit {
       (p) => p.id === this.selectedProductId
     );
     // Exit on error
-    if (!product) return;
+    if (!product) {
+      return this.notiService.showWaring('Empty product list');
+    }
 
     // Add to API
     this.storeService
@@ -104,7 +102,7 @@ export class StoreProductComponent implements OnInit {
   }
 
   resetSelected(): void {
-    this.selectedProductId = this.remainedProducts[0]?.id;
+    this.selectedProductId = this.remainedProducts[0]?.id || 0;
     this.quantity = 1;
   }
 

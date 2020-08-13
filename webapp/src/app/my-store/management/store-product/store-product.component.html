@@ -18,7 +18,7 @@
               [{{ product.id }}] {{ product.name }}
             </option>
           </ng-container>
-          <option *ngIf="!remainedProducts.length" disabled>Empty</option>
+          <option *ngIf="!remainedProducts.length" [value]="0" disabled>Empty</option>
         </select>
       </div>
 

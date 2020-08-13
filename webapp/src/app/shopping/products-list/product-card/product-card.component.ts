@@ -22,6 +22,10 @@ export class ProductCardComponent implements OnInit {
     this.imgUrl = `https://picsum.photos/id/${this.randomImgId()}/400`;
   }
 
+  printCategories(): string {
+    return this.product.categoryNames.join(', ');
+  }
+
   addToCart(event: Event): void {
     event.stopPropagation();
     this.cartService.addItem({ ...this.product, quantity: 1 });
