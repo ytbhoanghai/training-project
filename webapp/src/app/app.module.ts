@@ -14,8 +14,8 @@ import { NgModule } from '@angular/core';
 import { CoreModule } from './core/core.module';
 import { MDBBootstrapModulesPro, ToastModule } from 'ng-uikit-pro-standard';
 import { MDBSpinningPreloader } from 'ng-uikit-pro-standard';
-
 import { AppRoutingModule } from './app-routing.module';
+
 import { HeaderComponent } from './layouts/header/header.component';
 import { ContentComponent } from './layouts/content/content.component';
 import { FooterComponent } from './layouts/footer/footer.component';

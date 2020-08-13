@@ -35,9 +35,14 @@ export class CustomerService {
     return this.http.post<IUser>(this.REQUEST_URL, body);
   }
 
-  addItemToCart(productId: number, quantity: number): Observable<ICartItem> {
+  addItemToCart(
+    storeId: number,
+    productId: number,
+    quantity: number
+  ): Observable<ICartItem> {
     return this.http.put<ICartItem>(this.REQUEST_URL + 'cart', null, {
       params: {
+        storeId: String(storeId),
         productId: String(productId),
         quantity: String(quantity),
       },
@@ -116,6 +121,8 @@ export interface ICartItem {
   createdAt?: number;
   categories?: ICategory[];
   productId?: number;
+  storeId?: number;
+  storeName?: string;
 }
 
 export interface ICartItemBody {
@@ -124,8 +131,9 @@ export interface ICartItemBody {
 }
 
 export interface IMergeCartBody {
-  idProduct: number;
+  productId: number;
   quantity: number;
+  storeId: number;
 }
 
 export interface IOrder {

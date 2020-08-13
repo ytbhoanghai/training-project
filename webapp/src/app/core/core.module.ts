@@ -1,3 +1,4 @@
+import { UsdPipe } from './pipes/usd.pipe';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -7,7 +8,7 @@ import { ResponseInterceptor } from '../config/interceptor/response.interceptor'
 
 
 @NgModule({
-  declarations: [],
+  declarations: [UsdPipe],
   imports: [
     CommonModule,
     HttpClientModule
@@ -23,6 +24,7 @@ import { ResponseInterceptor } from '../config/interceptor/response.interceptor'
       useClass: ResponseInterceptor,
       multi: true
     }
-  ]
+  ],
+  exports: [UsdPipe]
 })
 export class CoreModule { }

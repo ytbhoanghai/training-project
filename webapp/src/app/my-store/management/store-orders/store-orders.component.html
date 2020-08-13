@@ -17,7 +17,7 @@
         <tr *ngFor="let order of orders; index as i">
           <th scope="row">{{ i + 1 }}</th>
           <td>{{ order.transactionId }}</td>
-          <td>{{ order.totalPrice | currency: "USD":true:"1.0-2" }}</td>
+          <td>{{ order.totalPrice | currency:'USD':true:'1.0-2' }}</td>
           <td [ngClass]="isShipping(order) ? 'text-danger' : 'text-success'">
             {{ order.status }}
           </td>

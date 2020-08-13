@@ -52,6 +52,7 @@ export interface IProduct {
   imgUrl?: string;
   productId?: number;
   cartItemId?: number;
+  storeId?: number;
 }
 
 export interface IProductBody {

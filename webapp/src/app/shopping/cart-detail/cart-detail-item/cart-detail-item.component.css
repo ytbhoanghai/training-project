@@ -10,3 +10,9 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.store-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6c757d;
+}

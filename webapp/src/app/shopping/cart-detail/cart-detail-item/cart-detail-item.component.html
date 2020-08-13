@@ -3,9 +3,12 @@
 </td>
 <td class="cart-title first-row">
   <h5>{{ item.name }}</h5>
+  <div class="store-name mt-2">
+    <i class="far fa-gem"></i>{{ item.storeName }}
+  </div>
 </td>
 <td class="p-price first-row">
-  {{ item.price | currency: "USD":true:"1.0-2" }}
+  {{ item.price | usd }}
 </td>
 <td class="qua-col first-row">
   <div class="quantity">
@@ -19,7 +22,7 @@
   </div>
 </td>
 <td class="total-price first-row">
-  {{ item.price * quantity | currency: "USD":true:"1.0-2" }}
+  {{ item.price * quantity | usd }}
 </td>
 <td class="close-td first-row">
   <i

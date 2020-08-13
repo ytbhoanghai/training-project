@@ -7,20 +7,6 @@ import { ICart, ICartItem, ICartItemBody } from './customer.service';
   providedIn: 'root',
 })
 export class LocalCartService {
-  events = {
-    add: new Subject(),
-    update: new Subject(),
-    delete: new Subject(),
-    change: new Subject(),
-  };
-
-  listeners = {
-    onAdd$: this.events.add.asObservable(),
-    onUpdate$: this.events.update.asObservable(),
-    onDelete$: this.events.delete.asObservable(),
-    onChange$: this.events.change.asObservable(),
-  };
-
   private cartName = 'tps_training_user_cart';
   private defaultCart: ICart = {
     totalPrice: 0,
@@ -67,8 +53,6 @@ export class LocalCartService {
 
     const cart: ICart = { totalPrice, items };
     localStorage.setItem(this.cartName, JSON.stringify(cart));
-    // Emit change event on saved
-    this.events.change.next();
   }
 
   updateItems(items: ICartItemBody[]): void {
@@ -94,6 +78,5 @@ export class LocalCartService {
 
   clear(): void {
     localStorage.removeItem(this.cartName);
-    this.events.change.next();
   }
 }

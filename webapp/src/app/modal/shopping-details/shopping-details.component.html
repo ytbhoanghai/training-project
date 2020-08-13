@@ -14,8 +14,9 @@
           <i class="rate far fa-star"></i>
         </div>
         <div class="price">
-          {{ product.price | currency: "USD":true:"1.0-2" }}
+          {{ product.price | usd }}
         </div>
+        <!-- <div class="store-name"><i class="far fa-gem"></i>{{ product.storeName }}</div> -->
         <hr />
 
         <div class="item">
