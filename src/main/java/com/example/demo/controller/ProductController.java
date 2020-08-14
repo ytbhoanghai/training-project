@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Product;
 import com.example.demo.form.ProductForm;
+import com.example.demo.repository.ProductRepository;
 import com.example.demo.response.MessageResponse;
 import com.example.demo.security.constants.ProductPermission;
 import com.example.demo.service.ProductService;
@@ -20,6 +21,8 @@ import java.util.List;
 public class ProductController {
 
     private ProductService productService;
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     public ProductController(ProductService productService) {
@@ -59,4 +62,5 @@ public class ProductController {
         productService.delete(productId);
         return new ResponseEntity<>(new MessageResponse("Deleted product with id: " + productId), HttpStatus.OK);
     }
+
 }

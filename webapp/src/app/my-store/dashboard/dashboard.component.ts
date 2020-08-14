@@ -13,19 +13,13 @@ export class DashboardComponent implements OnInit {
   constructor(private storeService: StoreService) { }
 
   ngOnInit(): void {
-    // this.fetchStores();
     this.fetchManageableStores();
-  }
-
-  fetchStores(): void {
-    this.storeService.fetchStores().subscribe(stores => {
-      this.stores = stores;
-    })
   }
 
   fetchManageableStores(): void {
     this.storeService.fetchManageableStores().subscribe(stores => {
-      this.stores = stores;
+      // Prevent null when user is unauthorized to read store
+      this.stores = stores || [];
     })
   }
 }

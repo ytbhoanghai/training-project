@@ -1,14 +1,11 @@
-import { UsdPipe } from './pipes/usd.pipe';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RequestInterceptor } from '../config/interceptor/request.interceptor';
 import { ResponseInterceptor } from '../config/interceptor/response.interceptor';
 
-
-
 @NgModule({
-  declarations: [UsdPipe],
+  declarations: [],
   imports: [
     CommonModule,
     HttpClientModule
@@ -25,6 +22,6 @@ import { ResponseInterceptor } from '../config/interceptor/response.interceptor'
       multi: true
     }
   ],
-  exports: [UsdPipe]
+  exports: []
 })
 export class CoreModule { }

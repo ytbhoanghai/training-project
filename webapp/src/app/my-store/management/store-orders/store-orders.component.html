@@ -8,7 +8,7 @@
           <th scope="col">#</th>
           <th scope="col">Transaction ID</th>
           <th scope="col">Total</th>
-          <th scope="col">Status</th>
+          <th scope="col">Ship to</th>
           <th scope="col">Date</th>
           <th scope="col" class="text-center">Action</th>
         </tr>
@@ -16,10 +16,20 @@
       <tbody>
         <tr *ngFor="let order of orders; index as i">
           <th scope="row">{{ i + 1 }}</th>
-          <td>{{ order.transactionId }}</td>
-          <td>{{ order.totalPrice | currency:'USD':true:'1.0-2' }}</td>
-          <td [ngClass]="isShipping(order) ? 'text-danger' : 'text-success'">
-            {{ order.status }}
+          <td>
+            <div>
+              {{ order.transactionId }}
+            </div>
+
+            <div class="order-status-small" [ngClass]="isShipping(order) ? 'text-danger' : 'text-success'">
+              {{ order.status }}
+              <i [ngClass]="isShipping(order) ? 'fas fa-shipping-fast' : 'fas fa-check-circle'"></i>
+            </div>
+
+          </td>
+          <td class="order-price">{{ order.totalPrice | usd }}</td>
+          <td>
+            {{ order.shipAddress }}
           </td>
           <td>
             {{ order.createdAt | date: "short" }}
@@ -35,7 +45,7 @@
             >
               <i
                 class="fas fa-lg mr-0"
-                [ngClass]="isShipping(order) && 'fa-tools'"
+                [ngClass]="isShipping(order) && 'fa-edit'"
               ></i>
             </button>
           </td>

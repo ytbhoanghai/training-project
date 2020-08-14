@@ -11,8 +11,14 @@
       <div class="col-lg-7 col-md-7">
         <div class="advanced-search">
           <button type="button" class="category-btn">All Categories</button>
-          <form action="#" class="input-group">
-            <input type="text" placeholder="What do you need?" />
+          <form action="#" class="input-group" (ngSubmit)="handleSearch()">
+            <input
+              type="text"
+              placeholder="What do you need?"
+              name="search"
+              [(ngModel)]="searchKeyword"
+              (input)="handleInput()"
+            />
             <button type="button"><i class="fas fa-search"></i></button>
           </form>
         </div>

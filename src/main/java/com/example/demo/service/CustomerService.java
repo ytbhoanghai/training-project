@@ -29,6 +29,8 @@ public interface CustomerService {
 
     List<ProductResponse> findProductsByStoreAndCategory(Integer storeId, Integer CategoryId);
 
+    PageableProductResponse searchProducts(Integer storeId, Integer categoryId, Pageable pageable, String keyword);
+
     PageableProductResponse findProductsByStoreAndCategory(Integer storeId, Integer categoryId, Pageable pageable);
 
     void clearCart(Integer cartId);

@@ -1,3 +1,4 @@
+import { SharedModule } from './../shared/shared.module';
 import { SettingsComponent } from './account/settings/settings.component';
 import { ShoppingStoreComponent } from './shopping/products-list/shopping-store/shopping-store.component';
 import { ProductCardComponent } from './shopping/products-list/product-card/product-card.component';
@@ -107,6 +108,7 @@ import { ShoppingDetailsComponent } from './modal/shopping-details/shopping-deta
   ],
   imports: [
     BrowserModule,
+    SharedModule,
     AppRoutingModule,
     CoreModule,
     NgbModule,

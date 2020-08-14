@@ -21,4 +21,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Set<Product> findAllByIdIsIn(Set<Integer> ids);
 
     List<Product> findAllByIdIsNotIn(List<Integer> ids);
+
 }

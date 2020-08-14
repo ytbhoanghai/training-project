@@ -17,13 +17,14 @@ export class CustomerService {
 
   fetchProductsByStoreAndCategory(
     storeId: number,
-    categoryId: number,
-    page?: number,
-    size?: number
+    categoryId = -1,
+    page = 1,
+    size = 9,
+    search = ""
   ): Observable<IPageableProduct> {
     return this.http.get<IPageableProduct>(
       this.REQUEST_URL + `stores/${storeId}/categories/${categoryId}/products`,
-      { params: { page: String(page), size: String(size) } }
+      { params: { page: String(page), size: String(size), search: search } }
     );
   }
 
@@ -153,7 +154,8 @@ export interface IProductFilter {
   };
   query?: {
     page: number;
-    size: number;
+    size?: number;
+    search?: string;
   };
 }
 
