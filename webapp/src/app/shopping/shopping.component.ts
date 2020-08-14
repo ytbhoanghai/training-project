@@ -1,3 +1,5 @@
+import { AuthService } from 'src/app/core/auth/auth.service';
+import { LoginModalService } from './../service/login-modal.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IStore } from 'src/app/manager/store-management/store.service';
 import { Component, OnInit } from '@angular/core';
@@ -14,23 +16,25 @@ export class ShoppingComponent implements OnInit {
   listener: Subscription;
 
   searchKeyword: string;
+  username: string;
 
   constructor(
     private userService: UserService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private loginModal: LoginModalService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.loadSearchQuery();
+    this.userService.currentUser$.subscribe((user) => {
+      this.username = user?.name;
+    });
   }
 
   loadSearchQuery(): void {
     this.searchKeyword = this.route.snapshot.queryParams.search;
-  }
-
-  isLogin(): boolean {
-    return this.userService.isLogin();
   }
 
   handleSearch(): void {
@@ -44,5 +48,17 @@ export class ShoppingComponent implements OnInit {
     if (!this.searchKeyword) {
       this.handleSearch();
     }
+  }
+
+  openLoginModal(): void {
+    this.loginModal.show();
+  }
+
+  isLogin(): boolean {
+    return this.userService.isLogin();
+  }
+
+  logout(): void {
+    this.authService.logoutUser().subscribe(() => (this.username = null));
   }
 }

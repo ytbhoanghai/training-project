@@ -25,7 +25,9 @@ export class LoginModalComponent implements OnInit {
 
   authenticate(): void {
     this.authService.loginUser(this.username, this.password).subscribe(
-      () => this.modalRef.hide(),
+      () => {
+        this.modalRef.hide();
+      },
       (error) => {
         this.messageError = error.error.message;
       }

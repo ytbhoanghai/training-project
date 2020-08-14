@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { SERVER_URL } from '../constants/api.constants';
-import { UserService } from './user.service';
+import { UserService, UserType } from './user.service';
 
 type JwtToken = {
   id_token: string;
@@ -17,7 +17,6 @@ type JwtToken = {
   providedIn: 'root',
 })
 export class AuthService {
-
   private jwtLocalStorageName = 'authenticationToken';
 
   constructor(
@@ -50,11 +49,23 @@ export class AuthService {
   // Store jwt into local storage after authenticate success
   private authenticateSuccess(jwt: JwtToken) {
     localStorage.setItem(this.jwtLocalStorageName, jwt.id_token);
-    this.router.navigateByUrl(location.pathname, {skipLocationChange: true});
-    this.userService.fetchUserInfo().subscribe(() => {
+    this.router.navigateByUrl(location.pathname, { skipLocationChange: true });
+    this.userService.fetchUserInfo().subscribe((user) => {
       // Do after fetched info
+      console.log(user.type === UserType[UserType.ADMIN]);
       this.cartService.fetchCart();
     });
+  }
+
+  navigateUserByType(type: string): void {
+    switch (type) {
+      case UserType[UserType.ADMIN]:
+        this.router.navigate(['/admin']);
+        return;
+      case UserType[UserType.OTHER]:
+        this.router.navigate(['/my-store']);
+        return;
+    }
   }
 
   getAuthToken(): string {

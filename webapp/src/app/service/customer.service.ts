@@ -32,10 +32,6 @@ export class CustomerService {
     return this.http.get<ICart>(this.REQUEST_URL + 'cart');
   }
 
-  createCustomer(body: ICustomerBody): Observable<IUser> {
-    return this.http.post<IUser>(this.REQUEST_URL, body);
-  }
-
   addItemToCart(
     storeId: number,
     productId: number,
