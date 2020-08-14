@@ -3,7 +3,7 @@ import { NotificationService } from 'src/app/layouts/notification/notification.s
 import { ShoppingModalService } from './../../../service/shopping-modal.service';
 import { CartService } from './../../../service/cart.service';
 import { IProduct } from './../../../manager/product-management/product.service';
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -35,6 +35,9 @@ export class ProductCardComponent implements OnInit, OnDestroy {
       if (id === this.product.id && !this.isSoldOut()) {
         this.isOutOfStock = true;
       }
+      if (id === -this.product.id) {
+        this.isOutOfStock = false;
+      }
     });
   }
 
@@ -43,7 +46,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   }
 
   addFieldsToProduct(): void {
-    this.product.storeId = this.route.snapshot.params.storeId;
+    this.product.storeId = +this.route.snapshot.params.storeId;
     this.product.productId = this.product.id;
   }
 
@@ -51,7 +54,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     const cartItem = this.cartService
       .getCart()
       .items.find((item) => item.productId === this.product.id);
-    if (cartItem?.quantity === this.product?.quantity) {
+    if (cartItem?.quantity >= this.product?.quantity) {
       this.isOutOfStock = true;
     }
   }
@@ -69,7 +72,9 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     if (this.isSoldOut()) {
       return this.notiService.showError('Product has sold out!');
     }
-    this.cartService.addItem({ ...this.product, quantity: 1 });
+
+    // this.cartService.addItem({ ...this.product, quantity: 1 });
+    this.cartService.addItem({ ...this.product });
   }
 
   randomImgId(): number {

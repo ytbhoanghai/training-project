@@ -1,5 +1,3 @@
-import { ConfirmModalComponent } from './../../modal/confirm-modal/confirm-modal.component';
-import { MDBModalRef } from 'ng-uikit-pro-standard';
 import { ConfirmModalService } from './../../service/confirm-modal.service';
 import { ProductModalService } from './../../service/product-modal.service';
 import { NotificationService } from './../../layouts/notification/notification.service';
@@ -13,7 +11,6 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProductManagementComponent implements OnInit {
   products: IProduct[] = [];
-  confirmModalRef: MDBModalRef;
 
   constructor(
     private productService: ProductService,
@@ -25,9 +22,9 @@ export class ProductManagementComponent implements OnInit {
   ngOnInit(): void {
     this.fetchProducts();
     this.productService.updateObservable$.subscribe((product: IProduct) => {
-      const index: number = this.products.findIndex(p => p.id === product.id);
+      const index: number = this.products.findIndex((p) => p.id === product.id);
       this.products[index] = product;
-    })
+    });
   }
 
   fetchProducts(): void {
@@ -36,39 +33,29 @@ export class ProductManagementComponent implements OnInit {
     });
   }
 
-  showDetailsModal(id: number) {
-    this.productService.fetchProductById(id).subscribe(product => {
+  showDetailsModal(id: number): void {
+    this.productService.fetchProductById(id).subscribe((product) => {
       this.productModalService.showDetailsModal(product);
-    })
+    });
   }
 
-  showUpdateModal(id: number) {
-    this.productService.fetchProductById(id).subscribe(product => {
+  showUpdateModal(id: number): void {
+    this.productService.fetchProductById(id).subscribe((product) => {
       this.productModalService.showUpdateModal(product);
-    })
+    });
   }
 
-  deleteProduct(id: number) {
-    // this.confirmModalRef = this.confirmService.show('DeleteProduct');
-    // this.confirmModalRef.content.action.subscribe(({ value, key }) => {
-    //   if (key === 'DeleteProduct' && value === ConfirmModalComponent.YES) {
-    //     this.productService.deleteById(id).subscribe(() => {
-    //       this.products = this.products.filter(store => store.id !== id);
-    //       this.notiService.showSuccess('Delete successfully!');
-    //     })
-    //     this.confirmModalRef.hide();
-    //   }
-    // })
+  deleteProduct(id: number): void {
     this.confirmService.show();
     this.confirmService.onYes(() => {
-        this.productService.deleteById(id).subscribe(() => {
-          this.products = this.products.filter(store => store.id !== id);
-          this.notiService.showSuccess('Delete successfully!');
-        })
-    })
+      this.productService.deleteById(id).subscribe(() => {
+        this.products = this.products.filter((store) => store.id !== id);
+        this.notiService.showSuccess('Delete successfully!');
+      });
+    });
   }
 
-  getCategories(product: IProduct) {
-    return product.categories.map(c => c.name).join(", ");
+  getCategories(product: IProduct): string {
+    return product.categories.map((c) => c.name).join(', ');
   }
 }

@@ -1,85 +1,73 @@
+import { ConfirmModalService } from './../../service/confirm-modal.service';
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { RoleUpdateModalComponent } from './../../modal/role-update-modal/role-update-modal.component';
 import { Component, OnInit } from '@angular/core';
-import { RoleManagementService } from "../../service/role-management.service";
-import {MDBModalRef, MDBModalService} from "ng-uikit-pro-standard";
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import {ViewRoleDetailsManagementComponent} from "../../modal/view-role-details-management/view-role-details-management.component";
-import {ConfirmModalComponent} from "../../modal/confirm-modal/confirm-modal.component";
+import { RoleManagementService } from '../../service/role-management.service';
+import { MDBModalService } from 'ng-uikit-pro-standard';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ViewRoleDetailsManagementComponent } from '../../modal/view-role-details-management/view-role-details-management.component';
 
 @Component({
   selector: 'app-role-management',
   templateUrl: './role-management.component.html',
-  styleUrls: ['./role-management.component.css']
+  styleUrls: ['./role-management.component.css'],
 })
 export class RoleManagementComponent implements OnInit {
-
   roles: IRole[];
-  confirmModalRef: MDBModalRef;
 
   constructor(
     private roleManagementService: RoleManagementService,
     private modalService: MDBModalService,
     private ngbService: NgbModal,
-    private notiSerive: NotificationService) { }
+    private notiSerive: NotificationService,
+    private confirmService: ConfirmModalService
+  ) {}
 
   ngOnInit(): void {
     this.fetchRoles();
     this.roleManagementService.updateObservable$.subscribe((role: IRole) => {
-      const index: number = this.roles.findIndex(r => r.id === role.id);
+      const index: number = this.roles.findIndex((r) => r.id === role.id);
       this.roles[index] = role;
-    })
+    });
   }
 
   fetchRoles(): void {
-    this.roleManagementService.findAllRoles()
-      .subscribe(roles => {
-        this.roles = roles;
-      });
+    this.roleManagementService.findAllRoles().subscribe((roles) => {
+      this.roles = roles;
+    });
   }
 
   viewRoleDetails(role: IRole): void {
-    this.roleManagementService.findRoleById(role.id)
-      .subscribe(role => {
-        this.modalService.show(ViewRoleDetailsManagementComponent, {
-          containerClass: 'fade',
-          class: 'modal-dialog-centered modal-xl',
-          data: { role } });
-      })
+    this.roleManagementService.findRoleById(role.id).subscribe((role) => {
+      this.modalService.show(ViewRoleDetailsManagementComponent, {
+        containerClass: 'fade',
+        class: 'modal-dialog-centered modal-xl',
+        data: { role },
+      });
+    });
   }
 
   openUpdateModal(role: IRole): void {
-    this.roleManagementService.findRoleById(role.id).subscribe(role => {
+    this.roleManagementService.findRoleById(role.id).subscribe((role) => {
       this.modalService.show(RoleUpdateModalComponent, {
-            class: 'modal-xl',
-            data: { role }
+        class: 'modal-xl',
+        data: { role },
       });
-    })
+    });
   }
 
   deleteRole(role: IRole): void {
-    this.confirmModalRef = this.modalService.show(ConfirmModalComponent, {
-      containerClass: 'modal fade top',
-      class: 'modal-dialog modal-frame modal-top',
-      data: {
-        key: 'DeleteAction'
-      }
+    this.confirmService.show().onYes(() => {
+      this.roleManagementService.deleteRoleById(role.id).subscribe(() => {
+        // delete role in view
+        const index = this.roles.indexOf(role);
+        this.roles.splice(index, 1);
+        document.getElementById(`role-${role.id}`).remove();
+
+        // hide modal confirm
+        this.notiSerive.showSuccess('Role deleted successfully!');
+      });
     });
-    this.confirmModalRef.content.action.subscribe(({value, key}) => {
-      if (key === "DeleteAction" && value === ConfirmModalComponent.YES) {
-        this.roleManagementService.deleteRoleById(role.id).subscribe(_ => {
-
-          // delete role in view
-          let index = this.roles.indexOf(role);
-          this.roles.splice(index, 1);
-          document.getElementById(`role-${role.id}`).remove();
-
-          // hide modal confirm
-          this.confirmModalRef.hide();
-          this.notiSerive.showSuccess('Role deleted successfully!');
-        })
-      }
-    })
   }
 
   openModal(modalName): void {
@@ -104,8 +92,8 @@ export interface IRole {
 }
 
 export interface IRoleBody {
-  name: string,
-  permissions: number[]
+  name: string;
+  permissions: number[];
 }
 
 export interface IPermission {

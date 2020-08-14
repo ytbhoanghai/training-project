@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs';
 import { IProduct } from './../manager/product-management/product.service';
 import { Injectable } from '@angular/core';
 import { ICart, ICartItem, ICartItemBody } from './customer.service';
@@ -35,10 +34,10 @@ export class LocalCartService {
 
     // FOUND
     if (index >= 0) {
-      items[index] = { ...items[index], quantity: items[index].quantity + 1 };
+      items[index] = { ...items[index], quantity: items[index].quantity + item.quantity };
       // NOT FOUND
     } else {
-      const newItem: ICartItem = { ...item, quantity: 1};
+      const newItem: ICartItem = { ...item, quantity: item.quantity};
       items.push(newItem);
     }
 

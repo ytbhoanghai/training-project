@@ -85,9 +85,9 @@ export class CartService {
       if (err.status === 409) {
         console.log(err.error.message)
         this.notiService.showWaring(`Product with id ${err.error.message} is not in same store`);
-        this.localCartService.clear();
         this.fetchRemoteCart();
       }
+      this.localCartService.clear();
     });
   }
 
@@ -109,6 +109,8 @@ export class CartService {
 
     // Item id and product in cart id are not same
     if (!this.userService.isLogin()) {
+      product.quantity = quantity;
+
       this.localCartService.addItem(product);
       this.doPostAddded(product);
       return;
@@ -118,8 +120,8 @@ export class CartService {
       .addItemToCart(product.storeId, product.id, quantity)
       .subscribe(
         (item) => {
-          // This is cart item, not product id
-          this.doPostAddded({ ...item, quantity: quantity, productId: product.id });
+          // Quantity from the user input
+          this.doPostAddded({ ...product, quantity: quantity });
         },
         (err: HttpErrorResponse) => {
           if (err.status === 406) {
@@ -133,16 +135,26 @@ export class CartService {
   }
 
   isValidItem(product: IProduct): boolean {
+    // CHECK SOLD OUT
     if (!product.quantity) {
       this.notiService.showError('Product has sold out!');
       return false;
     }
 
+    // CHECK SAME STORE
     const storeNameList = this.cart.items.map((i) => i.storeName);
     const isSameStore =
       !storeNameList.length || storeNameList.includes(product.storeName);
     if (!isSameStore) {
       this.notiService.showWaring(`Your order must be in the same ${storeNameList[0]} store!`);
+      return false;
+    }
+
+    // CHECK QUANTITY
+    const cartItem = this.cart.items.find(i => i.productId === product.id);
+    if (cartItem && cartItem.quantity >= product.quantity) {
+      this.notiService.showWaring( `Reach maximum quantity. This product is out of stock`);
+      this.outStockEvent.next(product.productId);
       return false;
     }
 
@@ -207,6 +219,10 @@ export class CartService {
   }
 
   doPostRemoved(id: number): void {
+    // Remove out of stock label
+    const cartItem = this.cart.items.find(i => i.id === id);
+    this.outStockEvent.next(-cartItem.productId);
+
     this.cart.items = this.cart.items.filter((item) => item.id !== id);
     this.changeEvent.next(this.cart);
     this.notiService.showQuickSuccess('Delete item successfully!');
