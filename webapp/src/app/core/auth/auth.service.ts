@@ -52,7 +52,7 @@ export class AuthService {
     this.router.navigateByUrl(location.pathname, { skipLocationChange: true });
     this.userService.fetchUserInfo().subscribe((user) => {
       // Do after fetched info
-      console.log(user.type === UserType[UserType.ADMIN]);
+      this.navigateUserByType(user.type);
       this.cartService.fetchCart();
     });
   }

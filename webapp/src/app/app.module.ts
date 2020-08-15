@@ -1,3 +1,5 @@
+import { AdminDashboardComponent } from './manager/dashboard/dashboard.component';
+import { AdminComponent } from './manager/admin.component';
 import { SharedModule } from './../shared/shared.module';
 import { SettingsComponent } from './account/settings/settings.component';
 import { ShoppingStoreComponent } from './shopping/products-list/shopping-store/shopping-store.component';
@@ -105,6 +107,8 @@ import { ShoppingDetailsComponent } from './modal/shopping-details/shopping-deta
     SettingsComponent,
     LoadingComponent,
     ShoppingDetailsComponent,
+    AdminComponent,
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,
