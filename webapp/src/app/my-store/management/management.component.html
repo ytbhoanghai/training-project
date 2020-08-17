@@ -1,69 +1,71 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-      <a routerLink="/"><i class="fas fa-home"></i></a>
-    </li>
-    <li class="breadcrumb-item"><a routerLink="/my-store">My store</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Manage</li>
-  </ol>
-</nav>
+<div class="p-3">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a routerLink="/"><i class="fas fa-home"></i></a>
+      </li>
+      <li class="breadcrumb-item"><a routerLink="/my-store">My store</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Manage</li>
+    </ol>
+  </nav>
 
-<div class="jumbotron bg-jumbotron">
-  <div class="container">
-    <div class="pl-3 mb-2">
-      <h2>{{ store?.name }}</h2>
-      <h6 [ngClass]="isClosed() ? 'text-danger' : 'text-success'">
-        {{ store?.status }}
-      </h6>
-      <div class="text-muted small">{{ store?.address }}</div>
-      <hr />
-    </div>
+  <div class="jumbotron bg-jumbotron">
+    <div class="container">
+      <div class="pl-3 mb-2">
+        <h2>{{ store?.name }}</h2>
+        <h6 [ngClass]="isClosed() ? 'text-danger' : 'text-success'">
+          {{ store?.status }}
+        </h6>
+        <div class="text-muted small">{{ store?.address }}</div>
+        <hr />
+      </div>
 
-    <ul class="nav nav-pills mb-3">
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          routerLink="products"
-          routerLinkActive="active"
-          ><i class="fas fa-hamburger"></i> Products</a
-        >
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          routerLink="staffs"
-          routerLinkActive="active"
-          ><i class="fas fa-user-friends"></i> Staffs</a
-        >
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          routerLink="orders"
-          routerLinkActive="active"
-          ><i class="fas fa-boxes"></i> Orders</a
-        >
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          routerLink="statistics"
-          routerLinkActive="active"
-          ><i class="fas fa-chart-line"></i>
-          Statistics</a
-        >
-      </li>
+      <ul class="nav nav-pills mb-3">
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="products"
+            routerLinkActive="active"
+            ><i class="fas fa-hamburger"></i> Products</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="staffs"
+            routerLinkActive="active"
+            ><i class="fas fa-user-friends"></i> Staffs</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="orders"
+            routerLinkActive="active"
+            ><i class="fas fa-boxes"></i> Orders</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="statistics"
+            routerLinkActive="active"
+            ><i class="fas fa-chart-line"></i>
+            Statistics</a
+          >
+        </li>
 
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="tab-content">
-              <router-outlet></router-outlet>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="tab-content">
+                <router-outlet></router-outlet>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </ul>
-    <!-- Nav tabs -->
+      </ul>
+      <!-- Nav tabs -->
+    </div>
   </div>
 </div>

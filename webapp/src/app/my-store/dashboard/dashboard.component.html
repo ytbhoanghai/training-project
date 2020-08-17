@@ -1,23 +1,27 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
-    <li class="breadcrumb-item"><a routerLink="/my-store">My store</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-  </ol>
-</nav>
-<div class="jumbotron bg-jumbotron">
-  <div class="container">
-    <h1 class="display-4">Manage Store</h1>
-    <p class="lead">
-      Manage the whole operation of the store including products management, staffs management, orders management
-    </p>
-    <div class="card-deck">
-      <app-store-card *ngFor="let store of stores" [store]="store"></app-store-card>
-    </div>
+<div class="p-3">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item"><a routerLink="/my-store">My store</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+    </ol>
+  </nav>
+  <div class="jumbotron bg-jumbotron">
+    <div class="container">
+      <h1 class="display-4">Manage Store</h1>
+      <p class="lead">
+        Manage the whole operation of the store including products management, staffs management, orders management
+      </p>
+      <div class="card-deck">
+        <app-store-card *ngFor="let store of stores" [store]="store"></app-store-card>
+      </div>
 
-    <div class="alert alert-danger" *ngIf="!stores.length">
-      <i class="fas fa-exclamation-triangle"></i>
-      Sorry! You're not the manager of any store
+      <app-loading *ngIf="isLoading"></app-loading>
+
+      <div class="alert alert-danger" *ngIf="!stores.length && !isLoading">
+        <i class="fas fa-exclamation-triangle"></i>
+        Sorry! You're not the manager of any store
+      </div>
     </div>
   </div>
 </div>

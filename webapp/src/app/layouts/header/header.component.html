@@ -18,7 +18,7 @@
   <div class="navbar-collapse collapse" id="navbarResponsive">
     <ul class="navbar-nav ml-auto">
       <!-- HOME -->
-      <li
+      <!-- <li
         class="nav-item"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
@@ -29,7 +29,7 @@
             <span>Home</span>
           </span>
         </a>
-      </li>
+      </li> -->
 
       <!-- SHOPPING -->
       <li
@@ -40,7 +40,7 @@
         <a class="nav-link" routerLink="/shopping">
           <span>
             <i class="fas fa-shopping-cart"></i>
-            <span>Shopping</span>
+            <span>Shop</span>
           </span>
         </a>
       </li>
@@ -54,7 +54,7 @@
         <a class="nav-link" routerLink="/my-store">
           <span>
             <i class="fas fa-store"></i>
-            <span>My Store</span>
+            <span>Store Management</span>
           </span>
         </a>
       </li>
@@ -82,6 +82,16 @@
           <li>
             <a
               class="dropdown-item"
+              routerLink="admin/store-management"
+              routerLinkActive="active"
+            >
+              <i class="fas fa-store fa-fw"></i>
+              <span>Store manager</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
               routerLink="admin/user-management"
               routerLinkActive="active"
             >
@@ -97,16 +107,6 @@
             >
               <i class="fas fa-key fa-fw"></i>
               <span>Role manager</span>
-            </a>
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              routerLink="admin/store-management"
-              routerLinkActive="active"
-            >
-              <i class="fas fa-store fa-fw"></i>
-              <span>Store manager</span>
             </a>
           </li>
           <li>

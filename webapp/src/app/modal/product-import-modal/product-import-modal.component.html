@@ -1,0 +1,42 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">Import product</h5>
+    <button type="button" class="close" (click)="hideModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="h3 text-muted">{{ product.name }}</div>
+
+    <div class="price">
+      {{ product.price | usd }}
+    </div>
+
+    <div class="item">
+      <div class="item-header">IN STOCK</div>
+      {{ product.quantity }} item(s)
+    </div>
+
+    <div class="item mt-2">
+      <div class="item-header">ADDED</div>
+      {{ product.storeProductQuantity }} item(s)
+    </div>
+
+    <div class="mt-2 item">
+      <div class="item-header">QUANTITY</div>
+      <div class="quantity">
+        <div class="pro-qty">
+          <span class="dec qtybtn" (click)="desQuantity()">-</span>
+
+          <input type="number" [(ngModel)]="importedQuan" min="1" required />
+
+          <span class="inc qtybtn" (click)="incQuantity()">+</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="select-button d-flex mt-3">
+      <a class="primary-btn checkout-btn bg-dark text-light" (click)="handleImport()">IMPORT</a>
+    </div>
+  </div>
+</div>

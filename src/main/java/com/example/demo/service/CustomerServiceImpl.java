@@ -222,7 +222,7 @@ public class CustomerServiceImpl implements CustomerService {
                     }
                     return true;
                 })
-                .map(storeProduct -> ProductResponse.build(storeProduct.getProduct(), store.getName()));
+                .map(storeProduct -> ProductResponse.build(storeProduct, store.getName()));
 
         double totalElements = streamSupplier.get().count();
 

@@ -77,6 +77,10 @@ export class CustomerService {
     return this.http.get<IOrder[]>(this.REQUEST_URL + 'orders');
   }
 
+  fetchOrdersByStore(storeId: number): Observable<IOrder[]> {
+    return this.http.get<IOrder[]>(this.REQUEST_URL + `orders/stores/${storeId}`);
+  }
+
   updateOrderStatus(id: number, body: { status: string }): Observable<IOrder> {
     return this.http.put<IOrder>(
       this.REQUEST_URL + `orders/${id}/status`,

@@ -56,11 +56,11 @@ export class RoleManagementService {
   }
 
   private permissionListResolver(permissions: IPermission[]): IPermissionChoose[] {
-    let arrTemp = { "CREATE": 0,  "READ": 1,  "UPDATE": 2,  "DELETE": 3 },
+    const arrTemp = { "CREATE": 0,  "READ": 1,  "UPDATE": 2,  "DELETE": 3 },
       temp: IPermissionChoose[] = [];
 
     permissions.forEach(permission => {
-      let index = arrTemp[permission.type];
+      const index = arrTemp[permission.type];
       temp[index] = permission as IPermissionChoose;
       temp[index].choose = false;
     })
