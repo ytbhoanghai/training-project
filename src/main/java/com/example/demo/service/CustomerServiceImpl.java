@@ -1,9 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.*;
-import com.example.demo.exception.CartNotFoundException;
-import com.example.demo.exception.NotEnoughQuantityException;
-import com.example.demo.exception.OrderNotFoundException;
+import com.example.demo.exception.*;
 import com.example.demo.form.CartItemMergeForm;
 import com.example.demo.form.CartItemUpdateForm;
 import com.example.demo.form.PaymentForm;
@@ -16,6 +14,7 @@ import com.example.demo.response.CartResponse;
 import com.example.demo.response.PageableProductResponse;
 import com.example.demo.response.ProductResponse;
 import com.example.demo.security.SecurityUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
@@ -81,19 +80,31 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         Staff staff = securityUtil.getCurrentStaff();
-        cart = cartRepository.save(new Cart(null, staff, new Date()));
+        cart = cartRepository.save(new Cart(null, staff, null, new Date()));
         return CartResponse.build(cart, Collections.emptyList());
     }
 
     @Override
-    public CartItemResponse addCartItem(Integer productId, Integer quantity) {
+    public CartItemResponse addCartItem(Integer storeId, Integer productId, Integer quantity) throws JsonProcessingException {
         Cart cart = getCartByCurrentStaff();
-        Product product = productService.findById(productId);
+        Product product = getProductInStore(storeId, productId);
 
+        Store store = storeService.findById(storeId);
         CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product)
-                .orElse(new CartItem(null, cart, product, 0, new Date()));
+                .orElse(new CartItem(null, cart, product, store, 0, new Date()));
 
-        if (cartItem.getQuantity() + quantity > product.getQuantity()) {
+        if (cart.getStore() == null) {
+            cart.setStore(store);
+            cartRepository.save(cart);
+        } else {
+            if (!cart.getStore().getId().equals(storeId)) {
+                throw new ProductNotSameStoreException(Collections.singletonList(productId));
+            }
+        }
+
+
+        StoreProduct storeProduct = storeProductService.findById(new StoreProduct.StoreProductID(storeId, productId));
+        if (cartItem.getQuantity() + quantity > storeProduct.getQuantity()) {
             throw new NotEnoughQuantityException("not enough quantity !!!");
         }
 
@@ -105,6 +116,12 @@ public class CustomerServiceImpl implements CustomerService {
     public void removeCartItem(Integer idCartItem) {
         Cart cart = getCartByCurrentStaff();
         cartItemRepository.deleteByIdAndCart(idCartItem, cart);
+
+        List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
+        if (cartItems.size() == 0) {
+            cart.setStore(null);
+            cartRepository.save(cart);
+        }
     }
 
     @Override
@@ -113,11 +130,31 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Integer> mergeCart(List<CartItemMergeForm> cartItemMergeForms) {
+    public List<Integer> mergeCart(List<CartItemMergeForm> cartItemMergeForms) throws JsonProcessingException {
         List<Integer> invalid = new ArrayList<>();
 
         Cart cart = getCartByCurrentStaff();
         List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
+
+        List<Integer> idsProductNotSameStore = new ArrayList<>();
+        if (cart.getStore() == null) {
+            Integer firstStoreId = cartItemMergeForms.get(0).getStoreId();
+            for (int i = 1; i < cartItemMergeForms.size(); i++) {
+                Integer nextStoreId = cartItemMergeForms.get(i).getStoreId();
+                if (!nextStoreId.equals(firstStoreId)) {
+                    idsProductNotSameStore.add(cartItemMergeForms.get(i).getProductId());
+                }
+            }
+        } else {
+            idsProductNotSameStore = cartItemMergeForms.stream()
+                    .filter(cartItemMergeForm -> !cartItemMergeForm.getStoreId().equals(cart.getStore().getId()))
+                    .map(CartItemMergeForm::getProductId)
+                    .collect(Collectors.toList());
+        }
+
+        if (idsProductNotSameStore.size() != 0) {
+            throw new ProductNotSameStoreException(idsProductNotSameStore);
+        }
 
         cartItemMergeForms.forEach(cartItemMergeForm -> {
             CartItem cartItem = getCartItemInCart(cartItemMergeForm, cartItems);
@@ -126,24 +163,29 @@ public class CustomerServiceImpl implements CustomerService {
                     ? cartItemMergeForm.getQuantity()
                     : cartItem.getQuantity() + cartItemMergeForm.getQuantity();
 
-
             Product product = (cartItem == null)
-                    ? productService.findById(cartItemMergeForm.getIdProduct())
+                    ? getProductInStore(cartItemMergeForm.getStoreId(), cartItemMergeForm.getProductId())
                     : cartItem.getProduct();
 
             if (cartItem == null) {
-                cartItem = new CartItem(null, cart, product, Integer.MAX_VALUE, new Date());
+                Store store = storeService.findById(cartItemMergeForm.getStoreId());
+                cartItem = new CartItem(null, cart, product, store, Integer.MIN_VALUE, new Date());
                 cartItems.add(cartItem);
             }
 
-            if (product.getQuantity() < quantity) {
-                invalid.add(cartItemMergeForm.getIdProduct());
-                cartItem.setQuantity(product.getQuantity());
+            StoreProduct.StoreProductID id = new StoreProduct.StoreProductID(cartItemMergeForm.getStoreId(), cartItemMergeForm.getProductId());
+            StoreProduct storeProduct = storeProductService.findById(id);
+
+            if (storeProduct.getQuantity() < quantity) {
+                invalid.add(cartItemMergeForm.getProductId());
+                cartItem.setQuantity(storeProduct.getQuantity());
             } else {
                 cartItem.setQuantity(quantity);
             }
         });
 
+        cart.setStore(cartItems.get(0).getStore());
+        cartRepository.save(cart);
         cartItemRepository.saveAll(cartItems);
         return invalid;
     }
@@ -160,7 +202,7 @@ public class CustomerServiceImpl implements CustomerService {
                     }
                     return true;
                 })
-                .map(storeProduct -> ProductResponse.build(storeProduct.getProduct(), store.getName()))
+                .map(storeProduct -> ProductResponse.build(storeProduct, store.getName()))
                 .collect(Collectors.toList());
     }
 
@@ -178,7 +220,7 @@ public class CustomerServiceImpl implements CustomerService {
                     }
                     return true;
                 })
-                .map(storeProduct -> ProductResponse.build(storeProduct.getProduct(), store.getName()));
+                .map(storeProduct -> ProductResponse.build(storeProduct, store.getName()));
 
         double totalElements = streamSupplier.get().count();
 
@@ -201,6 +243,9 @@ public class CustomerServiceImpl implements CustomerService {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new CartNotFoundException(String.valueOf(cartId)));
         cartItemRepository.deleteByCart(cart);
+
+        cart.setStore(null);
+        cartRepository.save(cart);
     }
 
     @Override
@@ -216,12 +261,15 @@ public class CustomerServiceImpl implements CustomerService {
                 .map(cartItem -> OrderItem.build(cartItem, order))
                 .collect(Collectors.toList());
 
-        updateProductQuantity(cartItems);
+        updateStoreProductQuantity(cartItems);
 
         cartItemRepository.deleteAll(cartItems);
 
         orderRepository.save(order);
         orderItemRepository.saveAll(orderItems);
+
+        cart.setStore(null);
+        cartRepository.save(cart);
 
         return charge;
     }
@@ -262,7 +310,7 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<CartItem> optionalCartItem = cartItems.stream()
                 .filter(cartItem -> {
                     Product product = cartItem.getProduct();
-                    return product.getId().equals(cartItemMergeForm.getIdProduct());
+                    return product.getId().equals(cartItemMergeForm.getProductId());
                 })
                 .findFirst();
         if (optionalCartItem.isPresent()) temp = optionalCartItem.get();
@@ -309,18 +357,25 @@ public class CustomerServiceImpl implements CustomerService {
         return invalid;
     }
 
-    private void updateProductQuantity(List<CartItem> cartItems) {
-        List<Product> products = cartItems.stream().peek(cartItem -> {
-            Product product = cartItem.getProduct();
-            if (product.getQuantity() == 0) {
+    private void updateStoreProductQuantity(List<CartItem> cartItems) {
+        cartItems.forEach(cartItem -> {
+            StoreProduct.StoreProductID id = new StoreProduct.StoreProductID(cartItem.getStore().getId(), cartItem.getProduct().getId());
+            StoreProduct storeProduct = storeProductService.findById(id);
+            if (storeProduct.getQuantity() == 0) {
                 throw new NotEnoughQuantityException("product not enough quantity");
             }
-            product.setQuantity(product.getQuantity() - cartItem.getQuantity());
-        })
-                .map(CartItem::getProduct)
-                .collect(Collectors.toList());
-        products.forEach(product -> System.out.println(product.getName() + " : " + product.getQuantity()));
-        productService.save(products);
+            storeProduct.setQuantity(storeProduct.getQuantity() - cartItem.getQuantity());
+            storeProductService.save(storeProduct);
+        });
     }
+
+    private Product getProductInStore(Integer storeId, Integer productId) {
+        Product product = storeService.getProductById(storeId, productId);
+        if (product == null) {
+            throw new ProductNotExistsInStoreException(new StoreProduct.StoreProductID(storeId, productId));
+        }
+        return product;
+    }
+
 
 }

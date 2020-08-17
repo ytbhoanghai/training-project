@@ -19,6 +19,8 @@ public interface StoreProductRepository extends JpaRepository<StoreProduct, Stor
 
     List<StoreProduct> findAllByStore(Store store);
 
+    List<StoreProduct> findAllByProduct(Product product);
+
     void deleteByStore(Store store);
 
     List<StoreProduct> findAllByProductIsNotIn(List<Product> products);

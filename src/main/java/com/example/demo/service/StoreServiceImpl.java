@@ -127,6 +127,16 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public Product getProductById(Integer storeId, Integer productId) {
+        Store store = findById(storeId);
+        return store.getStoreProductList().stream()
+                .filter(storeProduct -> storeProduct.getProduct().getId().equals(productId))
+                .findFirst()
+                .map(StoreProduct::getProduct)
+                .orElse(null);
+    }
+
+    @Override
     public Store update(Integer id, StoreUpdateForm storeUpdateForm) {
         Staff currentStaff = securityUtil.getCurrentStaff();
         Store store = findById(id);

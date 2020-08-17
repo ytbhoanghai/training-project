@@ -2,6 +2,7 @@ package com.example.demo.response;
 
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
+import com.example.demo.entity.StoreProduct;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +25,8 @@ public class ProductResponse {
     private List<String> categoryNames;
     private String storeName;
 
-    public static ProductResponse build(Product product, String storeName) {
+    public static ProductResponse build(StoreProduct storeProduct, String storeName) {
+        Product product = storeProduct.getProduct();
         List<String> categoryNames = product.getCategories().stream()
                 .map(Category::getName)
                 .collect(Collectors.toList());
@@ -33,7 +35,7 @@ public class ProductResponse {
                 .id(product.getId())
                 .name(product.getName())
                 .price(product.getPrice())
-                .quantity(product.getQuantity())
+                .quantity(storeProduct.getQuantity())
                 .categoryNames(categoryNames)
                 .storeName(storeName).build();
     }

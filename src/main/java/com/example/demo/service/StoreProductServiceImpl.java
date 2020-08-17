@@ -52,6 +52,11 @@ public class StoreProductServiceImpl implements StoreProductService {
     }
 
     @Override
+    public List<StoreProduct> findAllByProduct(Product product) {
+        return storeProductRepository.findAllByProduct(product);
+    }
+
+    @Override
     public Page<StoreProduct> findAllByStore(Store store, Pageable pageable) {
         return storeProductRepository.findAllByStore(store, pageable);
     }
@@ -92,6 +97,11 @@ public class StoreProductServiceImpl implements StoreProductService {
         productRepository.save(product);
 
         storeProductRepository.deleteById(id);
+    }
+
+    @Override
+    public void save(StoreProduct storeProduct) {
+        storeProductRepository.save(storeProduct);
     }
 
     @Override

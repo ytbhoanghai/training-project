@@ -14,6 +14,7 @@ public class CartItemResponse {
 
     private Integer id;
     private String name;
+    private String storeName;
     private BigDecimal price;
     private Integer quantity;
     private Integer productId;
@@ -22,6 +23,7 @@ public class CartItemResponse {
         return new CartItemResponse(
                 cartItem.getId(),
                 cartItem.getProduct().getName(),
+                cartItem.getStore().getName(),
                 cartItem.getProduct().getPrice(),
                 cartItem.getQuantity(),
                 cartItem.getProduct().getId());
