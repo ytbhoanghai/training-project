@@ -709,7 +709,7 @@ ol {
 	color: #252525;
 }
 
-.nav-item {
+#shop.nav-item {
 	background: #252525;
 	display: -webkit-box;
 	display: -ms-flexbox;
