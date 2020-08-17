@@ -1,3 +1,4 @@
+import { ProductImportModalService } from './../../../service/product-import-modal.service';
 import { ConfirmModalService } from './../../../service/confirm-modal.service';
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { StoreService } from './../../../manager/store-management/store.service';
@@ -23,7 +24,8 @@ export class StoreProductComponent implements OnInit {
     private storeService: StoreService,
     private route: ActivatedRoute,
     private notiService: NotificationService,
-    private confirmService: ConfirmModalService
+    private confirmService: ConfirmModalService,
+    private productImportModalService: ProductImportModalService
   ) {}
 
   ngOnInit(): void {
@@ -112,5 +114,10 @@ export class StoreProductComponent implements OnInit {
 
   printCategories(product: IProduct): string {
     return product.categories.map((c) => c.name).join(', ');
+  }
+
+  showImportModal(product: IProduct): void {
+    product.storeId = this.storeId;
+    this.productImportModalService.show(product);
   }
 }

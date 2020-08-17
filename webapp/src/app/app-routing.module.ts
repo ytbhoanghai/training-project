@@ -8,7 +8,9 @@ import {errorRoute} from './layouts/error/error.route';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
+    pathMatch: 'full',
+    // loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
+    redirectTo: 'shopping'
   },
   {
     path: 'admin',

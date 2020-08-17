@@ -3,7 +3,7 @@ import { LoginModalService } from './../service/login-modal.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IStore } from 'src/app/manager/store-management/store.service';
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../core/auth/user.service';
+import { UserService, IUser } from '../core/auth/user.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -16,6 +16,7 @@ export class ShoppingComponent implements OnInit {
   listener: Subscription;
 
   searchKeyword: string;
+  user: IUser;
   username: string;
 
   constructor(
@@ -29,6 +30,7 @@ export class ShoppingComponent implements OnInit {
   ngOnInit(): void {
     this.loadSearchQuery();
     this.userService.currentUser$.subscribe((user) => {
+      this.user = user;
       this.username = user?.name;
     });
   }
@@ -51,11 +53,24 @@ export class ShoppingComponent implements OnInit {
   }
 
   openLoginModal(): void {
+    if (this.isLogin()) return;
     this.loginModal.show();
   }
 
   isLogin(): boolean {
     return this.userService.isLogin();
+  }
+
+  isAdmin(): boolean {
+    return this.user.type === 'ADMIN';
+  }
+
+  isManager(): boolean {
+    return this.user.type === 'OTHER';
+  }
+
+  isRouterActive(): boolean {
+    return location.pathname.startsWith('/shopping/store');
   }
 
   logout(): void {
