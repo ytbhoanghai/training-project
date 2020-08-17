@@ -23,6 +23,9 @@ export class CartService {
   changeEvent = new BehaviorSubject<ICart>(null);
   changeListener$ = this.changeEvent.asObservable();
 
+  outStockEvent = new BehaviorSubject<number>(null);
+  outStockListener$ = this.outStockEvent.asObservable();
+
   constructor(
     private localCartService: LocalCartService,
     private customerService: CustomerService,
@@ -67,7 +70,7 @@ export class CartService {
     console.log('START MERGING CART');
     const body: IMergeCartBody[] = this.localCartService
       .getItems()
-      .map((item) => ({ idProduct: item.id, quantity: item.quantity }));
+      .map((item) => ({ productId: item.id, quantity: item.quantity, storeId: item.storeId }));
 
     this.customerService.mergeCart(body).subscribe((failedIds: number[]) => {
       if (!failedIds.length) {
@@ -78,6 +81,13 @@ export class CartService {
         this.showMergeFailedMessage(failedIds);
         this.doAfterMerge();
       }
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 409) {
+        console.log(err.error.message)
+        this.notiService.showWaring(`Product with id ${err.error.message} is not in same store`);
+        this.fetchRemoteCart();
+      }
+      this.localCartService.clear();
     });
   }
 
@@ -94,29 +104,61 @@ export class CartService {
     });
   }
 
-  addItem(product: IProduct, quantity = 1): boolean {
-    // Item id and product in cart id are not same
-    product.productId = product.id;
+  addItem(product: IProduct, quantity = 1): void {
+    if (!this.isValidItem(product)) return;
 
+    // Item id and product in cart id are not same
     if (!this.userService.isLogin()) {
+      product.quantity = quantity;
+
       this.localCartService.addItem(product);
       this.doPostAddded(product);
-      return true;
+      return;
     }
 
-    this.customerService.addItemToCart(product.id, quantity).subscribe(
-      (item) => {
-        // This is cart item, not product
-        this.doPostAddded({ ...item, productId: product.id });
-      },
-      (err: HttpErrorResponse) => {
-        if (err.status === 406) {
-          this.notiService.showWaring(
-            `Reach maximum quantity. This product is out of stock`
-          );
+    this.customerService
+      .addItemToCart(product.storeId, product.id, quantity)
+      .subscribe(
+        (item) => {
+          // Quantity from the user input
+          this.doPostAddded({ ...product, quantity: quantity });
+        },
+        (err: HttpErrorResponse) => {
+          if (err.status === 406) {
+            this.outStockEvent.next(product.productId);
+            this.notiService.showWaring(
+              `Reach maximum quantity. This product is out of stock`
+            );
+          }
         }
-      }
-    );
+      );
+  }
+
+  isValidItem(product: IProduct): boolean {
+    // CHECK SOLD OUT
+    if (!product.quantity) {
+      this.notiService.showError('Product has sold out!');
+      return false;
+    }
+
+    // CHECK SAME STORE
+    const storeNameList = this.cart.items.map((i) => i.storeName);
+    const isSameStore =
+      !storeNameList.length || storeNameList.includes(product.storeName);
+    if (!isSameStore) {
+      this.notiService.showWaring(`Your order must be in the same ${storeNameList[0]} store!`);
+      return false;
+    }
+
+    // CHECK QUANTITY
+    const cartItem = this.cart.items.find(i => i.productId === product.id);
+    if (cartItem && cartItem.quantity >= product.quantity) {
+      this.notiService.showWaring( `Reach maximum quantity. This product is out of stock`);
+      this.outStockEvent.next(product.productId);
+      return false;
+    }
+
+    return true;
   }
 
   doPostAddded(item: IProduct): void {
@@ -131,7 +173,7 @@ export class CartService {
       const cartItem = this.cart.items[index];
       this.cart.items[index] = {
         ...cartItem,
-        quantity: cartItem.quantity + 1,
+        quantity: cartItem.quantity + item.quantity,
       };
     } else {
       this.cart.items.push(item);
@@ -177,6 +219,10 @@ export class CartService {
   }
 
   doPostRemoved(id: number): void {
+    // Remove out of stock label
+    const cartItem = this.cart.items.find(i => i.id === id);
+    this.outStockEvent.next(-cartItem.productId);
+
     this.cart.items = this.cart.items.filter((item) => item.id !== id);
     this.changeEvent.next(this.cart);
     this.notiService.showQuickSuccess('Delete item successfully!');

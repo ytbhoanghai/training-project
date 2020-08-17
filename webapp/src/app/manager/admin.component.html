@@ -1,0 +1,63 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-1">
+      <div class="sidebar">
+        <div class="admin" routerLink="./">
+          <div>
+            <i class="fas fa-user-shield fa-lg"></i>
+          </div>
+          vfon98
+        </div>
+        <hr />
+        <div
+          class="management-item"
+          routerLinkActive="active"
+          routerLink="store-management"
+        >
+          <div>
+            <div>
+              <i class="fas fa-store fa-2x"></i>
+            </div>
+            Store Management
+          </div>
+        </div>
+        <div
+          class="management-item"
+          routerLinkActive="active"
+          routerLink="user-management"
+        >
+          <div><i class="fas fa-2x fa-user-friends"></i></div>
+          Staff Management
+        </div>
+        <div
+          class="management-item"
+          routerLinkActive="active"
+          routerLink="role-management"
+        >
+          <div><i class="fas fa-2x fa-key"></i></div>
+          Role Management
+        </div>
+        <div
+          class="management-item"
+          routerLinkActive="active"
+          routerLink="product-management"
+        >
+          <div><i class="fas fa-2x fa-hamburger"></i></div>
+          Product Management
+        </div>
+        <div
+          class="management-item"
+          routerLinkActive="active"
+          routerLink="category-management"
+        >
+          <div><i class="fas fa-2x fa-tags"></i></div>
+          Category Management
+        </div>
+      </div>
+    </div>
+
+    <div class="col-11 p-3">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

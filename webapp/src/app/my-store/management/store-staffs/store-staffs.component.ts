@@ -15,7 +15,7 @@ export class StoreStaffsComponent implements OnInit {
   addedStaffs: ISimpleStaff[] = [];
 
   storeId: number;
-  selectStaffId: number;
+  selectStaffId = 0;
 
   constructor(
     private staffService: UserManagementService,
@@ -46,7 +46,9 @@ export class StoreStaffsComponent implements OnInit {
     const staff: ISimpleStaff = this.staffs.find(
       (s) => s.id === this.selectStaffId
     );
-    if (!staff) return;
+    if (!staff) {
+      return this.notiService.showWaring('Empty staff list');
+    }
 
     this.storeService
       .addStaffToStore(this.storeId, this.selectStaffId)
@@ -70,6 +72,6 @@ export class StoreStaffsComponent implements OnInit {
   }
 
   resetSelected(): void {
-    this.selectStaffId = this.staffs[0]?.id;
+    this.selectStaffId = this.staffs[0]?.id || 0;
   }
 }

@@ -64,11 +64,11 @@ public class CustomerServiceImpl implements CustomerService {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
 
-        this.productService         = productService;
-        this.storeService           = storeService;
-        this.categoryService        = categoryService;
-        this.storeProductService    = storeProductService;
-        this.staffService           = staffService;
+        this.productService = productService;
+        this.storeService = storeService;
+        this.categoryService = categoryService;
+        this.storeProductService = storeProductService;
+        this.staffService = staffService;
     }
 
     @Override
@@ -101,7 +101,6 @@ public class CustomerServiceImpl implements CustomerService {
                 throw new ProductNotSameStoreException(Collections.singletonList(productId));
             }
         }
-
 
         StoreProduct storeProduct = storeProductService.findById(new StoreProduct.StoreProductID(storeId, productId));
         if (cartItem.getQuantity() + quantity > storeProduct.getQuantity()) {
@@ -207,6 +206,40 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public PageableProductResponse searchProducts(
+            Integer storeId, Integer categoryId, Pageable pageable, String keyword) {
+        Store store = storeService.findById(storeId);
+
+        List<StoreProduct> storeProductList = storeProductService.findAllByStore(store);
+
+        Supplier<Stream<ProductResponse>> streamSupplier = () -> storeProductList.stream()
+                .filter(storeProduct -> storeProduct.getProduct().getName().matches("(?i).*" + keyword + ".*"))
+                .filter(storeProduct -> {
+                    if (categoryId != -1) {
+                        return storeProduct.getProduct().getCategories().stream()
+                                .anyMatch(category -> category.getId().equals(categoryId));
+                    }
+                    return true;
+                })
+                .map(storeProduct -> ProductResponse.build(storeProduct, store.getName()));
+
+        double totalElements = streamSupplier.get().count();
+
+        List<ProductResponse> productResponses = streamSupplier.get()
+                .skip(pageable.getPageNumber() * pageable.getPageSize())
+                .limit(pageable.getPageSize())
+                .collect(Collectors.toList());
+
+        return PageableProductResponse.builder()
+                .currentPage(pageable.getPageNumber() + 1)
+                .totalPages((int) Math.ceil(totalElements / pageable.getPageSize()))
+                .totalElements((int) totalElements)
+                .size(productResponses.size())
+                .products(productResponses)
+                .build();
+    }
+
+    @Override
     public PageableProductResponse findProductsByStoreAndCategory(Integer storeId, Integer categoryId, Pageable pageable) {
         Store store = storeService.findById(storeId);
 
@@ -214,6 +247,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         Supplier<Stream<ProductResponse>> streamSupplier = () -> storeProductList.stream()
                 .filter(storeProduct -> {
+                    System.out.println(storeProduct.getProduct().getName());
                     if (categoryId != -1) {
                         return storeProduct.getProduct().getCategories().stream()
                                 .anyMatch(category -> category.getId().equals(categoryId));
@@ -376,6 +410,5 @@ public class CustomerServiceImpl implements CustomerService {
         }
         return product;
     }
-
 
 }

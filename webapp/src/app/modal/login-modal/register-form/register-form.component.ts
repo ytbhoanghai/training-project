@@ -1,3 +1,4 @@
+import { UserService } from 'src/app/core/auth/user.service';
 import { Router } from '@angular/router';
 import { NotificationService } from './../../../layouts/notification/notification.service';
 import {
@@ -30,6 +31,7 @@ export class RegisterFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private customerService: CustomerService,
+    private userService: UserService,
     private notiService: NotificationService,
     private router: Router
   ) {}
@@ -39,7 +41,7 @@ export class RegisterFormComponent implements OnInit {
   handleSubmit(): void {
     console.log(this.registerForm.value);
     const body: ICustomerBody = this.registerForm.value;
-    this.customerService.createCustomer(body).subscribe(() => {
+    this.userService.createAccount(body).subscribe(() => {
       this.notiService.showSuccess('Account created!');
       this.router.navigate(['']);
     });

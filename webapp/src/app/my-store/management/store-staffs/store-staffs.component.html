@@ -11,7 +11,7 @@
             <option *ngFor="let staff of staffs" [ngValue]="staff.id">
               {{ staff.id + ': ' + staff.name }}
             </option>
-            <option *ngIf="!staffs.length" disabled selected>Empty</option>
+            <option *ngIf="!staffs.length" [value]="0" disabled>Empty</option>
           </select>
         </div>
         <button type="button" class="btn btn-success btn-sm ml-1" (click)="addStaff()">

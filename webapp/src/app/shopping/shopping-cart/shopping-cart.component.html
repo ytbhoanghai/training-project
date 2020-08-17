@@ -14,10 +14,13 @@
             <td class="si-text">
               <div class="product-selected">
                 <p>
-                  {{ item.price | currency:"USD":true:"1.0-2" }} x
+                  {{ item.price | usd }} x
                   {{ item.quantity }}
                 </p>
-                <h6>{{ item.name }}</h6>
+                <h6 class="mb-1">{{ item.name }}</h6>
+                <div class="store-name">
+                  <i class="far fa-gem"></i>{{ item.storeName }}
+                </div>
               </div>
             </td>
             <td class="si-close">
@@ -32,7 +35,7 @@
     </div>
     <div class="select-total">
       <span>total:</span>
-      <h5>{{ cart.totalPrice | currency: "USD":true:"1.0-2" }}</h5>
+      <h5>{{ cart.totalPrice | usd }}</h5>
     </div>
     <div class="select-button">
       <a
@@ -47,4 +50,4 @@
     </div>
   </div>
 </li>
-<li class="cart-price">{{ cart.totalPrice | currency: "USD":true:"1.0-2" }}</li>
+<li class="cart-price">{{ cart.totalPrice | usd }}</li>
