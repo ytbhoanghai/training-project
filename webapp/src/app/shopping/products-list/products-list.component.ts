@@ -34,7 +34,10 @@ export class ProductsListComponent implements OnInit {
   ngOnInit(): void {
     combineLatest(this.route.params, this.route.queryParams)
       .pipe(
-        map((result) => ({ params: result[0], query: result[1] } as IProductFilter))
+        map(
+          (result) =>
+            ({ params: result[0], query: result[1] } as IProductFilter)
+        )
       )
       .subscribe((filter: IProductFilter) => {
         const { params, query } = filter;
@@ -47,18 +50,25 @@ export class ProductsListComponent implements OnInit {
           params.storeId,
           params.categoryId,
           query.page,
-          query.size
+          query.size,
+          query.search
         );
       });
   }
 
-  fetchProducts(storeId: number, categoryId = -1, page = 1, size = 9): void {
+  fetchProducts(
+    storeId: number,
+    categoryId: number,
+    page: number,
+    size?: number,
+    search?: string
+  ): void {
     if (String(categoryId) === 'all') {
       categoryId = -1;
     }
 
     this.customerService
-      .fetchProductsByStoreAndCategory(storeId, categoryId, page, size)
+      .fetchProductsByStoreAndCategory(storeId, categoryId, page, size, search)
       .subscribe((res) => {
         this.pageableProducts = res;
         this.products = res.products;

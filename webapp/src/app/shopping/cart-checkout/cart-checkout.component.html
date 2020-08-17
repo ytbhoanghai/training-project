@@ -30,13 +30,13 @@
               <li class="fw-normal" *ngFor="let item of cart.items">
                 {{ item.name }} x {{ item.quantity }}
                 <span>{{
-                  item.price * item.quantity | currency: "USD":true:"1.0-2"
+                  item.price * item.quantity | usd
                 }}</span>
               </li>
               <li class="total-price">
                 Total
                 <span>{{
-                  cart.totalPrice | currency: "USD":true:"1.0-2"
+                  cart.totalPrice | usd
                 }}</span>
               </li>
             </ul>

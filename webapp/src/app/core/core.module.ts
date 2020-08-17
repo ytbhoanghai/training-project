@@ -4,8 +4,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RequestInterceptor } from '../config/interceptor/request.interceptor';
 import { ResponseInterceptor } from '../config/interceptor/response.interceptor';
 
-
-
 @NgModule({
   declarations: [],
   imports: [
@@ -23,6 +21,7 @@ import { ResponseInterceptor } from '../config/interceptor/response.interceptor'
       useClass: ResponseInterceptor,
       multi: true
     }
-  ]
+  ],
+  exports: []
 })
 export class CoreModule { }

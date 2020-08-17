@@ -4,12 +4,14 @@ import com.example.demo.form.LoginForm;
 import com.example.demo.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @ControllerAdvice
 @RequestMapping("/api/authenticate")
+@Validated
 public class AuthenticationController {
 
     private AuthenticationService authenticationService;

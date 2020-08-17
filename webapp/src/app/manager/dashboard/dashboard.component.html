@@ -1,0 +1,24 @@
+<div class="jumbotron bg-jumbotron">
+  <h2 class="font-weight-bold">
+    Welcome, {{ user?.name || "anonymous" }}!
+  </h2>
+  <div class="row">
+    <div class="col-lg-4">
+      <img
+        src="assets/img/store-green.png"
+        class="img-fluid float-left text-center"
+      />
+    </div>
+
+    <div class="col-lg-8">
+      <div *ngIf="user" class="pl-3 info-block">
+        <p><b>Full name: </b>{{ user.name }}</p>
+        <p><b>Username: </b>{{ user.username }}</p>
+        <p><b>Email: </b>{{ user.email }}</p>
+        <p><b>Address: </b>{{ user.address }}</p>
+        <p><b>Roles: </b>{{ user.roles.join(", ") }}</p>
+        <p><b>Created at: </b>{{ user.createdAt | date: "medium" }}</p>
+      </div>
+    </div>
+  </div>
+</div>

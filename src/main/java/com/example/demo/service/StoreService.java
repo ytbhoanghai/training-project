@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Product;
 import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
 import com.example.demo.form.StoreForm;
@@ -38,4 +39,6 @@ public interface StoreService {
     void removeStaffFromStore(Integer storeId, Integer staffId);
 
     void addStaffToStore(Integer storeId, Integer staffId);
+
+    Product getProductById(Integer storeId, Integer productId);
 }

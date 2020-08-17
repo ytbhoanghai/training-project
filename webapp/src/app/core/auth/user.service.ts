@@ -1,3 +1,4 @@
+import { ICustomerBody } from './../../service/customer.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { SERVER_URL } from '../constants/api.constants';
@@ -54,6 +55,10 @@ export class UserService {
 
   fetchGrantedPemissions(): Observable<number[]> {
     return this.http.get<number[]>(this.REQUEST_URL + 'permissions');
+  }
+
+  createAccount(body: ICustomerBody): Observable<IUser> {
+    return this.http.post<IUser>(this.REQUEST_URL.slice(0, -1), body);
   }
 
   updateAccount(body: IUser): Observable<IUser> {

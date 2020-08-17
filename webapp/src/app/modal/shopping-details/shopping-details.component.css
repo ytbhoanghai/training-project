@@ -79,3 +79,9 @@ a.primary-btn:hover {
 .rate {
   /* color: #e7ab3c; */
 }
+
+.store-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6c757d;
+}

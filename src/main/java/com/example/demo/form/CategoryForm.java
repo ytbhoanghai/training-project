@@ -2,9 +2,7 @@ package com.example.demo.form;
 
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Staff;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

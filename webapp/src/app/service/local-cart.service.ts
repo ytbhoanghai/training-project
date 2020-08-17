@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs';
 import { IProduct } from './../manager/product-management/product.service';
 import { Injectable } from '@angular/core';
 import { ICart, ICartItem, ICartItemBody } from './customer.service';
@@ -7,20 +6,6 @@ import { ICart, ICartItem, ICartItemBody } from './customer.service';
   providedIn: 'root',
 })
 export class LocalCartService {
-  events = {
-    add: new Subject(),
-    update: new Subject(),
-    delete: new Subject(),
-    change: new Subject(),
-  };
-
-  listeners = {
-    onAdd$: this.events.add.asObservable(),
-    onUpdate$: this.events.update.asObservable(),
-    onDelete$: this.events.delete.asObservable(),
-    onChange$: this.events.change.asObservable(),
-  };
-
   private cartName = 'tps_training_user_cart';
   private defaultCart: ICart = {
     totalPrice: 0,
@@ -49,10 +34,10 @@ export class LocalCartService {
 
     // FOUND
     if (index >= 0) {
-      items[index] = { ...items[index], quantity: items[index].quantity + 1 };
+      items[index] = { ...items[index], quantity: items[index].quantity + item.quantity };
       // NOT FOUND
     } else {
-      const newItem: ICartItem = { ...item, quantity: 1};
+      const newItem: ICartItem = { ...item, quantity: item.quantity};
       items.push(newItem);
     }
 
@@ -67,8 +52,6 @@ export class LocalCartService {
 
     const cart: ICart = { totalPrice, items };
     localStorage.setItem(this.cartName, JSON.stringify(cart));
-    // Emit change event on saved
-    this.events.change.next();
   }
 
   updateItems(items: ICartItemBody[]): void {
@@ -94,6 +77,5 @@ export class LocalCartService {
 
   clear(): void {
     localStorage.removeItem(this.cartName);
-    this.events.change.next();
   }
 }

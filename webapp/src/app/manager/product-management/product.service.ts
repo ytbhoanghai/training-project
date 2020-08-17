@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs';
 import { SERVER_URL } from './../../core/constants/api.constants';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ICategory } from '../category-management/category.service';
 
@@ -52,6 +52,7 @@ export interface IProduct {
   imgUrl?: string;
   productId?: number;
   cartItemId?: number;
+  storeId?: number;
 }
 
 export interface IProductBody {

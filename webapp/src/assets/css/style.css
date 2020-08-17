@@ -709,15 +709,17 @@ ol {
 	color: #252525;
 }
 
-.nav-item {
-	/* background: #252525;
+#shop.nav-item {
+	background: #252525;
 	display: -webkit-box;
 	display: -ms-flexbox;
-	display: flex; */
+  display: flex;
+  height: 52px;
 }
 
 .nav-item .nav-depart {
-	float: left;
+	/* float: left; */
+	float: right;
 }
 
 .nav-item .nav-depart .depart-btn {
@@ -826,6 +828,10 @@ ol {
 	-webkit-transition: all 0.3s;
 	-o-transition: all 0.3s;
 	transition: all 0.3s;
+}
+
+.nav-title {
+	border-left: 2px solid #3b3b3b;
 }
 
 .nav-item .nav-menu li:hover>a {

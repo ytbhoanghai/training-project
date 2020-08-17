@@ -20,7 +20,7 @@
           <div class="col-9">
             <div class="order-id">{{ getId(order.transactionId) }}</div>
             <div class="d-flex justify-content-between align-items-center">
-              <div class="order-price">{{ order.totalPrice | currency:'USD':true:'1.0-2' }}</div>
+              <div class="order-price">{{ order.totalPrice | usd }}</div>
               <div class="order-status" [ngClass]="isShipping(order.status) ? 'text-danger' : 'text-success'">
                 {{ order.status }}
               </div>

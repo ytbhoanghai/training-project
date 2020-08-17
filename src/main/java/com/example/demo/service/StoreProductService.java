@@ -11,6 +11,10 @@ import java.util.List;
 public interface StoreProductService {
 
     List<StoreProduct> findAllByStore(Store store);
+    
+    StoreProduct findById(StoreProduct.StoreProductID id);
+
+    List<StoreProduct> findAllByProduct(Product product);
 
     Page<StoreProduct> findAllByStore(Store store, Pageable pageable);
 
@@ -21,4 +25,6 @@ public interface StoreProductService {
     List<StoreProduct> findAllByProductIsNotIn(List<Product> products);
 
     void deleteProductFormStore(Integer storeId, Integer productId);
+
+    void save(StoreProduct storeProduct);
 }

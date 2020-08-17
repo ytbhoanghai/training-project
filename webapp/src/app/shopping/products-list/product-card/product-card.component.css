@@ -16,3 +16,7 @@ a {
   text-overflow: ellipsis;
   margin: 0 8px;
 }
+
+.product-item {
+  cursor: pointer;
+}

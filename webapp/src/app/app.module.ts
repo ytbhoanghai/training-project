@@ -1,3 +1,6 @@
+import { AdminDashboardComponent } from './manager/dashboard/dashboard.component';
+import { AdminComponent } from './manager/admin.component';
+import { SharedModule } from './../shared/shared.module';
 import { SettingsComponent } from './account/settings/settings.component';
 import { ShoppingStoreComponent } from './shopping/products-list/shopping-store/shopping-store.component';
 import { ProductCardComponent } from './shopping/products-list/product-card/product-card.component';
@@ -14,8 +17,8 @@ import { NgModule } from '@angular/core';
 import { CoreModule } from './core/core.module';
 import { MDBBootstrapModulesPro, ToastModule } from 'ng-uikit-pro-standard';
 import { MDBSpinningPreloader } from 'ng-uikit-pro-standard';
-
 import { AppRoutingModule } from './app-routing.module';
+
 import { HeaderComponent } from './layouts/header/header.component';
 import { ContentComponent } from './layouts/content/content.component';
 import { FooterComponent } from './layouts/footer/footer.component';
@@ -104,9 +107,12 @@ import { ShoppingDetailsComponent } from './modal/shopping-details/shopping-deta
     SettingsComponent,
     LoadingComponent,
     ShoppingDetailsComponent,
+    AdminComponent,
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,
+    SharedModule,
     AppRoutingModule,
     CoreModule,
     NgbModule,
