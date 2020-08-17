@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/stores")
-@Slf4j
+@Validated
 public class StoreController {
 
     @Autowired
@@ -93,7 +94,6 @@ public class StoreController {
     @PostMapping
     @PreAuthorize("hasAuthority(\"" + StorePermission.CREATE + "\")")
     public ResponseEntity<Store> createStore(@Valid @RequestBody StoreForm storeForm) {
-        log.info(storeForm.toString());
         Store store = storeService.save(storeForm);
         return new ResponseEntity<>(store, HttpStatus.OK);
     }

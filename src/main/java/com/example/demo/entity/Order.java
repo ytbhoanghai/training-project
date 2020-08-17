@@ -42,6 +42,11 @@ public class Order {
 
     private Status status;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
+
     public enum Status {
         Shipping, Shipped
     }
@@ -59,6 +64,7 @@ public class Order {
                 .shipAddress(paymentForm.getShipAddress())
                 .transactionId(transactionId)
                 .staff(cart.getStaff())
+                .store(cart.getStore())
                 .status(Status.Shipping).build();
     }
 }

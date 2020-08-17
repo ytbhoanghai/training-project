@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Order;
 import com.example.demo.form.CartItemMergeForm;
 import com.example.demo.form.CartItemUpdateForm;
 import com.example.demo.form.PaymentForm;
@@ -9,6 +10,7 @@ import com.example.demo.response.MessageResponse;
 import com.example.demo.response.PageableProductResponse;
 import com.example.demo.service.CustomerService;
 import com.example.demo.service.OrderUpdateForm;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +19,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping(value = "/api/customer")
+@Validated
 public class CustomerController {
 
     private CustomerService customerService;
@@ -41,21 +47,17 @@ public class CustomerController {
     }
 
     @PutMapping(value = "cart")
-    public ResponseEntity<CartItemResponse> addCartItem(@RequestParam Integer productId, @RequestParam Integer quantity) {
-        return ResponseEntity.ok(customerService.addCartItem(productId, quantity));
+    public ResponseEntity<CartItemResponse> addCartItem(@RequestParam Integer storeId, @RequestParam Integer productId, @Valid @RequestParam @Min(value = 1) Integer quantity) throws JsonProcessingException {
+        return ResponseEntity.ok(customerService.addCartItem(storeId, productId, quantity));
     }
 
     @PutMapping(value = "cart/cart-items")
-    public ResponseEntity<List<Integer>> updateQuantityCartItems(
-            @NotNull @RequestBody List<CartItemUpdateForm> cartItemUpdateForms) {
-
+    public ResponseEntity<List<Integer>> updateQuantityCartItems(@NotNull @RequestBody List<CartItemUpdateForm> cartItemUpdateForms) {
         return ResponseEntity.ok(customerService.updateQuantityCartItems(cartItemUpdateForms));
     }
 
     @PutMapping(value = "cart/cart-items/merge")
-    public ResponseEntity<List<Integer>> mergeCart(
-            @NotNull @RequestBody List<CartItemMergeForm> cartItemMergeForms) {
-
+    public ResponseEntity<List<Integer>> mergeCart(@Valid @RequestBody List<CartItemMergeForm> cartItemMergeForms) throws JsonProcessingException {
         return ResponseEntity.ok(customerService.mergeCart(cartItemMergeForms));
     }
 
@@ -93,6 +95,7 @@ public class CustomerController {
         return ResponseEntity.ok(responses);
     }
 
+    @Deprecated
     @DeleteMapping(value = "cart/{cartId}")
     public ResponseEntity<MessageResponse> clearCart(@PathVariable Integer cartId) {
         customerService.clearCart(cartId);
@@ -109,12 +112,12 @@ public class CustomerController {
     }
 
     @GetMapping(value = "orders")
-    public ResponseEntity<?> findAllOrder() {
+    public ResponseEntity<List<Order>> findAllOrder() {
         return ResponseEntity.ok(customerService.findAllOrder());
     }
 
     @PutMapping(value = "orders/{id}/status")
-    public ResponseEntity<?> updateOrderStatus(@PathVariable Integer id, @RequestBody OrderUpdateForm orderUpdateForm) {
+    public ResponseEntity<Order> updateOrderStatus(@PathVariable Integer id, @RequestBody OrderUpdateForm orderUpdateForm) {
         return ResponseEntity.ok(customerService.updateOrderStatus(id, orderUpdateForm));
     }
 }

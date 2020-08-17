@@ -12,14 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.HashSet;
 
 @ControllerAdvice
 @RequestMapping(value = "/api/account")
+@Validated
 public class AccountController {
 
     private StaffService staffService;
@@ -44,7 +45,7 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<Staff> createAccountForCustomer(@RequestBody StaffForm staffForm) {
+    public ResponseEntity<Staff> createAccountForCustomer(@Valid @RequestBody StaffForm staffForm) {
         Staff staff = StaffForm.buildStaff(staffForm, null, null, new HashSet<>(), 99);
         staff.setType(Staff.Type.CUSTOMER);
         staff.setPassword(new BCryptPasswordEncoder().encode(staffForm.getPassword()));

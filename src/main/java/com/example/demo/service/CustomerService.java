@@ -8,6 +8,7 @@ import com.example.demo.response.CartItemResponse;
 import com.example.demo.response.CartResponse;
 import com.example.demo.response.PageableProductResponse;
 import com.example.demo.response.ProductResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.data.domain.Pageable;
@@ -19,13 +20,13 @@ public interface CustomerService {
 
     CartResponse getMyCart();
 
-    CartItemResponse addCartItem(Integer productId, Integer quantity);
+    CartItemResponse addCartItem(Integer storeId, Integer productId, Integer quantity) throws JsonProcessingException;
 
     @Transactional void removeCartItem(Integer idCartItem);
 
     List<Integer> updateQuantityCartItems(List<CartItemUpdateForm> itemUpdateForms);
 
-    List<Integer> mergeCart(List<CartItemMergeForm> cartItemMergeForms);
+    List<Integer> mergeCart(List<CartItemMergeForm> cartItemMergeForms) throws JsonProcessingException;
 
     List<ProductResponse> findProductsByStoreAndCategory(Integer storeId, Integer CategoryId);
 

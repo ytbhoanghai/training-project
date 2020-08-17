@@ -3,7 +3,7 @@ import { NotificationService } from 'src/app/layouts/notification/notification.s
 import { ShoppingModalService } from './../../../service/shopping-modal.service';
 import { CartService } from './../../../service/cart.service';
 import { IProduct } from './../../../manager/product-management/product.service';
-import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 @Component({
