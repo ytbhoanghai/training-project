@@ -31,10 +31,12 @@ export class StoreProductComponent implements OnInit {
   ngOnInit(): void {
     this.storeId = this.route.parent.snapshot.params.id;
     this.fetchProducts();
-    // this.route.parent.params.subscribe(params => {
-    //   this.storeId = params.storeId;
-    //   this.fetchProducts();
-    // })
+    this.storeService.importedObservable$.subscribe(({ id, newQuan }) => {
+      const index = this.addedProducts.findIndex((p) => p.id === id);
+      // Add quantity
+      const addedQuan = this.addedProducts[index].storeProductQuantity + newQuan;
+      this.addedProducts[index].storeProductQuantity = addedQuan;
+    });
   }
 
   fetchProducts(): void {
@@ -109,7 +111,7 @@ export class StoreProductComponent implements OnInit {
 
   resetSelected(): void {
     this.selectedProductId = this.remainedProducts[0]?.id || 0;
-    this.quantity = 1;
+    this.quantity = 15;
   }
 
   printCategories(product: IProduct): string {

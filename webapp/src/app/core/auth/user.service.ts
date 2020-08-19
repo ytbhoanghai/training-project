@@ -81,6 +81,15 @@ export class UserService {
     return this.getCurrentUser() !== null;
   }
 
+  isAdmin(): boolean {
+    return this.getCurrentUser()?.type === UserType[UserType.ADMIN];
+  }
+
+  isManager(): boolean {
+    const user = this.getCurrentUser();
+    return user?.type === UserType[UserType.OTHER] && user.isManager;
+  }
+
   updateCurrentUser(newInfo: IUser): void {
     this.currentUserSubject.next({ ...this.getCurrentUser(), ...newInfo });
   }

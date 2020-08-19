@@ -20,8 +20,7 @@ export class ProductImportModalComponent implements OnInit {
     private notiService: NotificationService
   ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   hideModal(): void {
     this.productImportModalService.hide();
@@ -38,13 +37,26 @@ export class ProductImportModalComponent implements OnInit {
 
   handleImport(): void {
     this.storeService
-      .addProductWithQuantity(this.product.storeId, this.product.id, this.importedQuan, true)
-      .subscribe(() => {
-        this.notiService.showQuickSuccess('Imported successfully!');
-      }, (err: HttpErrorResponse) => {
-        if (err.status === 406) {
-          this.notiService.showError('Not enough quantity');
+      .addProductWithQuantity(
+        this.product.storeId,
+        this.product.id,
+        this.importedQuan,
+        true
+      )
+      .subscribe(
+        () => {
+          this.notiService.showQuickSuccess('Imported successfully!');
+          this.storeService.importedSubject.next({
+            id: this.product.id,
+            newQuan: this.importedQuan,
+          });
+          this.productImportModalService.hide();
+        },
+        (err: HttpErrorResponse) => {
+          if (err.status === 406) {
+            this.notiService.showError('Not enough quantity');
+          }
         }
-      });
+      );
   }
 }

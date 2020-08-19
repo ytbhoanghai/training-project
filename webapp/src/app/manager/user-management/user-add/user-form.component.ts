@@ -9,6 +9,7 @@ import { IStore, StoreService } from '../../store-management/store.service';
 export enum FormType {
   CREATE,
   UPDATE,
+  CREATE_IN_STORE
 }
 
 @Component({
@@ -19,6 +20,8 @@ export enum FormType {
 export class UserFormComponent implements OnInit {
   @Input('user') user: IUser;
   @Input('type') type: FormType;
+  @Input() storeId: number;
+
   @Output() onSubmit = new EventEmitter();
   @Output() onCancel = new EventEmitter();
   stores: IStore[] = [];
@@ -62,11 +65,15 @@ export class UserFormComponent implements OnInit {
   }
 
   fillUserToForm(): void {
+    if (this.storeId) {
+      return this.userForm.patchValue({ storeId: this.storeId});
+    }
+
     if (!this.user) return;
     this.userForm.patchValue({
       ...this.user,
       roleIds: this.user.roles.map((r) => r.id),
-      storeId: this.user.idStore
+      storeId: this.storeId
     });
   }
 

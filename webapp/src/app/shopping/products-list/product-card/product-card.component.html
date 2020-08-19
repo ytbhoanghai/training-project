@@ -29,8 +29,8 @@
     <div class="catagory-name categories" [title]="printCategories()">
       {{ printCategories() }}
     </div>
-    <a>
-      <h5>{{ product.name }}</h5>
+    <a [title]="product.name">
+      <h5 class="product-name">{{ product.name }}</h5>
     </a>
     <div class="product-price">
       {{ product.price | usd }}

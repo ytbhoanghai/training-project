@@ -37,6 +37,14 @@ export class HeaderComponent implements OnInit {
     return this.userService.isLogin();
   }
 
+  isAdmin(): boolean {
+    return this.userService.isAdmin();
+  }
+
+  isManager(): boolean {
+    return this.userService.isManager();
+  }
+
   logout(): void {
     this.authService.logoutUser().subscribe(() => (this.name = null));
   }

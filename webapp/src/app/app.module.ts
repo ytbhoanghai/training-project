@@ -62,6 +62,8 @@ import { RegisterFormComponent } from './modal/login-modal/register-form/registe
 import { LoadingComponent } from './layouts/loading/loading.component';
 import { ShoppingDetailsComponent } from './modal/shopping-details/shopping-details.component';
 import { ProductImportModalComponent } from './modal/product-import-modal/product-import-modal.component';
+import { UserAddModalComponent } from './modal/user-add-modal/user-add-modal.component';
+import { RoleAddModalComponent } from './modal/role-add-modal/role-add-modal.component';
 
 @NgModule({
   declarations: [
@@ -110,7 +112,9 @@ import { ProductImportModalComponent } from './modal/product-import-modal/produc
     ShoppingDetailsComponent,
     AdminComponent,
     AdminDashboardComponent,
-    ProductImportModalComponent
+    ProductImportModalComponent,
+    UserAddModalComponent,
+    RoleAddModalComponent
   ],
   imports: [
     BrowserModule,

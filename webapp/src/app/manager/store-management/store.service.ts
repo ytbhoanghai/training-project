@@ -14,6 +14,9 @@ export class StoreService {
   public updateSubject = new Subject();
   public updateObservable$ = this.updateSubject.asObservable();
 
+  importedSubject = new Subject<{id: number, newQuan: number}>();
+  importedObservable$ = this.importedSubject.asObservable();
+
   constructor(private http: HttpClient) {}
 
   fetchStores(): Observable<IStore[]> {

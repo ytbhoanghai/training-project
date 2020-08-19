@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient} from "@angular/common/http";
-import {Observable, of, Subject} from "rxjs";
+import {Observable, of, Subject, BehaviorSubject} from "rxjs";
 import { SERVER_URL } from "../core/constants/api.constants";
 import { catchError, map, tap } from "rxjs/operators";
 import {IPermission, IPermissionChoose, IResource, IRole, IRoleBody} from "../manager/role-management/role-management.component";
@@ -11,6 +11,9 @@ import {IPermission, IPermissionChoose, IResource, IRole, IRoleBody} from "../ma
 export class RoleManagementService {
   public updateSubject = new Subject();
   public updateObservable$ = this.updateSubject.asObservable();
+
+  roleAddSubject = new BehaviorSubject<IRole>(null);
+  roleAddObservable$ = this.roleAddSubject.asObservable();
 
   constructor(private httpClient: HttpClient) { }
 
@@ -24,8 +27,7 @@ export class RoleManagementService {
   }
 
   findRoleById(id: number): Observable<IRole> {
-    return this.httpClient.get<IRole>(SERVER_URL + "/roles/" + id).pipe(
-      tap( _ => console.log("find role by id " + id)));
+    return this.httpClient.get<IRole>(SERVER_URL + "/roles/" + id);
   }
 
   deleteRoleById(id: number): Observable<string> {

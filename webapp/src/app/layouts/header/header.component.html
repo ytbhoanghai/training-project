@@ -32,7 +32,7 @@
       </li> -->
 
       <!-- SHOPPING -->
-      <li
+      <!-- <li
         class="nav-item"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
@@ -43,7 +43,7 @@
             <span>Shop</span>
           </span>
         </a>
-      </li>
+      </li> -->
 
       <!-- MY STORE -->
       <li
@@ -61,6 +61,7 @@
 
       <!-- MANAGEMENT -->
       <li
+        *ngIf="isAdmin()"
         ngbDropdown
         class="nav-item dropdown pointer"
         display="dynamic"
