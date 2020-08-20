@@ -22,7 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -311,6 +313,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Order> findAllOrder() {
         return orderRepository.findAllByStaff(securityUtil.getCurrentStaff());
+    }
+
+    @Override
+    public List<Order> findAllOrdersByStore(Integer storeId) {
+        Store store = storeService.findById(storeId);
+        return orderRepository.findAllByStore(store);
     }
 
     @Override

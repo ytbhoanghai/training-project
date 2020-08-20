@@ -32,6 +32,11 @@ public class Role {
     @JoinColumn(name = "created_by")
     private Staff createdBy;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
+
     private Boolean grantable;
 
     private Integer level;

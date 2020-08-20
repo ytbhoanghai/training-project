@@ -27,4 +27,6 @@ public interface StoreProductService {
     void deleteProductFormStore(Integer storeId, Integer productId);
 
     void save(StoreProduct storeProduct);
+
+    void updateQuantityOfProductInStore(Integer storeId, Integer productId, Integer quantity);
 }

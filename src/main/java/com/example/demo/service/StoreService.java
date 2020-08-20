@@ -41,4 +41,6 @@ public interface StoreService {
     void addStaffToStore(Integer storeId, Integer staffId);
 
     Product getProductById(Integer storeId, Integer productId);
+
+    void updateQuantityOfProductInStore(Integer storeId, Integer productId, Integer quantity);
 }

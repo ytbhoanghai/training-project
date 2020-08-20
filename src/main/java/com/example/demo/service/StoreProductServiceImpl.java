@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.object.StoredProcedure;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,7 +71,7 @@ public class StoreProductServiceImpl implements StoreProductService {
 
         Integer currentQuantity = product.getQuantity();
         if (currentQuantity - quantity < 0) {
-            throw new NotEnoughQuantityException("sever not enough product to provide ... ");
+            throw new NotEnoughQuantityException("server not enough product to provide ... ");
         }
 
         StoreProduct.StoreProductID id = new StoreProduct.StoreProductID(store.getId(), product.getId());
@@ -102,6 +103,24 @@ public class StoreProductServiceImpl implements StoreProductService {
     @Override
     public void save(StoreProduct storeProduct) {
         storeProductRepository.save(storeProduct);
+    }
+
+    @Override
+    public void updateQuantityOfProductInStore(Integer storeId, Integer productId, Integer quantity) {
+        StoreProductID id = new StoreProductID(storeId, productId);
+        StoreProduct storeProduct = storeProductRepository.findById(id)
+                .orElseThrow(() -> new ProductNotExistsInStoreException(id));
+
+        Product product = storeProduct.getProduct();
+        if (product.getQuantity() < storeProduct.getQuantity() + quantity) {
+            throw new NotEnoughQuantityException("server not enough product to provide ... ");
+        }
+
+        storeProduct.setQuantity(storeProduct.getQuantity() + quantity);
+        product.setQuantity(product.getQuantity() - quantity);
+
+        storeProductRepository.save(storeProduct);
+        productRepository.save(product);
     }
 
     @Override

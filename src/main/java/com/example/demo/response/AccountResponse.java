@@ -27,6 +27,7 @@ public class AccountResponse implements Serializable {
     private Staff.Type type;
     private Date createdAt;
     private Integer idStore;
+    private Boolean isManager;
     private List<String> roles;
 
     public static AccountResponse build(Staff staff) {
@@ -44,6 +45,7 @@ public class AccountResponse implements Serializable {
                 .type(staff.getType())
                 .createdAt(staff.getCreatedAt())
                 .idStore(staff.getStore() != null ? staff.getStore().getId() : null)
+                .isManager(staff.getIsManager())
                 .roles(roles).build();
     }
 

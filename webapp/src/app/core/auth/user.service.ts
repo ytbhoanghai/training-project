@@ -19,6 +19,7 @@ export type IUser = {
   allowDelete: boolean;
   allowUpdate: boolean;
   isManager?: boolean;
+  storeName: string;
 };
 
 export enum UserType {
