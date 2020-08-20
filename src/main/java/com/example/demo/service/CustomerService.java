@@ -40,5 +40,8 @@ public interface CustomerService {
 
     List<Order> findAllOrder();
 
+    List<Order> findAllOrdersByStore(Integer storeId);
+
     Order updateOrderStatus(Integer orderId, OrderUpdateForm orderUpdateForm);
+
 }

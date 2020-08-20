@@ -4,20 +4,21 @@
     <li>
       <a
         [routerLink]="['/shopping', 'store', storeId, 'category', 'all']"
-        [routerLinkActiveOptions]="{ exact: false, __change_detection_hack__: storeId }"
         [queryParams]="{ page: 1 }"
-        routerLinkActive="active"
+        [ngClass]="this.categoryId === 'all' ? 'active' : ''"
         >ALL</a
       >
     </li>
     <li *ngFor="let category of categories">
       <a
         [routerLink]="['/shopping', 'store', storeId, 'category', category.id]"
-        [routerLinkActiveOptions]="{ exact: false, __change_detection_hack__: storeId }"
         [queryParams]="{ page: 1 }"
-        routerLinkActive="active"
+        [ngClass]="{active: category.isActive}"
         >{{ category.name }}</a
-      >
-    </li>
-  </ul>
-</div>
+        >
+      </li>
+    </ul>
+  </div>
+
+
+  <!-- [routerLinkActiveOptions]="{ exact: false, __change_detection_hack__: storeId }" -->

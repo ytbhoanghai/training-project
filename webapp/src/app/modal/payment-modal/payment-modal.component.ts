@@ -40,6 +40,7 @@ export class PaymentModalComponent implements OnInit {
 
   handlePayment(): void {
     if (!this.paymentInfo.stripeToken) {
+      this.isLoading = true;
       this.stripeForm
         .handleCardSubmit()
         .then((token) => {

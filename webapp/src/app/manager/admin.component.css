@@ -34,11 +34,11 @@
 }
 
 .management-item:hover {
-  background: #e7ab3c;
+  background: #4f88a0;
 }
 
 .active {
-  background: #e7ab3c;
+  background: #1776b7;
 }
 
 .management-item .fas {

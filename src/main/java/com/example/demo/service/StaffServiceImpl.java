@@ -74,6 +74,11 @@ public class StaffServiceImpl implements StaffService {
     public List<StaffResponse> findAll() {
         Staff currentStaff = securityUtil.getCurrentStaff();
         return staffRepository.findAll().stream()
+                .filter(staff -> staff.getLevel() > currentStaff.getLevel())
+                .filter(staff -> {
+                    if (currentStaff.isAdmin() || currentStaff.getStore() == null) return true;
+                    return currentStaff.getStore().equals(staff.getStore());
+                })
                 .map(staff -> convertStaffToStaffResponse(staff, currentStaff))
                 .collect(Collectors.toList());
     }
@@ -160,7 +165,8 @@ public class StaffServiceImpl implements StaffService {
         Staff staff = staffRepository.findById(id)
                 .orElseThrow(() -> new StaffNotFoundException(id));
 
-        if (!isAllowedDelete(staff, securityUtil.getCurrentStaff())) {
+        Staff currentStaff = securityUtil.getCurrentStaff();
+        if (!isAllowedDelete(staff, currentStaff)) {
             throw new AccessDeniedException("Access Denied !!!");
         }
 
@@ -190,28 +196,43 @@ public class StaffServiceImpl implements StaffService {
 
     private Boolean isAllowedUpdate(Staff staff, Staff currentStaff) {
         if (currentStaff.hasPermission(StaffPermission.UPDATE)) {
-            return currentStaff.isAdmin()
-                    || currentStaff.getLevel() < staff.getLevel()
-                    || staff.equals(currentStaff);
+            if (currentStaff.isAdmin() || currentStaff.equals(staff)) {
+                return true;
+            } else if (staff.getStore() == null && currentStaff.getLevel() < staff.getLevel()) {
+                return true;
+            } else return staff.getStore() != null
+                    && currentStaff.getLevel() < staff.getLevel()
+                    && currentStaff.getStore().equals(staff.getStore());
         }
         return false;
     }
 
     private Boolean isAllowedUpdateRole(Staff staff, Staff currentStaff) {
         if (currentStaff.hasPermission(StaffPermission.UPDATE)) {
-            return currentStaff.isAdmin()
-                    || currentStaff.getLevel() < staff.getLevel();
+            if (currentStaff.isAdmin()) {
+                return true;
+            } else if (staff.getStore() == null && currentStaff.getLevel() < staff.getLevel()) {
+                return true;
+            } else return staff.getStore() != null
+                    && currentStaff.getLevel() < staff.getLevel()
+                    && currentStaff.getStore().equals(staff.getStore());
         }
         return false;
     }
 
     private Boolean isAllowedDelete(Staff staff, Staff currentStaff) {
         if (currentStaff.hasPermission(StaffPermission.DELETE)) {
-            if (staff.getLevel() == 0) {
-                return false;
+            if (staff.getLevel() != 0) {
+                if (currentStaff.isAdmin()) {
+                    return true;
+                } else if (staff.getStore() == null && currentStaff.getLevel() < staff.getLevel()) {
+                    return true;
+                } else return staff.getStore() != null
+                        && currentStaff.getLevel() < staff.getLevel()
+                        && currentStaff.getStore().equals(staff.getStore());
             }
-            return currentStaff.isAdmin() || currentStaff.getLevel() < staff.getLevel();
         }
         return false;
     }
+
 }

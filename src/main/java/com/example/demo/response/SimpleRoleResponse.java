@@ -20,6 +20,8 @@ public class SimpleRoleResponse {
 
     private Date createdAt;
 
+    private Integer createdBy;
+
     private Boolean allowUpdate;
 
     private Boolean allowDelete;
@@ -29,6 +31,7 @@ public class SimpleRoleResponse {
                 .id(role.getId())
                 .name(role.getName())
                 .createdAt(role.getCreatedAt())
+                .createdBy(role.getCreatedBy().getId())
                 .allowUpdate(allowUpdate)
                 .allowDelete(allowDelete).build();
     }

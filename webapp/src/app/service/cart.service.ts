@@ -121,11 +121,11 @@ export class CartService {
       .subscribe(
         (item) => {
           // Quantity from the user input
-          this.doPostAddded({ ...product, quantity: quantity });
+          this.doPostAddded({ ...item, quantity: quantity });
         },
         (err: HttpErrorResponse) => {
           if (err.status === 406) {
-            this.outStockEvent.next(product.productId);
+            // this.outStockEvent.next(product.productId);
             this.notiService.showWaring(
               `Reach maximum quantity. This product is out of stock`
             );

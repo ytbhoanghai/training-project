@@ -22,7 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -101,7 +103,6 @@ public class CustomerServiceImpl implements CustomerService {
                 throw new ProductNotSameStoreException(Collections.singletonList(productId));
             }
         }
-
 
         StoreProduct storeProduct = storeProductService.findById(new StoreProduct.StoreProductID(storeId, productId));
         if (cartItem.getQuantity() + quantity > storeProduct.getQuantity()) {
@@ -315,6 +316,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public List<Order> findAllOrdersByStore(Integer storeId) {
+        Store store = storeService.findById(storeId);
+        return orderRepository.findAllByStore(store);
+    }
+
+    @Override
     public Order updateOrderStatus(Integer orderId, OrderUpdateForm orderUpdateForm) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(OrderNotFoundException::new);
@@ -411,6 +418,5 @@ public class CustomerServiceImpl implements CustomerService {
         }
         return product;
     }
-
 
 }

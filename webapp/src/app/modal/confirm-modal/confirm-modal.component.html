@@ -1,9 +1,21 @@
 <div class="modal-content">
-  <div class="modal-body">
-    {{ title || 'Are you sure ???' }}
+  <div class="modal-header">
+    <h6 class="modal-title">Confirm</h6>
+    <button type="button" class="close">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
-  <div class="modal-footer">
+  <div class="modal-body">
+    {{ title || "Are you sure ???" }}
+  </div>
+  <div class="modal-footer p-1">
     <button class="btn btn-primary" (click)="onButtonYesClick()">Yes</button>
-    <button class="btn btn-secondary" aria-label="Close" (click)="onButtonNoClick()">No</button>
+    <button
+      class="btn btn-secondary"
+      aria-label="Close"
+      (click)="onButtonNoClick()"
+    >
+      No
+    </button>
   </div>
 </div>

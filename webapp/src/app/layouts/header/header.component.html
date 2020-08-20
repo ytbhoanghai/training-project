@@ -18,35 +18,54 @@
   <div class="navbar-collapse collapse" id="navbarResponsive">
     <ul class="navbar-nav ml-auto">
       <!-- HOME -->
-      <!-- <li
+      <li
         class="nav-item"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
         <a class="nav-link" routerLink="/">
           <span>
-            <i class="fas fa-home"></i>
-            <span>Home</span>
+            <i class="fas fa-user-cog fa-fw text-secondary"></i>
+            <span>Settings</span>
           </span>
         </a>
-      </li> -->
+      </li>
+
+
+        <!-- <li>
+          <a
+            class="dropdown-item account-menu-item"
+            routerLink="account/settings"
+          >
+            <i class="fas fa-user-cog fa-fw text-secondary"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+
+          <li *ngIf="isLogin(); else elseBlock">
+            <a class="dropdown-item account-menu-item" id="logout" (click)='logout()'>
+              <i class="fas fa-power-off fa-fw text-danger"></i>
+              <span>Sign out</span>
+            </a>
+          </li> -->
 
       <!-- SHOPPING -->
-      <!-- <li
+      <li
         class="nav-item"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
         <a class="nav-link" routerLink="/shopping">
           <span>
-            <i class="fas fa-shopping-cart"></i>
-            <span>Shop</span>
+            <i class="fas fa-power-off fa-fw text-danger"></i>
+            <span>Sign out</span>
           </span>
         </a>
-      </li> -->
+      </li>
 
       <!-- MY STORE -->
       <li
+        *ngIf="false"
         class="nav-item"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
@@ -61,6 +80,7 @@
 
       <!-- MANAGEMENT -->
       <li
+        *ngIf="false"
         ngbDropdown
         class="nav-item dropdown pointer"
         display="dynamic"
@@ -132,6 +152,7 @@
         </ul>
       </li>
       <li
+        *ngIf="false"
         ngbDropdown
         class="nav-item dropdown pointer"
         display="dynamic"

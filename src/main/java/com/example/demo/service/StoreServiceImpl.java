@@ -49,9 +49,7 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<Store> findAll() {
-        return storeRepository.findAll();
-    }
+    public List<Store> findAll() { return storeRepository.findAll(); }
 
     @Override
     public Store findById(Integer id) {
@@ -134,6 +132,11 @@ public class StoreServiceImpl implements StoreService {
                 .findFirst()
                 .map(StoreProduct::getProduct)
                 .orElse(null);
+    }
+
+    @Override
+    public void updateQuantityOfProductInStore(Integer storeId, Integer productId, Integer quantity) {
+        storeProductService.updateQuantityOfProductInStore(storeId, productId, quantity);
     }
 
     @Override

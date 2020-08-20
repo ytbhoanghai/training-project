@@ -23,5 +23,10 @@
         Sorry! You're not the manager of any store
       </div>
     </div>
+
+    <div class="alert alert-danger" *ngIf="!stores.length">
+      <i class="fas fa-exclamation-triangle"></i>
+      Sorry! You're not the manager of any store
+    </div>
   </div>
 </div>

@@ -30,6 +30,8 @@ export class UserManagementComponent implements OnInit {
 
   fetchUsers(): void {
     this.userService.fetchAll().subscribe((users) => {
+      users.sort((a, b) => a?.storeName.localeCompare(b?.storeName));
+      users.reverse();
       this.users = users;
     });
   }

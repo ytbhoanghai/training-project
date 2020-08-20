@@ -1,3 +1,4 @@
+import { UserService, IUser } from 'src/app/core/auth/user.service';
 import { NotificationService } from './../../../layouts/notification/notification.service';
 import { ConfirmModalService } from './../../../service/confirm-modal.service';
 import { RoleModalService } from './../../../service/role-modal.service';
@@ -12,12 +13,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StoreRolesComponent implements OnInit {
   roles: IRole[] = [];
+  currentUser: IUser;
 
   constructor(
     private roleService: RoleManagementService,
     private roleModalService: RoleModalService,
     private confirmService: ConfirmModalService,
-    private notiService: NotificationService
+    private notiService: NotificationService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -27,6 +30,8 @@ export class StoreRolesComponent implements OnInit {
         this.roles.push(role);
       }
     });
+
+    this.currentUser = this.userService.getCurrentUser();
   }
 
   fetchRoles(): void {

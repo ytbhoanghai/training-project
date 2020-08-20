@@ -111,7 +111,7 @@ export class StoreProductComponent implements OnInit {
 
   resetSelected(): void {
     this.selectedProductId = this.remainedProducts[0]?.id || 0;
-    this.quantity = 15;
+    this.quantity = 1;
   }
 
   printCategories(product: IProduct): string {
