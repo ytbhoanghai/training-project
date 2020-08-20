@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark navbar-expand-lg bg-dark">
+<nav *ngIf="!isHidden" class="navbar navbar-dark navbar-expand-lg bg-dark">
   <a class="navbar-brand logo" routerLink="/">
     <span class="logo-img"></span>
     <span class="navbar-title">TPS Training Foundation</span>
@@ -61,7 +61,6 @@
 
       <!-- MANAGEMENT -->
       <li
-        *ngIf="isAdmin()"
         ngbDropdown
         class="nav-item dropdown pointer"
         display="dynamic"

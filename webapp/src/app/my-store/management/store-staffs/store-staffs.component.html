@@ -3,7 +3,7 @@
     <div class="mb-2 row">
       <div class="col">
         <button class="btn btn-info" (click)="newStaff()">
-          <i class="fas fa-user-plus"></i>Add a new staff
+          <i class="fas fa-user-plus"></i>Create a new staff
         </button>
       </div>
 
@@ -15,7 +15,7 @@
           <select class="form-control form-control-sm w-50" name="selectStaffId" [(ngModel)]="selectStaffId">
             <!-- <option disabled selected value="0">Default</option> -->
             <option *ngFor="let staff of staffs" [ngValue]="staff.id">
-              {{ staff.id + ': ' + staff.name }}
+              [{{ staff.id }}] {{ staff.name }}
             </option>
             <option *ngIf="!staffs.length" [value]="0" disabled>Empty</option>
           </select>
@@ -45,13 +45,13 @@
           </td>
           <td class="text-center">
             <ng-container *ngIf="!staff.isManager">
-              <button type="button" class="btn btn-secondary btn-sm mr-1">
+              <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="editStaff(staff)">
                 <i class="fas fa-edit mr-0"></i>
               </button>
               <button
                 type="button"
                 class="btn btn-danger btn-sm"
-                (click)="removeStaff(staff)"
+                (click)="deleteStaff(staff)"
               >
                 <i class="fas fa-times mr-0"></i>
               </button>

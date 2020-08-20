@@ -1,9 +1,11 @@
+import { Subscription } from 'rxjs';
+import { UserService, IUser } from './../../../core/auth/user.service';
 import { ConfirmModalService } from './../../../service/confirm-modal.service';
 import { UserModalService } from './../../../service/user-modal.service';
 import { NotificationService } from '../../../layouts/notification/notification.service';
 import { ActivatedRoute } from '@angular/router';
 import { StoreService } from '../../../manager/store-management/store.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISimpleStaff } from 'src/app/manager/store-management/store.service';
 import { UserManagementService } from '../../../manager/user-management/user-management.service';
 
@@ -12,12 +14,14 @@ import { UserManagementService } from '../../../manager/user-management/user-man
   templateUrl: './store-staffs.component.html',
   styleUrls: ['./store-staffs.component.css'],
 })
-export class StoreStaffsComponent implements OnInit {
+export class StoreStaffsComponent implements OnInit, OnDestroy {
   staffs: ISimpleStaff[] = [];
   addedStaffs: ISimpleStaff[] = [];
 
   storeId: number;
   selectStaffId = 0;
+
+  listeners = new Subscription();
 
   constructor(
     private staffService: UserManagementService,
@@ -31,11 +35,26 @@ export class StoreStaffsComponent implements OnInit {
   ngOnInit(): void {
     this.storeId = this.route.parent.snapshot.params.id;
     this.fetchStaffs();
-    this.staffService.userAddObservable$.subscribe((user) => {
-      if (user) {
-        this.addedStaffs.push(user);
-      }
-    });
+
+    this.listeners.add(
+      this.staffService.userAddObservable$.subscribe((user) => {
+        if (user) {
+          this.addedStaffs.push(user);
+        }
+      })
+    );
+
+    this.listeners.add(
+      this.staffService.updateObservable$.subscribe((user: IUser) => {
+        console.log('Listen', user);
+        const index = this.addedStaffs.findIndex((u) => u.id === user.id);
+        this.addedStaffs[index] = { ...this.addedStaffs[index], ...user };
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.listeners.unsubscribe();
   }
 
   fetchStaffs(): void {
@@ -72,7 +91,15 @@ export class StoreStaffsComponent implements OnInit {
       );
   }
 
-  removeStaff(staff: ISimpleStaff): void {
+  editStaff(staff: ISimpleStaff): void {
+    this.staffService.fetchById(staff.id).subscribe((user) => {
+      console.log(user);
+      user.idStore = this.storeId;
+      this.userModalService.showUpdateModal(user);
+    });
+  }
+
+  deleteStaff(staff: ISimpleStaff): void {
     this.confirmService.show().onYes(() => {
       this.storeService.deleteStaffFromStore(this.storeId, staff.id).subscribe(
         () => {

@@ -73,7 +73,7 @@ export class UserFormComponent implements OnInit {
     this.userForm.patchValue({
       ...this.user,
       roleIds: this.user.roles.map((r) => r.id),
-      storeId: this.storeId
+      storeId: this.user.idStore
     });
   }
 
