@@ -1,9 +1,6 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  OnChanges,
-} from '@angular/core';
+import { of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { IPageableProduct } from 'src/app/service/customer.service';
 
 @Component({
@@ -15,7 +12,7 @@ export class PaginationComponent implements OnInit, OnChanges {
   @Input() pagination: IPageableProduct;
   pages: number[] = [];
 
-  constructor() {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.convertInput();
@@ -39,4 +36,5 @@ export class PaginationComponent implements OnInit, OnChanges {
   isLastPage(): boolean {
     return this.pagination.currentPage === this.pagination.totalPages;
   }
+
 }

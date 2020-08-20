@@ -22,6 +22,7 @@ export class CustomerService {
     size = 9,
     search = ""
   ): Observable<IPageableProduct> {
+    if (page < 1) page = 1;
     return this.http.get<IPageableProduct>(
       this.REQUEST_URL + `stores/${storeId}/categories/${categoryId}/products`,
       { params: { page: String(page), size: String(size), search: search } }
@@ -75,6 +76,10 @@ export class CustomerService {
   // ORDERS
   fetchOrders(): Observable<IOrder[]> {
     return this.http.get<IOrder[]>(this.REQUEST_URL + 'orders');
+  }
+
+  fetchOrdersByStore(storeId: number): Observable<IOrder[]> {
+    return this.http.get<IOrder[]>(this.REQUEST_URL + `orders/stores/${storeId}`);
   }
 
   updateOrderStatus(id: number, body: { status: string }): Observable<IOrder> {

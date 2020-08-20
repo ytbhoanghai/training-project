@@ -100,9 +100,21 @@ public class StoreController {
 
     @PutMapping("{storeId}/products/{productId}")
     @PreAuthorize("hasAuthority(\"" + StorePermission.UPDATE + "\")")
-    public ResponseEntity<?> addProductToStore(@PathVariable Integer storeId, @PathVariable Integer productId, @RequestParam Integer quantity) {
-        storeService.addProductToStore(storeId, productId, quantity);
-        return new ResponseEntity<>(new MessageResponse("Add product to store successfully!"), HttpStatus.OK);
+    public ResponseEntity<?> addProductToStore(
+            @PathVariable Integer storeId,
+            @PathVariable Integer productId,
+            @RequestParam Integer quantity,
+            @RequestParam(required = false, defaultValue = "false") Boolean isImport) {
+
+        String message = "";
+        if (!isImport) {
+            storeService.addProductToStore(storeId, productId, quantity);
+            message = "Add product to store successfully!";
+        } else {
+            storeService.updateQuantityOfProductInStore(storeId, productId, quantity);
+            message = "Update quantity successfully!";
+        }
+        return new ResponseEntity<>(new MessageResponse(message), HttpStatus.OK);
     }
 
     @DeleteMapping("{storeId}/products/{productId}")

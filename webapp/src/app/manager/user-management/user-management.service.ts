@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -13,7 +13,10 @@ export class UserManagementService {
   public updateSubject = new Subject();
   public updateObservable$ = this.updateSubject.asObservable();
 
-  private REQUEST_URL: string = `${SERVER_URL}/staffs/`;
+  userAddSubject = new BehaviorSubject<IUser>(null);
+  userAddObservable$ = this.userAddSubject.asObservable();
+
+  private REQUEST_URL = `${SERVER_URL}/staffs/`;
 
   constructor(private http: HttpClient) {}
 

@@ -13,8 +13,8 @@ export class ConfirmModalService {
 
   show(title?: string): ConfirmModalService {
     this.modalRef = this.modalService.show(ConfirmModalComponent, {
-      containerClass: 'modal fade top',
-      class: 'modal-dialog modal-frame modal-top',
+      containerClass: 'fade bottom',
+      class: 'modal-dialog modal-dialog-centered modal-sm',
       data: { title },
     });
     return this;

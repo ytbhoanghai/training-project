@@ -43,13 +43,18 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<SimpleRoleResponse> findAll() {
-        Staff staff = securityUtil.getCurrentStaff();
+        Staff currentStaff = securityUtil.getCurrentStaff();
         List<Role> roleList = roleRepository.findAll(true);
         return roleList.stream()
+                .filter(role -> role.getLevel() >= currentStaff.getLevel())
+                .filter(role -> {
+                    if (currentStaff.isAdmin() || currentStaff.getStore() == null) return true;
+                    return currentStaff.getStore().equals(role.getStore());
+                })
                 .map(role -> SimpleRoleResponse.from(
                         role,
-                        isAllowedUpdate(role, staff),
-                        isAllowedDelete(role, staff)))
+                        isAllowedUpdate(role, currentStaff),
+                        isAllowedDelete(role, currentStaff)))
                 .collect(Collectors.toList());
     }
 

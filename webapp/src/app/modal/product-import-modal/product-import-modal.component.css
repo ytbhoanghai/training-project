@@ -1,0 +1,87 @@
+.price {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e7ab3c;
+}
+
+div {
+  color: #b2b2b2;
+}
+
+.quantity {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: flex-start;
+	-ms-flex-pack: flex-start;
+	justify-content: flex-start;
+}
+
+.pro-qty {
+	width: 123px;
+	height: 46px;
+	border: 2px solid #ebebeb;
+	padding: 0 15px;
+	float: left;
+}
+
+.pro-qty .qtybtn {
+	font-size: 24px;
+	color: #b2b2b2;
+	float: left;
+	line-height: 38px;
+	cursor: pointer;
+	width: 18px;
+}
+
+.pro-qty .qtybtn.dec {
+	font-size: 30px;
+}
+
+.pro-qty input {
+	text-align: center;
+	width: 52px;
+	font-size: 14px;
+	font-weight: 700;
+	border: none;
+	color: #4c4c4c;
+	line-height: 40px;
+	float: left;
+}
+
+/* HIDE INPUT NUMBER ARROW */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+a.primary-btn:hover {
+  color: white !important;
+}
+
+.item {
+  font-size: .9rem;
+}
+
+.item-header {
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #757d85d1;
+}
+
+.rate {
+  /* color: #e7ab3c; */
+}
+
+.store-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6c757d;
+}

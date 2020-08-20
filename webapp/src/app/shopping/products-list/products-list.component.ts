@@ -1,7 +1,7 @@
 import { IStore } from 'src/app/manager/store-management/store.service';
 import { NotificationService } from './../../layouts/notification/notification.service';
 import { StoreService } from './../../manager/store-management/store.service';
-import { map } from 'rxjs/operators';
+import { map, last, debounceTime } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   CustomerService,
@@ -37,7 +37,8 @@ export class ProductsListComponent implements OnInit {
         map(
           (result) =>
             ({ params: result[0], query: result[1] } as IProductFilter)
-        )
+        ),
+        debounceTime(0)
       )
       .subscribe((filter: IProductFilter) => {
         const { params, query } = filter;

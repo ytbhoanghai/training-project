@@ -24,12 +24,14 @@ export class UserManagementComponent implements OnInit {
     this.fetchUsers();
     this.userService.updateObservable$.subscribe((user: IUser) => {
       const index: number = this.users.findIndex((u) => u.id === user.id);
-      this.users[index] = user;
+      this.users[index] = { ...this.users[index], ...user };
     });
   }
 
   fetchUsers(): void {
     this.userService.fetchAll().subscribe((users) => {
+      users.sort((a, b) => a?.storeName.localeCompare(b?.storeName));
+      users.reverse();
       this.users = users;
     });
   }

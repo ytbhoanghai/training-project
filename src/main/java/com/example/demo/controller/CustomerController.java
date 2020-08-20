@@ -8,6 +8,7 @@ import com.example.demo.response.CartItemResponse;
 import com.example.demo.response.CartResponse;
 import com.example.demo.response.MessageResponse;
 import com.example.demo.response.PageableProductResponse;
+import com.example.demo.security.constants.StorePermission;
 import com.example.demo.service.CustomerService;
 import com.example.demo.service.OrderUpdateForm;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -112,7 +114,7 @@ public class CustomerController {
     }
 
     @GetMapping(value = "orders")
-    public ResponseEntity<List<Order>> findAllOrder() {
+    public ResponseEntity<List<Order>> findAllOrderByCurrentStaff() {
         return ResponseEntity.ok(customerService.findAllOrder());
     }
 
@@ -120,4 +122,11 @@ public class CustomerController {
     public ResponseEntity<Order> updateOrderStatus(@PathVariable Integer id, @RequestBody OrderUpdateForm orderUpdateForm) {
         return ResponseEntity.ok(customerService.updateOrderStatus(id, orderUpdateForm));
     }
+
+    @GetMapping(value = "orders/stores/{storeId}")
+    @PreAuthorize(value = "hasAuthority(\"" + StorePermission.READ + "\")")
+    public ResponseEntity<List<Order>> findAllOrdersByStore(@PathVariable Integer storeId) {
+        return ResponseEntity.ok(customerService.findAllOrdersByStore(storeId));
+    }
+
 }

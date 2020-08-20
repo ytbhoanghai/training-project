@@ -26,7 +26,7 @@ export class RoleTableComponent implements OnInit {
   // Just in use when updating
   permissionIds: number[];
   resources: IResource[];
-  roleName: string = '';
+  roleName = '';
   grantedPemissions: number[] = [];
   ungrantedPermissions: number[] = [];
 

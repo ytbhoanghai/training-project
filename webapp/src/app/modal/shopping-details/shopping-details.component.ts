@@ -35,7 +35,6 @@ export class ShoppingDetailsComponent implements OnInit {
   }
 
   hideModal(): void {
-    console.log('klsdklfj');
     this.shoppingModalService.hide();
   }
 

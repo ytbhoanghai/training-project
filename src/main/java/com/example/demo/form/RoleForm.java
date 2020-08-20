@@ -36,6 +36,7 @@ public class RoleForm {
                 .createdAt(new Date())
                 .grantable(true)
                 .createdBy(createByStaff)
+                .store(createByStaff.getStore())
                 .level(createByStaff.getLevel()).build();
     }
 }

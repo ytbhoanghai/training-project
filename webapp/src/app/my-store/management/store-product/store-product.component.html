@@ -59,11 +59,15 @@
         <td>{{ product.name }}</td>
         <td>{{ product.price | usd }}</td>
         <td>{{ printCategories(product) }}</td>
-        <td class="text-center">{{ product.storeProductQuantity }}</td>
+        <td class="text-center" [ngClass]="{'text-danger font-weight-bold': !product.storeProductQuantity}">
+          {{ product.storeProductQuantity }}
+        </td>
         <td class="text-center">
-          <button class="btn btn-info btn-sm mr-1">
-            <i class="fas fa-dolly mr-0"></i>
-          </button>
+          <a data-toggle="tooltip" title="Hooray!">
+            <button class="btn btn-info btn-sm mr-1" (click)="showImportModal(product)">
+              <i class="fas fa-dolly mr-0"></i>
+            </button>
+          </a>
           <button
             class="btn btn-danger btn-sm"
             (click)="removeProduct(product)"

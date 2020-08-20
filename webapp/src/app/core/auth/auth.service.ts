@@ -1,3 +1,4 @@
+import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { CartService } from './../../service/cart.service';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -7,7 +8,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { SERVER_URL } from '../constants/api.constants';
-import { UserService, UserType } from './user.service';
+import { UserService, UserType, IUser } from './user.service';
 
 type JwtToken = {
   id_token: string;
@@ -23,7 +24,8 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private userService: UserService,
-    private cartService: CartService
+    private cartService: CartService,
+    private notiService: NotificationService
   ) {}
 
   loginUser(username: string, password: string): Observable<any> {
@@ -52,18 +54,22 @@ export class AuthService {
     this.router.navigateByUrl(location.pathname, { skipLocationChange: true });
     this.userService.fetchUserInfo().subscribe((user) => {
       // Do after fetched info
-      this.navigateUserByType(user.type);
+      this.navigateUser(user);
       this.cartService.fetchCart();
     });
   }
 
-  navigateUserByType(type: string): void {
-    switch (type) {
+  navigateUser(user: IUser): void {
+    switch (user.type) {
       case UserType[UserType.ADMIN]:
         this.router.navigate(['/admin']);
+        this.notiService.showSuccess('Logged in as Admin!');
         return;
       case UserType[UserType.OTHER]:
-        this.router.navigate(['/my-store']);
+        if (user.isManager) {
+          this.router.navigate(['/my-store']);
+          this.notiService.showSuccess('Logged in as Store Manager!');
+        }
         return;
     }
   }

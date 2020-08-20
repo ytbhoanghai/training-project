@@ -19,6 +19,7 @@ export type IUser = {
   allowDelete: boolean;
   allowUpdate: boolean;
   isManager?: boolean;
+  storeName: string;
 };
 
 export enum UserType {
@@ -79,6 +80,15 @@ export class UserService {
 
   isLogin(): boolean {
     return this.getCurrentUser() !== null;
+  }
+
+  isAdmin(): boolean {
+    return this.getCurrentUser()?.type === UserType[UserType.ADMIN];
+  }
+
+  isManager(): boolean {
+    const user = this.getCurrentUser();
+    return user?.type === UserType[UserType.OTHER] && user.isManager;
   }
 
   updateCurrentUser(newInfo: IUser): void {

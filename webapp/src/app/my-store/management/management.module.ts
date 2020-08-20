@@ -9,6 +9,7 @@ import { StoreProductComponent } from './store-product/store-product.component';
 import { StoreStaffsComponent } from './store-staffs/store-staffs.component';
 import { StoreOrdersComponent } from './store-orders/store-orders.component';
 import { StoreStatisticsComponent } from './store-statistics/store-statistics.component';
+import { StoreRolesComponent } from './store-roles/store-roles.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { StoreStatisticsComponent } from './store-statistics/store-statistics.co
     StoreStaffsComponent,
     StoreOrdersComponent,
     StoreStatisticsComponent,
+    StoreRolesComponent,
   ],
   imports: [
     CommonModule,
@@ -30,6 +32,7 @@ import { StoreStatisticsComponent } from './store-statistics/store-statistics.co
           { path: '', pathMatch: 'full', redirectTo: 'products' },
           { path: 'products', component: StoreProductComponent },
           { path: 'staffs', component: StoreStaffsComponent },
+          { path: 'roles', component: StoreRolesComponent },
           { path: 'orders', component: StoreOrdersComponent },
           { path: 'statistics', component: StoreStatisticsComponent },
         ],
@@ -41,6 +44,7 @@ import { StoreStatisticsComponent } from './store-statistics/store-statistics.co
     StoreStaffsComponent,
     StoreOrdersComponent,
     StoreStatisticsComponent,
+    StoreRolesComponent,
   ],
 })
 export class ManagementModule {}

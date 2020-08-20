@@ -1,6 +1,7 @@
+import { UserAddModalComponent } from './modal/user-add-modal/user-add-modal.component';
 import { AdminDashboardComponent } from './manager/dashboard/dashboard.component';
 import { AdminComponent } from './manager/admin.component';
-import { SharedModule } from './../shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
 import { SettingsComponent } from './account/settings/settings.component';
 import { ShoppingStoreComponent } from './shopping/products-list/shopping-store/shopping-store.component';
 import { ProductCardComponent } from './shopping/products-list/product-card/product-card.component';
@@ -61,6 +62,8 @@ import { PaginationComponent } from './shopping/products-list/pagination/paginat
 import { RegisterFormComponent } from './modal/login-modal/register-form/register-form.component';
 import { LoadingComponent } from './layouts/loading/loading.component';
 import { ShoppingDetailsComponent } from './modal/shopping-details/shopping-details.component';
+import { RoleAddModalComponent } from './modal/role-add-modal/role-add-modal.component';
+import { ProductImportModalComponent } from './modal/product-import-modal/product-import-modal.component';
 
 @NgModule({
   declarations: [
@@ -108,7 +111,10 @@ import { ShoppingDetailsComponent } from './modal/shopping-details/shopping-deta
     LoadingComponent,
     ShoppingDetailsComponent,
     AdminComponent,
-    AdminDashboardComponent
+    AdminDashboardComponent,
+    ProductImportModalComponent,
+    UserAddModalComponent,
+    RoleAddModalComponent
   ],
   imports: [
     BrowserModule,

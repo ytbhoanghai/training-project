@@ -6,6 +6,7 @@ import { RoleManagementService } from '../../service/role-management.service';
 import { MDBModalService } from 'ng-uikit-pro-standard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ViewRoleDetailsManagementComponent } from '../../modal/view-role-details-management/view-role-details-management.component';
+import {IUser, UserService} from "../../core/auth/user.service";
 
 @Component({
   selector: 'app-role-management',
@@ -14,13 +15,15 @@ import { ViewRoleDetailsManagementComponent } from '../../modal/view-role-detail
 })
 export class RoleManagementComponent implements OnInit {
   roles: IRole[];
+  currentUser: IUser;
 
   constructor(
     private roleManagementService: RoleManagementService,
     private modalService: MDBModalService,
     private ngbService: NgbModal,
     private notiSerive: NotificationService,
-    private confirmService: ConfirmModalService
+    private confirmService: ConfirmModalService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
@@ -29,6 +32,7 @@ export class RoleManagementComponent implements OnInit {
       const index: number = this.roles.findIndex((r) => r.id === role.id);
       this.roles[index] = role;
     });
+    this.currentUser = this.userService.getCurrentUser();
   }
 
   fetchRoles(): void {
