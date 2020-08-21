@@ -54,7 +54,7 @@ public class CustomerController {
     }
 
     @PutMapping(value = "cart/cart-items")
-    public ResponseEntity<List<Integer>> updateQuantityCartItems(@NotNull @RequestBody List<CartItemUpdateForm> cartItemUpdateForms) {
+    public ResponseEntity<List<Integer>> updateQuantityCartItems(@Valid @NotNull @RequestBody List<CartItemUpdateForm> cartItemUpdateForms) {
         return ResponseEntity.ok(customerService.updateQuantityCartItems(cartItemUpdateForms));
     }
 
@@ -89,11 +89,11 @@ public class CustomerController {
             @RequestParam(name = "size", required = false, defaultValue = "6") Integer size,
             @RequestParam(name = "search", required = false, defaultValue = "") String keyword
     ) {
-//        Page starts from 0
+        /* Page starts from 0 */
         Pageable pageable = PageRequest.of(page - 1, size);
         PageableProductResponse responses =
                 customerService.searchProducts(storeId, categoryId, pageable, keyword.trim());
-//        customerService.findProductsByStoreAndCategory(storeId, categoryId, pageable);
+        /* customerService.findProductsByStoreAndCategory(storeId, categoryId, pageable); */
         return ResponseEntity.ok(responses);
     }
 
