@@ -18,3 +18,7 @@ input[type="checkbox"] {
   cursor: pointer;
   background-color: #d4fdfd;
 }
+
+.form-group {
+  padding: 0 12px;
+}
