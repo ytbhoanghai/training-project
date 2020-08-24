@@ -66,7 +66,11 @@ export class ShoppingComponent implements OnInit {
   }
 
   isManager(): boolean {
-    return this.user.type === 'OTHER';
+    return this.user.type === 'OTHER' && this.user.isManager;
+  }
+
+  isStaff(): boolean {
+    return this.user.type === 'OTHER' && !this.user.isManager;
   }
 
   isRouterActive(): boolean {
