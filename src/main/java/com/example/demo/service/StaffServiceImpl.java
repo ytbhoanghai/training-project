@@ -202,7 +202,7 @@ public class StaffServiceImpl implements StaffService {
                 return true;
             } else return staff.getStore() != null
                     && currentStaff.getLevel() < staff.getLevel()
-                    && currentStaff.getStore().equals(staff.getStore());
+                    && currentStaff.getStore() == staff.getStore();
         }
         return false;
     }
@@ -215,7 +215,7 @@ public class StaffServiceImpl implements StaffService {
                 return true;
             } else return staff.getStore() != null
                     && currentStaff.getLevel() < staff.getLevel()
-                    && currentStaff.getStore().equals(staff.getStore());
+                    && currentStaff.getStore() == staff.getStore();
         }
         return false;
     }
@@ -229,7 +229,7 @@ public class StaffServiceImpl implements StaffService {
                     return true;
                 } else return staff.getStore() != null
                         && currentStaff.getLevel() < staff.getLevel()
-                        && currentStaff.getStore().equals(staff.getStore());
+                        && currentStaff.getStore() == staff.getStore();
             }
         }
         return false;
