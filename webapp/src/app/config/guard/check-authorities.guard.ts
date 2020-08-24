@@ -1,3 +1,4 @@
+import { MANAGER } from './../../core/constants/role.constants';
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { Injectable } from '@angular/core';
 import {
@@ -29,15 +30,17 @@ export class CheckAuthoritiesGuard implements CanActivate {
     | boolean
     | UrlTree {
     const currentUser = this.userService.getCurrentUser();
-    const requiredRole = next.data.role;
+    const requiredRole: string[] = next.data.role;
 
-    if (currentUser && currentUser.type === "ADMIN") {
+
+    // Prevent customer access
+    if (currentUser && requiredRole.includes(currentUser.type)) {
       return true;
     }
 
-    // Prevent customer access
-    if (currentUser && currentUser.type === requiredRole) {
-      return true;
+    // User that is manager of a store
+    if (currentUser && currentUser.type === MANAGER && currentUser.isManager) {
+      return false;
     }
 
     this.notiService.showWaring('You can not access this route!');

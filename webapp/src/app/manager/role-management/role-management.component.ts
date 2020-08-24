@@ -14,7 +14,6 @@ import {IUser, UserService} from "../../core/auth/user.service";
   styleUrls: ['./role-management.component.css'],
 })
 export class RoleManagementComponent implements OnInit {
-
   roles: IRole[];
   currentUser: IUser;
 

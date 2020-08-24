@@ -25,7 +25,7 @@
               </a>
             </li>
             <hr />
-            <li *ngIf="isAdmin()">
+            <li *ngIf="isAdmin() || isStaff()">
               <a routerLink="/admin">Admin Dashboard</a>
             </li>
             <li *ngIf="isManager() || isAdmin()">
@@ -64,7 +64,7 @@
               [(ngModel)]="searchKeyword"
               (input)="handleInput()"
             />
-            <button type="button"><i class="fas fa-search"></i></button>
+            <button type="submit"><i class="fas fa-search"></i></button>
           </form>
         </div>
       </div>
