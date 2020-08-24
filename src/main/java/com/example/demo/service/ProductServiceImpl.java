@@ -5,8 +5,11 @@ import com.example.demo.exception.ProductNotFoundException;
 import com.example.demo.form.ProductForm;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
+import com.example.demo.response.PageableProductResponse;
 import com.example.demo.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +36,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findAll() {
         return productRepository.findAll();
+    }
+
+    @Override
+    public PageableProductResponse findAll(Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Product> products = productRepository.findAll(pageRequest);
+        return PageableProductResponse.build(products);
     }
 
     @Override
