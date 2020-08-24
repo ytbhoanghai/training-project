@@ -7,6 +7,8 @@ import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +35,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findAll() {
         return productRepository.findAll();
+    }
+
+    @Override
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     @Override

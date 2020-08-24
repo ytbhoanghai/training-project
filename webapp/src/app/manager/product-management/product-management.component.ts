@@ -3,6 +3,7 @@ import { ProductModalService } from './../../service/product-modal.service';
 import { NotificationService } from './../../layouts/notification/notification.service';
 import { IProduct, ProductService } from './product.service';
 import { Component, OnInit } from '@angular/core';
+import {ClassGetter} from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: 'app-product-management',
@@ -31,6 +32,10 @@ export class ProductManagementComponent implements OnInit {
     this.productService.fetchProducts().subscribe((products) => {
       this.products = products;
     });
+    // this.productService.fetchProductsPageable().subscribe(res => {
+    //   console.log(res)
+    //   this.products = res.content;
+    // })
   }
 
   showDetailsModal(id: number): void {

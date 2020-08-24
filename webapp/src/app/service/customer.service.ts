@@ -94,8 +94,14 @@ export interface IPageableProduct {
   currentPage: number;
   totalPages: number;
   totalElements: number;
-  size: number;
+  size?: number;
   products: IProduct[];
+  content?: IProduct[];
+  empty?: boolean;
+  first?: boolean;
+  last?: boolean;
+  number?: number;
+  numberOfElements?: number;
 }
 
 export interface IShoppingProduct {

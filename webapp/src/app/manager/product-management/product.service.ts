@@ -1,9 +1,10 @@
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs';
-import { SERVER_URL } from './../../core/constants/api.constants';
+import { SERVER_URL } from '../../core/constants/api.constants';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ICategory } from '../category-management/category.service';
+import {IPageableProduct} from "../../service/customer.service";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,13 @@ export class ProductService {
 
   fetchProducts(): Observable<IProduct[]> {
     return this.http.get<IProduct[]>(this.REQUEST_URL);
+  }
+
+  fetchProductsPageable(page = 0, size = 15): Observable<IPageableProduct> {
+    if (page < 0) page = 0;
+    return this.http.get<IPageableProduct>(this.REQUEST_URL + 'pageable',
+      { params: { page: String(page), size: String(size) } }
+      );
   }
 
   fetchProductById(id: number): Observable<IProduct> {

@@ -7,6 +7,7 @@ import com.example.demo.response.MessageResponse;
 import com.example.demo.security.constants.ProductPermission;
 import com.example.demo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,6 @@ import java.util.List;
 public class ProductController {
 
     private ProductService productService;
-    @Autowired
-    private ProductRepository productRepository;
 
     @Autowired
     public ProductController(ProductService productService) {
@@ -35,6 +34,15 @@ public class ProductController {
     public ResponseEntity<List<Product>> findAll() {
         List<Product> products = productService.findAll();
         return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("pageable")
+    public ResponseEntity<Page<Product>> findAllPageable(
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(value = "size", required = false, defaultValue = "15") Integer size
+    ) {
+        Page<Product> products = productService.findAll(PageRequest.of(page, size));
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("{productId}")
