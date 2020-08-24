@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,23 @@ public class ProductResponse {
     private BigDecimal price;
     private Integer quantity;
     private List<String> categoryNames;
+    private Date createdAt;
     private String storeName;
+
+    public static ProductResponse build(Product product) {
+        List<String> categoryNames = product.getCategories().stream()
+                .map(Category::getName)
+                .collect(Collectors.toList());
+
+        return ProductResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .quantity(product.getQuantity())
+                .categoryNames(categoryNames)
+                .createdAt(product.getCreatedAt())
+                .storeName("").build();
+    }
 
     public static ProductResponse build(StoreProduct storeProduct, String storeName) {
         Product product = storeProduct.getProduct();
@@ -37,6 +54,7 @@ public class ProductResponse {
                 .price(product.getPrice())
                 .quantity(storeProduct.getQuantity())
                 .categoryNames(categoryNames)
+                .createdAt(product.getCreatedAt())
                 .storeName(storeName).build();
     }
 
