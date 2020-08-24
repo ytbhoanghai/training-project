@@ -13,6 +13,7 @@ import { Component, OnInit } from '@angular/core';
 export class ShoppingCategoryComponent implements OnInit {
   categories: ICategory[] = [];
   storeId: number;
+  categoryId: string;
 
   constructor(
     private categoryService: CategoryService,
@@ -21,14 +22,32 @@ export class ShoppingCategoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchCategories();
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.storeId = +params.storeId;
+      this.checkActive();
+    });
+
+    this.route.queryParams.subscribe(query => {
+      this.checkActive();
     })
+  }
+
+  checkActive(): void {
+    this.categoryId = this.route.snapshot.paramMap.get('categoryId');
+    this.categories.forEach(c => {
+      if (c.id === +this.categoryId) {
+        c.isActive = true;
+      }
+      else {
+        c.isActive = false;
+      }
+    });
   }
 
   fetchCategories(): void {
     this.categoryService.fetchCategories().subscribe((categories) => {
       this.categories = categories;
+      this.checkActive();
     });
   }
 }

@@ -32,7 +32,13 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> findAll() {
+    public ResponseEntity<List<Product>> findAll(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "-1") Integer size) {
+
+
+        System.out.println(page + " : " + size);
+
         List<Product> products = productService.findAll();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }

@@ -14,6 +14,9 @@ export class StoreService {
   public updateSubject = new Subject();
   public updateObservable$ = this.updateSubject.asObservable();
 
+  importedSubject = new Subject<{id: number, newQuan: number}>();
+  importedObservable$ = this.importedSubject.asObservable();
+
   constructor(private http: HttpClient) {}
 
   fetchStores(): Observable<IStore[]> {
@@ -66,13 +69,17 @@ export class StoreService {
   addProductWithQuantity(
     storeId: number,
     productId: number,
-    quantity: number
+    quantity: number,
+    isImport = false
   ): Observable<any> {
     return this.http.put<any>(
       this.REQUEST_URL + `${storeId}/products/${productId}`,
       null,
       {
-        params: new HttpParams().set('quantity', String(quantity)),
+        params: {
+          quantity: String(quantity),
+          isImport: String(isImport)
+        }
       }
     );
   }

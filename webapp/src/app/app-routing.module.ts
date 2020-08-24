@@ -1,3 +1,4 @@
+import { ADMIN, MANAGER } from './core/constants/role.constants';
 import { CheckLoginGuard } from './config/guard/check-login.guard';
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
@@ -8,7 +9,9 @@ import {errorRoute} from './layouts/error/error.route';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
+    pathMatch: 'full',
+    // loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
+    redirectTo: 'shopping'
   },
   {
     path: 'admin',
@@ -17,14 +20,20 @@ const routes: Routes = [
       import('./manager/manager-routing.module').then(
         (m) => m.ManagerRoutingModule
       ),
+    data: {
+      role: ADMIN
+    }
   },
   {
     path: 'my-store',
-    canActivate: [CheckLoginGuard],
+    canActivate: [CheckLoginGuard, CheckAuthoritiesGuard],
     loadChildren: () =>
       import('./my-store/my-store-routing.module').then(
         (m) => m.MyStoreRoutingModule
       ),
+    data: {
+      role: MANAGER
+    }
   },
   {
     path: 'shopping',

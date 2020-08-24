@@ -54,7 +54,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
     const cartItem = this.cartService
       .getCart()
       .items.find((item) => item.productId === this.product.id);
-    if (cartItem?.quantity >= this.product?.quantity) {
+    if (cartItem?.quantity >= this.product?.quantity && !this.isSoldOut()) {
       this.isOutOfStock = true;
     }
   }

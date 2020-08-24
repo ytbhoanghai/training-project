@@ -44,7 +44,6 @@ export class SettingsComponent implements OnInit {
 
   getUser(): void {
     this.user = this.userService.getCurrentUser();
-    console.log('user', this.userService.getCurrentUser());
     this.fillAccountForm();
   }
 
@@ -53,9 +52,7 @@ export class SettingsComponent implements OnInit {
   }
 
   handleUpdateAccount(): void {
-    console.log(this.accountForm.value);
     this.userService.updateAccount(this.accountForm.value).subscribe((user) => {
-      console.log(user);
       this.notiService.showSuccess('Update account successfully!');
       this.userService.updateCurrentUser(user);
       this.router.navigate(['']);

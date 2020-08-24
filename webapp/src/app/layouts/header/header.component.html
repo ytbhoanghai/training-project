@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark navbar-expand-lg bg-dark">
+<nav *ngIf="!isHidden" class="navbar navbar-dark navbar-expand-lg bg-dark">
   <a class="navbar-brand logo" routerLink="/">
     <span class="logo-img"></span>
     <span class="navbar-title">TPS Training Foundation</span>
@@ -17,21 +17,6 @@
   </a>
   <div class="navbar-collapse collapse" id="navbarResponsive">
     <ul class="navbar-nav ml-auto">
-      <!-- HOME -->
-      <li
-        class="nav-item"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        <a class="nav-link" routerLink="/">
-          <span>
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-          </span>
-        </a>
-      </li>
-
-      <!-- SHOPPING -->
       <li
         class="nav-item"
         routerLinkActive="active"
@@ -39,14 +24,61 @@
       >
         <a class="nav-link" routerLink="/shopping">
           <span>
-            <i class="fas fa-shopping-cart"></i>
-            <span>Shopping</span>
+            <i class="fas fa-shopping-cart fa-fw"></i>
+            <span>Shop</span>
+          </span>
+        </a>
+      </li>
+      <!-- HOME -->
+      <li
+        class="nav-item"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link" routerLink="account/settings">
+          <span>
+            <i class="fas fa-user-cog fa-fw text-secondary"></i>
+            <span>Settings</span>
+          </span>
+        </a>
+      </li>
+
+
+        <!-- <li>
+          <a
+            class="dropdown-item account-menu-item"
+            routerLink="account/settings"
+          >
+            <i class="fas fa-user-cog fa-fw text-secondary"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+
+          <li *ngIf="isLogin(); else elseBlock">
+            <a class="dropdown-item account-menu-item" id="logout" (click)='logout()'>
+              <i class="fas fa-power-off fa-fw text-danger"></i>
+              <span>Sign out</span>
+            </a>
+          </li> -->
+
+      <!-- SHOPPING -->
+      <li
+        *ngIf="false"
+        class="nav-item"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link" (click)="logout()">
+          <span>
+            <i class="fas fa-power-off fa-fw text-danger"></i>
+            <span>Sign out</span>
           </span>
         </a>
       </li>
 
       <!-- MY STORE -->
       <li
+        *ngIf="false"
         class="nav-item"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
@@ -54,13 +86,14 @@
         <a class="nav-link" routerLink="/my-store">
           <span>
             <i class="fas fa-store"></i>
-            <span>My Store</span>
+            <span>Store Management</span>
           </span>
         </a>
       </li>
 
       <!-- MANAGEMENT -->
       <li
+        *ngIf="false"
         ngbDropdown
         class="nav-item dropdown pointer"
         display="dynamic"
@@ -82,6 +115,16 @@
           <li>
             <a
               class="dropdown-item"
+              routerLink="admin/store-management"
+              routerLinkActive="active"
+            >
+              <i class="fas fa-store fa-fw"></i>
+              <span>Store manager</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
               routerLink="admin/user-management"
               routerLinkActive="active"
             >
@@ -97,16 +140,6 @@
             >
               <i class="fas fa-key fa-fw"></i>
               <span>Role manager</span>
-            </a>
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              routerLink="admin/store-management"
-              routerLinkActive="active"
-            >
-              <i class="fas fa-store fa-fw"></i>
-              <span>Store manager</span>
             </a>
           </li>
           <li>
@@ -132,6 +165,7 @@
         </ul>
       </li>
       <li
+        *ngIf="false"
         ngbDropdown
         class="nav-item dropdown pointer"
         display="dynamic"
@@ -156,15 +190,6 @@
           ngbDropdownMenu
           aria-labelledby="account-menu"
         >
-          <li>
-            <a
-              class="dropdown-item account-menu-item"
-              routerLink="account/settings"
-            >
-              <i class="fas fa-user-cog fa-fw text-secondary"></i>
-              <span>Settings</span>
-            </a>
-          </li>
           <li *ngIf="isLogin(); else elseBlock">
             <a class="dropdown-item account-menu-item" id="logout" (click)='logout()'>
               <i class="fas fa-power-off fa-fw text-danger"></i>

@@ -1,9 +1,27 @@
 <div class="modal-content">
-  <div class="modal-body">
-    {{ title || 'Are you sure ???' }}
+  <!-- <div class="modal-header">
+    <h6 class="modal-title">Confirm</h6>
+    <button type="button" class="close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div> -->
+  <div class="modal-body text-center">
+    <i class="fas fa-exclamation-triangle fa-5x text-warning my-2"></i>
+    <div class="h3 py-2 text-secondary">
+      {{ title || "Are you sure ???" }}
+    </div>
+    <div class="small text-muted">You will not be able to recover this action</div>
   </div>
-  <div class="modal-footer">
-    <button class="btn btn-primary" (click)="onButtonYesClick()">Yes</button>
-    <button class="btn btn-secondary" aria-label="Close" (click)="onButtonNoClick()">No</button>
+
+  <div class="d-flex justify-content-center mb-3 mt-2">
+    <button
+    class="btn btn-secondary mr-1"
+    aria-label="Close"
+    (click)="onButtonNoClick()"
+    >
+    No, cancel
+    </button>
+    <button class="btn btn-danger ml-1" (click)="onButtonYesClick()">Yes, just do it!</button>
   </div>
+
 </div>

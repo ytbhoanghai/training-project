@@ -20,3 +20,25 @@ a {
 .product-item {
   cursor: pointer;
 }
+
+.product-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 8px;
+}
+
+.sold-out {
+	position: absolute;
+	left: 0;
+	top: 20px;
+	padding: 5px 10px;
+}
+
+.out-of-stock {
+	position: absolute;
+	left: 0;
+	top: 20px;
+  padding: 5px 10px;
+  transform: rotateX(40deg);
+}

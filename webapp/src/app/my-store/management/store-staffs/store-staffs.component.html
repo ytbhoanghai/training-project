@@ -1,6 +1,12 @@
 <div class="card">
   <div class="card-body p-2">
     <div class="mb-2 row">
+      <div class="col">
+        <button class="btn btn-info" (click)="newStaff()">
+          <i class="fas fa-user-plus"></i>Create a new staff
+        </button>
+      </div>
+
       <div class="form-inline d-flex justify-content-end col">
         <div class="input-group input-group-sm">
           <div class="input-group-prepend">
@@ -9,7 +15,7 @@
           <select class="form-control form-control-sm w-50" name="selectStaffId" [(ngModel)]="selectStaffId">
             <!-- <option disabled selected value="0">Default</option> -->
             <option *ngFor="let staff of staffs" [ngValue]="staff.id">
-              {{ staff.id + ': ' + staff.name }}
+              [{{ staff.id }}] {{ staff.name }}
             </option>
             <option *ngIf="!staffs.length" [value]="0" disabled>Empty</option>
           </select>
@@ -18,9 +24,10 @@
           <i class="fas fa-plus mr-0"></i> Add
         </button>
       </div>
+
     </div>
 
-    <table class="table table-sm table-hover table-striped">
+    <table class="table table-sm table-hover table-striped table-responsive-sm">
       <thead>
         <tr>
           <th scope="col">ID</th>
@@ -37,14 +44,18 @@
             {{ staff.isManager ? 'Manager' : 'Staff' }}
           </td>
           <td class="text-center">
-            <button
-              type="button"
-              class="btn btn-danger btn-sm"
-              (click)="removeStaff(staff)"
-              [disabled]="staff.isManager"
-            >
-              <i class="fas fa-times mr-0"></i>
-            </button>
+            <ng-container *ngIf="!staff.isManager">
+              <button type="button" class="btn btn-secondary btn-sm mr-sm-1 mb-1 mb-sm-0" (click)="editStaff(staff)">
+                <i class="fas fa-edit fa-fw mr-0"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                (click)="deleteStaff(staff)"
+              >
+                <i class="fas fa-times fa-fw mr-0"></i>
+              </button>
+            </ng-container>
           </td>
         </tr>
         <tr *ngIf="!addedStaffs.length">

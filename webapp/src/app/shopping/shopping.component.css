@@ -38,3 +38,25 @@ footer {
   background-color: #191919;
   /* margin: 0 -15px; */
 }
+
+.dropdown-title {
+	color: #e7ab3c !important;
+  text-transform: none !important;
+  font-size: 0.7rem !important;
+  font-style: italic;
+  user-select: none;
+}
+
+hr {
+  margin: 0;
+  padding: 0;
+  background: #3b3b3b;
+}
+
+.left-border {
+  border-left: 2px solid #3b3b3b;
+}
+
+#content {
+  min-height: 70vh !important;
+}

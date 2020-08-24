@@ -1,43 +1,47 @@
-
 <div class="nav-item" id="shop">
-    <div class="container">
-        <nav class="nav-menu mobile-menu d-flex justify-content-between">
-            <ul>
-                <li><a class="nav-title">Home</a></li>
-            </ul>
-            <ul>
-                <li>
-                  <a class="nav-title" routerLink="/admin">Admin</a>
-                </li>
-                <li>
-                  <a class="nav-title" routerLink="/shopping">Shop</a>
-                </li>
-                <li routerLinkActive="active">
-                  <a routerLink="/shopping/cart">Shopping Cart</a>
-                </li>
-                <li routerLinkActive="active">
-                  <a routerLink="/shopping/checkout">Checkout</a>
-                </li>
-                <li (click)="openLoginModal()">
-                  <a><i class="far fa-user fa-lg mr-2"></i>{{ username || 'Login' }}</a>
-                  <ul class="dropdown" *ngIf="isLogin()">
-                      <li><a>Blog Details</a></li>
-                      <li><a>Shopping Cart</a></li>
-                      <li><a>Checkout</a></li>
-                      <li><a>Faq</a></li>
-                      <li><a>Register</a></li>
-                      <li><a>Login</a></li>
-                      <li (click)="logout()"><a>Logout</a></li>
-                  </ul>
-                </li>
-            </ul>
-        </nav>
-        <div id="mobile-menu-wrap"></div>
-    </div>
+  <div class="container">
+    <nav class="nav-menu mobile-menu d-flex justify-content-between">
+      <ul>
+        <li routerLink="/" [ngClass]="{active: isRouterActive()}"><a class="nav-title">Home</a></li>
+      </ul>
+      <ul>
+        <li routerLinkActive="active" class="left-border hide-on-xs">
+          <a routerLink="/shopping/cart">Shopping Cart</a>
+        </li>
+        <li routerLinkActive="active" class="hide-on-xs">
+          <a routerLink="/shopping/checkout">Checkout</a>
+        </li>
+        <li>
+          <a (click)="openLoginModal()">
+            <i class="far fa-user fa-lg mr-2"></i>
+            {{ username || "Login" }}
+            <i *ngIf="isLogin()" class="fas fa-caret-down ml-1 mr-0"></i>
+          </a>
+          <ul class="dropdown" *ngIf="isLogin()">
+            <li>
+              <a class="dropdown-title">
+                Login as
+                {{ isAdmin() ? "Admin" : ( isManager() ? "Store Manager" : "Customer" ) }}
+              </a>
+            </li>
+            <hr />
+            <li *ngIf="isAdmin()">
+              <a routerLink="/admin">Admin Dashboard</a>
+            </li>
+            <li *ngIf="isManager() || isAdmin()">
+              <a routerLink="/my-store">Store Management</a>
+            </li>
+            <li><a routerLink="/shopping/cart">Shopping Cart</a></li>
+            <li><a routerLink="/shopping/checkout">Checkout</a></li>
+            <hr />
+            <li (click)="logout()"><a>Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <div id="mobile-menu-wrap"></div>
+  </div>
 </div>
-
-
-
 
 <div class="container">
   <div class="inner-header">
@@ -64,7 +68,7 @@
           </form>
         </div>
       </div>
-      <div class="col-lg-3 text-right col-md-3">
+      <div class="col-lg-3 text-right">
         <ul class="nav-right">
           <app-shopping-order *ngIf="isLogin()"></app-shopping-order>
           <app-shopping-cart></app-shopping-cart>
@@ -74,7 +78,9 @@
   </div>
 </div>
 
-<router-outlet></router-outlet>
+<div id="content">
+  <router-outlet></router-outlet>
+</div>
 
 <footer>
   <div class="copyright-reserved">

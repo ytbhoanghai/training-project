@@ -83,8 +83,11 @@ export class CartService {
       }
     }, (err: HttpErrorResponse) => {
       if (err.status === 409) {
-        console.log(err.error.message)
-        this.notiService.showWaring(`Product with id ${err.error.message} is not in same store`);
+        const failedId: number[] = JSON.parse(err.error.message);
+        failedId.forEach(id => {
+          const cartItem = this.getCart().items.find(i => i.productId === id);
+          this.notiService.showWaring(`${cartItem.name} is not in same store`);
+        })
         this.fetchRemoteCart();
       }
       this.localCartService.clear();
@@ -121,11 +124,11 @@ export class CartService {
       .subscribe(
         (item) => {
           // Quantity from the user input
-          this.doPostAddded({ ...product, quantity: quantity });
+          this.doPostAddded({ ...item, quantity: quantity });
         },
         (err: HttpErrorResponse) => {
           if (err.status === 406) {
-            this.outStockEvent.next(product.productId);
+            // this.outStockEvent.next(product.productId);
             this.notiService.showWaring(
               `Reach maximum quantity. This product is out of stock`
             );

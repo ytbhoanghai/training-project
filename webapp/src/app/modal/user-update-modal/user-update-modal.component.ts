@@ -25,9 +25,10 @@ export class UserUpdateModalComponent implements OnInit {
   }
 
   handleSubmit(id: number, user: IUser): void {
-    this.userService.update(id, user).subscribe((user) => {
+    this.userService.update(id, user).subscribe(() => {
       this.modalService.userUpdateModalRef.hide();
       this.notiService.showSuccess();
+      user.id = id;
       this.userService.updateSubject.next(user);
     });
   }

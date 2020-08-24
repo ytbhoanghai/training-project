@@ -2,7 +2,7 @@
   <div class="pi-pic">
 
     <img [src]="imgUrl" class="product-img" />
-    <img *ngIf="isOutOfStock" src="assets/img/out-of-stock.png" class="sold-out" />
+    <img *ngIf="isOutOfStock" src="assets/img/out-of-stock.png" class="out-of-stock" />
     <img *ngIf="isSoldOut()" src="assets/img/sold-out.png" alt="Sold out" class="sold-out">
 
     <div class="sale pp-sale">Sale</div>
@@ -29,8 +29,8 @@
     <div class="catagory-name categories" [title]="printCategories()">
       {{ printCategories() }}
     </div>
-    <a>
-      <h5>{{ product.name }}</h5>
+    <a [title]="product.name">
+      <h5 class="product-name">{{ product.name }}</h5>
     </a>
     <div class="product-price">
       {{ product.price | usd }}

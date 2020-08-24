@@ -8,12 +8,14 @@
         <i class="fas fa-pencil-ruler"></i>Create Role
       </a>
     </div>
-    <table class="table table-sm table-striped">
+
+    <table class="table table-sm table-striped table-responsive-sm">
+
       <thead>
       <tr class="d-flex">
         <th class="col-1"># ID</th>
         <th class="col-3">Role Name</th>
-        <th class="col-3">Created By</th>
+        <th class="col-3 text-center">Created By</th>
         <th class="col-2 text-center">Granted</th>
         <th class="text-center col-3">Action</th>
       </tr>
@@ -22,10 +24,12 @@
       <tr class="d-flex" id="role-{{role.id}}" *ngFor="let role of roles">
         <th class="col-1 d-flex"><p class="my-auto">{{role.id}}</p></th>
         <td class="col-3 d-flex"><p class="my-auto">{{role.name}}</p></td>
-        <td class="col-3 d-flex"><p class="my-auto" *ngIf="role.createdBy !== currentUser.id; else byMe">{{role.createdBy}}</p></td>
-        <ng-template #byMe>
-          <td Class="col-3 d-flex border-0"><p class="my-auto"><span class="badge badge-pill badge-danger label-byMe">Me</span></p></td>
-        </ng-template>
+        <td class="col-3 d-flex justify-content-center">
+          <p class="my-auto" *ngIf="role.createdBy !== currentUser.id; else byMe">{{role.createdBy}}</p>
+          <ng-template #byMe>
+            <p class="my-auto"><span class="badge badge-pill badge-danger label-byMe">Me</span></p>
+          </ng-template>
+        </td>
         <td class="col-2 d-flex justify-content-center">
           <p class="my-auto">
             <span class="badge badge-pill badge-danger label-deletable" *ngIf="role.allowDelete">deletable</span>

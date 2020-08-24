@@ -1,0 +1,9 @@
+.one-card {
+  width: 18rem;
+}
+
+@media only screen and (max-width: 425px) {
+  .one-card {
+    width: unset;
+  }
+}

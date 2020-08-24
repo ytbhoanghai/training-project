@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {CategoryService, ICategory} from "./category.service";
 import {CategoryModalService} from "../../service/category-modal.service";
@@ -50,6 +51,8 @@ export class CategoryManagementComponent implements OnInit {
       this.categoryService.deleteById(id).subscribe(() => {
         this.categories = this.categories.filter(c => c.id !== id);
         this.notiService.showSuccess('Deleted successfully!');
+      }, (err: HttpErrorResponse) => {
+        this.notiService.showError('Category is not empty!');
       })
     });
   }

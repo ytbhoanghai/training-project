@@ -40,6 +40,7 @@ export interface ICategory {
   id: number;
   name: string;
   createdAt: number;
+  isActive?: boolean;
 }
 
 export interface ICategoryBody {
