@@ -50,12 +50,12 @@ html {
   user-select: none;
 }
 
-.sold-out {
+/* .sold-out {
 	position: absolute;
 	left: 0;
 	top: 20px;
 	padding: 5px 10px;
-}
+} */
 
 #accordion-body .card-body {
   padding: 0;
@@ -79,4 +79,8 @@ html {
 .label-byMe {
   padding: 4px 12px 4px 12px;
   background-color: #29a3d8;
+}
+
+.bg-blueGreen {
+  background-color: rgb(44 199 186);
 }

@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private modalService: MDBModalService,
     private authService: AuthService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -62,7 +62,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.authService.logoutUser().subscribe(() => (this.name = null));
+    this.authService.logoutUser().subscribe(() => {
+      this.name = null;
+    });
   }
 
   openModalLogin(): void {

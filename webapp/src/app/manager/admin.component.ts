@@ -9,6 +9,7 @@ import { IUser, UserService } from '../core/auth/user.service';
 })
 export class AdminComponent implements OnInit {
   user: IUser = null;
+  navbarShown = false;
 
   constructor(
     private userService: UserService,
@@ -23,5 +24,9 @@ export class AdminComponent implements OnInit {
 
   showLoginModal(): void {
     this.loginModal.show();
+  }
+
+  toggleSidebar(): void {
+    this.navbarShown = !this.navbarShown;
   }
 }

@@ -27,7 +27,7 @@
 
     </div>
 
-    <table class="table table-sm table-hover table-striped">
+    <table class="table table-sm table-hover table-striped table-responsive-sm">
       <thead>
         <tr>
           <th scope="col">ID</th>
@@ -45,15 +45,15 @@
           </td>
           <td class="text-center">
             <ng-container *ngIf="!staff.isManager">
-              <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="editStaff(staff)">
-                <i class="fas fa-edit mr-0"></i>
+              <button type="button" class="btn btn-secondary btn-sm mr-sm-1 mb-1 mb-sm-0" (click)="editStaff(staff)">
+                <i class="fas fa-edit fa-fw mr-0"></i>
               </button>
               <button
                 type="button"
                 class="btn btn-danger btn-sm"
                 (click)="deleteStaff(staff)"
               >
-                <i class="fas fa-times mr-0"></i>
+                <i class="fas fa-times fa-fw mr-0"></i>
               </button>
             </ng-container>
           </td>
