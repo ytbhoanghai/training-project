@@ -15,7 +15,7 @@ export class ShoppingModalService {
     focus: true,
     show: false,
     ignoreBackdropClick: false,
-    class: 'modal-dialog modal-dialog-centered modal-lg',
+    class: 'modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg',
     containerClass: 'fade bottom',
     animated: true,
     data: {},

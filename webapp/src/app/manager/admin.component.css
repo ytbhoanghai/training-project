@@ -53,4 +53,38 @@
   font-size: 1.2rem;
   margin-top: 16px;
   cursor: pointer;
+  outline: none;
+}
+
+@media only screen and (max-width: 768px) {
+  .navbar-show {
+    position: fixed;
+    top: 100px;
+    z-index: 999;
+    box-sizing: border-box;
+    display: inline-block !important;
+
+    /* background: #252525; */
+    background: lightcoral;
+    /* background: #1776b7; */
+    border-radius: 0 2px 2px 0;
+    transition: 0.3s;
+    opacity: 0.9;
+  }
+
+  .navbar-show:hover {
+    opacity: 0;
+  }
+
+  .navbar-show:hover + .sidebar {
+    left: 0 !important;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -100px;
+    z-index: 998;
+    transition: 0.3s;
+  }
 }

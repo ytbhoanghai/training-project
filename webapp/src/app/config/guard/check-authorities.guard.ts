@@ -29,11 +29,20 @@ export class CheckAuthoritiesGuard implements CanActivate {
     | boolean
     | UrlTree {
     const currentUser = this.userService.getCurrentUser();
-    if (currentUser && currentUser.type !== 'CUSTOMER') {
+    const requiredRole = next.data.role;
+
+    if (currentUser && currentUser.type === "ADMIN") {
       return true;
     }
-    // this.router.navigate(['/accessdenied']);
+
+    // Prevent customer access
+    if (currentUser && currentUser.type === requiredRole) {
+      return true;
+    }
+
     this.notiService.showWaring('You can not access this route!');
+    // this.router.navigate(['/accessdenied']);
+    this.router.navigate(['']);
     return false;
   }
 }

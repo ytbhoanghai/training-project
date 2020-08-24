@@ -1,5 +1,22 @@
-<div class="container">
-  <!-- <form ngNativeValidate> -->
-  <a class="btn btn-outline-secondary" (click)="back()"><i class="fas fa-backward"></i></a>
-  <app-role-table (onSubmit)="handleSubmit($event)"></app-role-table>
+<div class="row">
+  <div class="col-md-8 offset-md-2">
+    <div class="card">
+      <div class="card-header font-weight-bold text-dark bg-blue">
+        Create Role
+      </div>
+      <div class="card-body">
+        <div class="container-fluid">
+          <!-- <form ngNativeValidate> -->
+          <a class="btn btn-outline-secondary" (click)="back()"
+            ><i class="fas fa-backward"></i
+          ></a>
+
+
+          <app-role-table (onSubmit)="handleSubmit($event)"></app-role-table>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

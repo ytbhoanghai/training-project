@@ -1,4 +1,4 @@
-<li class="cart-icon">
+<li class="cart-icon ml-3">
   <a>
     <i class="fas fa-shopping-cart"></i>
     <span>{{ cart.items.length }}</span>
@@ -9,7 +9,7 @@
         <tbody>
           <tr *ngFor="let item of cart.items">
             <td class="si-pic">
-              <img src="https://picsum.photos/{{item.id}}/50" alt="" />
+              <img src="https://picsum.photos/id/{{item.id}}/50" alt="" />
             </td>
             <td class="si-text">
               <div class="product-selected">

@@ -1,5 +1,8 @@
 <div class="container-fluid">
   <div class="row">
+    <div class="navbar-show text-center d-none px-1" (click)="toggleSidebar()">
+      <i class="fas fa-angle-double-right mr-0 text-light"></i>
+    </div>
     <div class="sidebar">
       <div class="admin" routerLink="./">
         <div>
@@ -54,7 +57,7 @@
       </div>
     </div>
 
-    <div class="p-3 content-wrapper col">
+    <div class="p-2 p-md-3 content-wrapper col">
       <router-outlet></router-outlet>
     </div>
   </div>

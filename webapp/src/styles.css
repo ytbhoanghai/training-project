@@ -50,12 +50,12 @@ html {
   user-select: none;
 }
 
-.sold-out {
+/* .sold-out {
 	position: absolute;
 	left: 0;
 	top: 20px;
 	padding: 5px 10px;
-}
+} */
 
 #accordion-body .card-body {
   padding: 0;
