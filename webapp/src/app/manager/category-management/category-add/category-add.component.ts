@@ -25,6 +25,7 @@ export class CategoryAddComponent implements OnInit {
     this.categoryService.save(body).subscribe(category => {
       this.back();
       this.notiService.showSuccess();
+      this.categoryService.updateSubject.next(category);
     })
   }
 }

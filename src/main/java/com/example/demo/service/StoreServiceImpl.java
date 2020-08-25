@@ -58,6 +58,13 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public List<Product> findAllProductsByStoreId(Integer storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new StoreNotFoundException(storeId));
+        return productRepository.findAllByStore(store);
+    }
+
+    @Override
     public Store save(StoreForm storeForm) {
         Staff staff = securityUtil.getCurrentStaff();
         return storeRepository.save(StoreForm.buildStore(storeForm, staff));

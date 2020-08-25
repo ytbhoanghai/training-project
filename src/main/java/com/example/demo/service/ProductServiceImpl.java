@@ -2,9 +2,11 @@ package com.example.demo.service;
 
 import com.example.demo.entity.*;
 import com.example.demo.exception.ProductNotFoundException;
+import com.example.demo.exception.StoreNotFoundException;
 import com.example.demo.form.ProductForm;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
+import com.example.demo.repository.StoreRepository;
 import com.example.demo.response.PageableProductResponse;
 import com.example.demo.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +23,20 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     private SecurityUtil securityUtil;
     private CategoryRepository categoryRepository;
+    private StoreRepository storeRepository;
 
     @Autowired
     public ProductServiceImpl(
             ProductRepository productRepository,
             SecurityUtil securityUtil,
-            CategoryRepository categoryRepository) {
+            CategoryRepository categoryRepository,
+            StoreRepository storeRepository
+    ) {
 
         this.productRepository = productRepository;
         this.securityUtil = securityUtil;
         this.categoryRepository = categoryRepository;
+        this.storeRepository = storeRepository;
     }
 
     @Override
@@ -55,8 +61,11 @@ public class ProductServiceImpl implements ProductService {
     public Product save(ProductForm productForm) {
         Staff createByStaff = securityUtil.getCurrentStaff();
         Set<Category> categories = categoryRepository.findAllByIdIsIn(productForm.getCategories());
+        Store store = storeRepository.findById(productForm.getStoreId())
+                .orElseThrow(() -> new StoreNotFoundException(productForm.getStoreId()));
+
         return productRepository.save(
-                ProductForm.buildProduct(productForm, createByStaff, categories));
+                ProductForm.buildProduct(productForm, store, createByStaff, categories));
     }
 
     @Override

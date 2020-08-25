@@ -41,7 +41,7 @@ export class AuthService {
   logoutUser(): Observable<any> {
     return new Observable((observer) => {
       localStorage.removeItem(this.jwtLocalStorageName);
-      this.router.navigate(['']);
+      this.router.navigate(['/account/login']);
       this.userService.removeCurrentUser();
       this.cartService.clearLocalCart();
       observer.next();

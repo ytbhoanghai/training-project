@@ -16,6 +16,8 @@ public interface StoreService {
 
     Store findById(Integer id);
 
+    List<Product> findAllProductsByStoreId(Integer id);
+
     Store save(StoreForm storeForm);
 
     void addProductToStore(Integer storeId, Integer productId, Integer quantity);

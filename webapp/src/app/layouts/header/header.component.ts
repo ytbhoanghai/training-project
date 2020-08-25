@@ -34,7 +34,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.listener = this.router.events
       .pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe(() => {
-        this.isHidden = location.pathname.startsWith('/shopping');
+        const pathname = location.pathname;
+        this.isHidden = pathname.startsWith('/shopping') || pathname.startsWith('/account/login');
       });
   }
 

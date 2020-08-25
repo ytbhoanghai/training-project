@@ -56,6 +56,7 @@ export class CartDetailComponent implements OnInit {
   }
 
   clearCart(): void {
+    if (!this.cart.items.length) return;
     this.confirmService.show().onYes(() => {
       this.cartService.clearCart(this.cart.id);
     });

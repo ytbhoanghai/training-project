@@ -32,7 +32,6 @@ export class CheckAuthoritiesGuard implements CanActivate {
     const currentUser = this.userService.getCurrentUser();
     const requiredRole: string[] = next.data.role;
 
-
     // Prevent customer access
     if (currentUser && requiredRole.includes(currentUser.type)) {
       return true;

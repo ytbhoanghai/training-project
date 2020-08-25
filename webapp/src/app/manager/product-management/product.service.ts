@@ -58,5 +58,7 @@ export interface IProduct {
 export interface IProductBody {
   name: string;
   price: number;
+  quantity?: number;
+  storeId?: number;
   categories: number[]
 }

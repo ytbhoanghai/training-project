@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Product;
 import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
 import com.example.demo.form.StoreForm;
@@ -29,7 +30,6 @@ import java.util.stream.Collectors;
 @Validated
 public class StoreController {
 
-    @Autowired
     private StoreService storeService;
 
     @Autowired
@@ -48,6 +48,14 @@ public class StoreController {
     public ResponseEntity<Store> findById(@PathVariable Integer storeId) {
         Store store = storeService.findById(storeId);
         return new ResponseEntity<>(store, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "{storeId}/products/all")
+    @PreAuthorize("hasAuthority(\"" + StorePermission.READ + "\")")
+    public ResponseEntity<List<Product>> findAllProducts(@PathVariable Integer storeId) {
+        return ResponseEntity.ok(
+                storeService.findAllProductsByStoreId(storeId)
+        );
     }
 
     @GetMapping(value = "status")
