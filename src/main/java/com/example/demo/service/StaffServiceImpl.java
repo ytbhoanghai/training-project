@@ -17,6 +17,7 @@ import com.example.demo.security.SecurityUtil;
 import com.example.demo.security.constants.StaffPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
