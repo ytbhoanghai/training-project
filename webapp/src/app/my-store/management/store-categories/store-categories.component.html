@@ -1,0 +1,52 @@
+<div class="card">
+  <div class="card-body p-2">
+    <div class="mb-2 row">
+      <div class="col">
+        <button class="btn btn-info" (click)="showAddModal()">
+          <i class="fas fa-plus"></i>New category
+        </button>
+      </div>
+    </div>
+
+    <table class="table table-sm table-hover table-striped table-responsive-sm">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Description</th>
+          <th scope="col">Created by</th>
+          <th scope="col" class="text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let category of categories">
+          <th scope="row">{{ category.id }}</th>
+          <td>{{ category.name }}</td>
+          <td>{{ category?.description }}</td>
+          <td>
+            {{ category.createdAt | date: "short" }}
+          </td>
+          <td class="text-center">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm mr-md-1 mb-1 mb-md-0"
+              (click)="showUpdateModal(category)"
+            >
+              <i class="fas fa-edit fa-fw mr-0"></i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger btn-sm"
+              (click)="deleteCategory(category)"
+            >
+              <i class="fas fa-times fa-fw mr-0"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="!categories.length">
+          <td colspan="4" class="text-center text-danger font-italic">Empty</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

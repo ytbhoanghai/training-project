@@ -4,6 +4,7 @@ import com.example.demo.form.ProductForm;
 import com.example.demo.service.CategoryService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -29,6 +30,10 @@ public class Product {
     private BigDecimal price;
 
     private Integer quantity;
+
+    @OneToOne
+    @JoinColumn(name = "id_store")
+    private Store store;
 
     private Date createdAt;
 

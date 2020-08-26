@@ -246,7 +246,6 @@ export class CartService {
   doPostClearCart(): void {
     this.cart.items = [];
     this.changeEvent.next(this.cart);
-    this.notiService.showQuickSuccess('Clear cart successfully!');
   }
 
   clearLocalCart(): void {

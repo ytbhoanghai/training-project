@@ -16,6 +16,6 @@ import { ProductFormComponent } from './product-form/product-form.component';
       { path: 'new', component: ProductAddComponent },
     ]),
   ],
-  exports: [ProductFormComponent],
+  exports: [ProductAddComponent, ProductFormComponent],
 })
 export class ProductManagementModule {}

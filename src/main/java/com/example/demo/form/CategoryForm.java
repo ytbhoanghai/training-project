@@ -2,6 +2,7 @@ package com.example.demo.form;
 
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Staff;
+import com.example.demo.entity.Store;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -17,9 +18,15 @@ public class CategoryForm {
     @Size(min = 2)
     private String name;
 
-    public static Category buildCategory(CategoryForm categoryForm, Staff createByStaff) {
+    private String description;
+
+    private Integer storeId;
+
+    public static Category buildCategory(CategoryForm categoryForm, Store store, Staff createByStaff) {
         return Category.builder()
                 .name(categoryForm.getName())
+                .store(store)
+                .description(categoryForm.getDescription())
                 .createdAt(new Date())
                 .createdBy(createByStaff).build();
     }

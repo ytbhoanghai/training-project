@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
@@ -15,6 +16,10 @@ public interface StoreService {
     List<Store> findAll();
 
     Store findById(Integer id);
+
+    List<Product> findAllProductsByStoreId(Integer id);
+
+    List<Category> findCategoriesByStore(Integer storeId);
 
     Store save(StoreForm storeForm);
 
@@ -43,4 +48,5 @@ public interface StoreService {
     Product getProductById(Integer storeId, Integer productId);
 
     void updateQuantityOfProductInStore(Integer storeId, Integer productId, Integer quantity);
+
 }

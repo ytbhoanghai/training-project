@@ -2,7 +2,7 @@
   <div class="container">
     <nav class="nav-menu mobile-menu d-flex justify-content-between">
       <ul>
-        <li routerLink="/" [ngClass]="{active: isRouterActive()}"><a class="nav-title">Home</a></li>
+        <li routerLink="/" [ngClass]="{active: isRouterActive()}"><a class="nav-title">Shop</a></li>
       </ul>
       <ul>
         <li routerLinkActive="active" class="left-border hide-on-xs">
@@ -12,7 +12,8 @@
           <a routerLink="/shopping/checkout">Checkout</a>
         </li>
         <li>
-          <a (click)="openLoginModal()">
+          <!-- <a (click)="openLoginModal()"> -->
+          <a routerLink="/account/login">
             <i class="far fa-user fa-lg mr-2"></i>
             {{ username || "Login" }}
             <i *ngIf="isLogin()" class="fas fa-caret-down ml-1 mr-0"></i>
@@ -25,14 +26,16 @@
               </a>
             </li>
             <hr />
+            <!-- JUST FOR TESTING -->
             <li *ngIf="isAdmin() || isStaff()">
               <a routerLink="/admin">Admin Dashboard</a>
             </li>
             <li *ngIf="isManager() || isAdmin()">
               <a routerLink="/my-store">Store Management</a>
             </li>
-            <li><a routerLink="/shopping/cart">Shopping Cart</a></li>
-            <li><a routerLink="/shopping/checkout">Checkout</a></li>
+            <!-- JUST FOR TESTING -->
+            <!-- <li><a routerLink="/shopping/cart">Shopping Cart</a></li> -->
+            <!-- <li><a routerLink="/shopping/checkout">Checkout</a></li> -->
             <hr />
             <li (click)="logout()"><a>Logout</a></li>
           </ul>

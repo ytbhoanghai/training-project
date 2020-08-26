@@ -1,0 +1,14 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">Category Information</h5>
+    <button type="button" class="close" (click)="hideModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-category-form
+      (onSubmit)="handleSubmit($event)"
+      (onCancel)="hideModal()"
+    ></app-category-form>
+  </div>
+</div>

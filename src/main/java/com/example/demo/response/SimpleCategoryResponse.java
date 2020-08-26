@@ -14,12 +14,15 @@ public class SimpleCategoryResponse {
 
     private String name;
 
+    private String description;
+
     private Date createdAt;
 
     public static SimpleCategoryResponse from(Category category) {
         return SimpleCategoryResponse.builder()
                 .id(category.getId())
                 .name(category.getName())
+                .description(category.getDescription())
                 .createdAt(category.getCreatedAt())
                 .build();
     }

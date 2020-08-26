@@ -26,6 +26,13 @@ public class Category {
 
     private String name;
 
+    private String description;
+
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "id_store")
+    private Store store;
+
     private Date createdAt;
 
     @JsonIgnore
@@ -35,6 +42,7 @@ public class Category {
 
     public static Category updateDate(Category category, CategoryForm categoryForm) {
         category.setName(categoryForm.getName());
+        category.setDescription(categoryForm.getDescription());
         return category;
     }
 }
