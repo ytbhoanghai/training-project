@@ -324,7 +324,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Order updateOrderStatus(Integer orderId, OrderUpdateForm orderUpdateForm) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(OrderNotFoundException::new);
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
         order.setStatus(orderUpdateForm.getStatus());
         return orderRepository.save(order);
     }

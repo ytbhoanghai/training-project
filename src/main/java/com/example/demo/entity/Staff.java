@@ -88,13 +88,12 @@ public class Staff {
         return false;
     }
 
-    public Staff updateData(StaffForm staffForm, Store store, Set<Role> roles) {
+    public Staff updateData(StaffForm staffForm, Set<Role> roles) {
         this.name = staffForm.getName();
         this.username = staffForm.getUsername();
         this.email = staffForm.getEmail();
         this.address = staffForm.getAddress();
         this.roles = roles;
-        this.store = store;
 
         return this;
     }

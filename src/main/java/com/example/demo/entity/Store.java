@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -16,8 +17,8 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "store")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Store {
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+public class Store  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +36,6 @@ public class Store {
 
     private Date createdAt;
 
-
     @JsonIgnore
     @OneToMany(mappedBy = "store")
     private List<StoreProduct> storeProductList;
@@ -44,6 +44,10 @@ public class Store {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private Staff createdBy;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE)
+    private List<Staff> staff;
 
     public enum Status {
         Open, Closed

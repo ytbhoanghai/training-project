@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -42,18 +43,18 @@ public class StaffForm {
     private Set<Integer> roleIds;
 
     public static Staff buildStaff(
-            StaffForm staffForm, Staff createByStaff, Store ofStore, Set<Role> roles, Integer level) {
+            StaffForm staffForm, Staff createByStaff, Store ofStore, Set<Role> roles, Integer level, Staff.Type type) {
 
         return Staff.builder()
                 .name(staffForm.getName())
                 .username(staffForm.getUsername())
-                .password(staffForm.getPassword())
+                .password(new BCryptPasswordEncoder().encode(staffForm.getPassword()))
                 .email(staffForm.getEmail())
                 .address(staffForm.getAddress())
                 .store(ofStore)
                 .createdAt(new Date())
                 .createdBy(createByStaff)
-                .type(Staff.TYPE_DEFAULT)
+                .type(type)
                 .isManager(false)
                 .isDeleted(false)
                 .roles(roles)

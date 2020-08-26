@@ -45,6 +45,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> findAllByStore(Store store) {
+        return productRepository.findAllByStore(store);
+    }
+
+    @Override
     public PageableProductResponse findAll(Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Product> products = productRepository.findAll(pageRequest);
@@ -82,8 +87,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public Integer delete(Integer id) {
         productRepository.deleteById(id);
+        return id;
     }
 
     @Override

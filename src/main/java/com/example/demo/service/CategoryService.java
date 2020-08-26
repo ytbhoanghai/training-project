@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Category;
+import com.example.demo.entity.Store;
 import com.example.demo.form.CategoryForm;
 import com.example.demo.response.SimpleCategoryResponse;
 
@@ -10,12 +11,14 @@ public interface CategoryService {
 
     List<SimpleCategoryResponse> findAll();
 
+    List<Category> findAllByStore(Store store);
+
     Category findById(Integer id);
 
     Category save(CategoryForm categoryForm);
 
     Category update(Integer id, CategoryForm categoryForm);
 
-    String deleteById(Integer id);
+    Integer deleteById(Integer id);
 
 }

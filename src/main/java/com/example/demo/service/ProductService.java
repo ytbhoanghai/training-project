@@ -12,6 +12,8 @@ public interface ProductService {
 
     List<Product> findAll();
 
+    List<Product> findAllByStore(Store store);
+
     PageableProductResponse findAll(Integer page, Integer size);
 
     Product findById(Integer id);
@@ -22,7 +24,9 @@ public interface ProductService {
 
     Product update(Integer id, ProductForm productForm);
 
-    void delete(Integer id);
+    Integer delete(Integer id);
 
     void save(List<Product> products);
+
+
 }

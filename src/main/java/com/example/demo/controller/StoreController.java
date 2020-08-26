@@ -2,16 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
-import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
 import com.example.demo.form.StoreForm;
-import com.example.demo.form.StoreUpdateForm;
 import com.example.demo.response.MessageResponse;
 import com.example.demo.security.constants.StaffPermission;
 import com.example.demo.security.constants.StorePermission;
 import com.example.demo.service.StoreService;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,10 +17,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/stores")
@@ -51,12 +45,11 @@ public class StoreController {
         return new ResponseEntity<>(store, HttpStatus.OK);
     }
 
-    @GetMapping(value = "{storeId}/products/all")
+    @GetMapping(value = "{storeId}/products")
     @PreAuthorize("hasAuthority(\"" + StorePermission.READ + "\")")
     public ResponseEntity<List<Product>> findAllProducts(@PathVariable Integer storeId) {
         return ResponseEntity.ok(
-                storeService.findAllProductsByStoreId(storeId)
-        );
+                storeService.findAllProductsByStoreId(storeId));
     }
 
     @GetMapping(value = "status")
@@ -67,7 +60,8 @@ public class StoreController {
     @GetMapping(value = "management")
     @PreAuthorize("hasAuthority(\"" + StorePermission.READ + "\")")
     public ResponseEntity<?> getManageableStores() {
-        return ResponseEntity.ok(storeService.getManageableStores());
+        List<Store> stores = storeService.getManageableStores();
+        return ResponseEntity.ok(stores);
     }
 
     @GetMapping(value = "{storeId}/staffs")
@@ -75,30 +69,18 @@ public class StoreController {
     public ResponseEntity<?> getStaffs(
             @PathVariable Integer storeId,
             @RequestParam(required = false, value = "is_manager") Boolean isManager) {
-
-        List<Staff> staffList = null;
-        if (isManager == null) {
-            staffList = storeService.findStaffsByStore(storeId).stream()
-                    .peek(staff -> staff.setRoles(null))
-                    .collect(Collectors.toList());
-        } else {
-            staffList = storeService.findStaffsByStoreAndIsManager(storeId, isManager);
-        }
-        return ResponseEntity.ok(staffList.stream()
-                .sorted(Comparator.comparing(Staff::getIsManager).reversed())
-                .peek(staff -> staff.setRoles(null))
-                .collect(Collectors.toList()));
+        return ResponseEntity.ok(storeService.findStaffsByStore(storeId));
     }
 
-    @GetMapping(value = "{storeId}/products")
-    @PreAuthorize("hasAuthority(\"" + StorePermission.READ + "\")")
-    public ResponseEntity<?> getProductsByIsAdded(
-            @PathVariable Integer storeId,
-            @RequestParam(value = "is_added") Boolean isAdded) {
-        return ResponseEntity.ok(
-                storeService.findProductsByStoreAndIsAdded(storeId, isAdded)
-        );
-    }
+//    @GetMapping(value = "{storeId}/products")
+//    @PreAuthorize("hasAuthority(\"" + StorePermission.READ + "\")")
+//    public ResponseEntity<?> getProductsByIsAdded(
+//            @PathVariable Integer storeId,
+//            @RequestParam(value = "is_added") Boolean isAdded) {
+//        return ResponseEntity.ok(
+//                storeService.findProductsByStoreAndIsAdded(storeId, isAdded)
+//        );
+//    }
 
     @GetMapping(value = "{storeId}/categories")
     public ResponseEntity<List<Category>> getAllCategoriesByStore(@PathVariable Integer storeId) {
@@ -109,6 +91,7 @@ public class StoreController {
     @PreAuthorize("hasAuthority(\"" + StorePermission.CREATE + "\")")
     public ResponseEntity<Store> createStore(@Valid @RequestBody StoreForm storeForm) {
         Store store = storeService.save(storeForm);
+
         return new ResponseEntity<>(store, HttpStatus.OK);
     }
 
@@ -145,17 +128,10 @@ public class StoreController {
         return ResponseEntity.ok(new MessageResponse("Add staffs to store successfully!"));
     }
 
-    @PutMapping("{storeId}")
-    @PreAuthorize("hasAuthority(\"" + StorePermission.UPDATE + "\")")
-    public ResponseEntity<Store> updateStore(@PathVariable Integer storeId, @Valid @RequestBody StoreUpdateForm storeUpdateForm) {
-        Store store = storeService.update(storeId, storeUpdateForm);
-        return new ResponseEntity<>(store, HttpStatus.OK);
-    }
-
     @DeleteMapping("{storeId}")
     @PreAuthorize("hasAuthority(\"" + StorePermission.DELETE + "\")")
     public ResponseEntity<?> deleteStore(@PathVariable Integer storeId) {
-        String id = storeService.deleteById(storeId);
+        Integer id = storeService.deleteById(storeId);
         return new ResponseEntity<>(new MessageResponse("Deleted id: " + id), HttpStatus.OK);
     }
 
