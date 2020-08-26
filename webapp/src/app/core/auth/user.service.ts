@@ -94,9 +94,27 @@ export class UserService {
   updateCurrentUser(newInfo: IUser): void {
     this.currentUserSubject.next({ ...this.getCurrentUser(), ...newInfo });
   }
+
+  checkPermissionOnResources(): Observable<IGrantedPermisson> {
+    const body: IGrantedPermisson = {
+      product: ['read'],
+      staff: ['read'],
+      category: ['read'],
+      role: ['read'],
+    };
+    return this.http.post<IGrantedPermisson>(this.REQUEST_URL + 'permissions', body);
+  }
 }
 
 export interface IUpdatePass {
   oldPass: string;
   newPass: string;
+}
+
+export interface IGrantedPermisson {
+  product?: string[];
+  category?: string[];
+  staff?: string[];
+  role?: string[];
+  order?: string[];
 }

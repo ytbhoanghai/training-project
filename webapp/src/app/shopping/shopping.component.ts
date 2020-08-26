@@ -80,4 +80,9 @@ export class ShoppingComponent implements OnInit {
   logout(): void {
     this.authService.logoutUser().subscribe(() => (this.username = null));
   }
+
+  backToHome(): void {
+    if (location.pathname.startsWith('/shopping/store')) return;
+    this.router.navigate(['/shopping']);
+  }
 }

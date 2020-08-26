@@ -1,9 +1,10 @@
-import { StoreService, ISimpleStaff } from './../store.service';
+import { StoreService } from './../store.service';
 import { NotificationService } from './../../../layouts/notification/notification.service';
 import { IStore } from 'src/app/manager/store-management/store.service';
 import { Validators } from '@angular/forms';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { IUser } from 'src/app/core/auth/user.service';
 
 @Component({
   selector: 'app-store-form',
@@ -18,8 +19,8 @@ export class StoreFormComponent implements OnInit {
   @Output() onCancel = new EventEmitter();
 
   statusList: string[] = [];
-  managers: ISimpleStaff[] = [];
-  staffs: ISimpleStaff[] = [];
+  managers: IUser[] = [];
+  staffs: IUser[] = [];
 
   storeForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.minLength(4)]],
@@ -29,7 +30,7 @@ export class StoreFormComponent implements OnInit {
       '',
       [Validators.pattern(/(09|01)([0-9]{8,})\b/), Validators.maxLength(11)],
     ],
-    status: [''],
+    status: ['Open'],
     selectStaffId: [null],
     idManagers: [[]],
   });
@@ -86,8 +87,8 @@ export class StoreFormComponent implements OnInit {
   }
 
   addManager(): void {
-    let staffId: number = +this.storeForm.value.selectStaffId;
-    const selectStaff: ISimpleStaff = this.staffs.find((s) => s.id === staffId);
+    const staffId: number = +this.storeForm.value.selectStaffId;
+    const selectStaff: IUser = this.staffs.find((s) => s.id === staffId);
     if (!selectStaff) return;
 
     this.staffs = this.staffs.filter((s) => s.id !== staffId);
@@ -95,7 +96,7 @@ export class StoreFormComponent implements OnInit {
     this.resetSelected();
   }
 
-  removeManager(manager: ISimpleStaff): void {
+  removeManager(manager: IUser): void {
     this.managers = this.managers.filter((m) => m !== manager);
     this.staffs.push(manager);
   }

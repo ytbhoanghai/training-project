@@ -9,6 +9,9 @@ import {IPermission, IPermissionChoose, IResource, IRole, IRoleBody} from "../ma
   providedIn: 'root'
 })
 export class RoleManagementService {
+  private MANAGER_URL = SERVER_URL + '/manager';
+  private ADMIN_URL = SERVER_URL + '/admin';
+
   public updateSubject = new Subject();
   public updateObservable$ = this.updateSubject.asObservable();
 
@@ -18,7 +21,7 @@ export class RoleManagementService {
   constructor(private httpClient: HttpClient) { }
 
   findAllRoles(): Observable<IRole[]> {
-    return this.httpClient.get<IRole[]>(SERVER_URL + "/roles").pipe(
+    return this.httpClient.get<IRole[]>(this.MANAGER_URL + "/roles").pipe(
       catchError(err => {
         console.error(err);
         return of([]);
@@ -26,12 +29,16 @@ export class RoleManagementService {
     );
   }
 
-  findRoleById(id: number): Observable<IRole> {
-    return this.httpClient.get<IRole>(SERVER_URL + "/roles/" + id);
+  findAdminRoleById(id: number): Observable<IRole> {
+    return this.httpClient.get<IRole>(this.ADMIN_URL + "/roles/" + id);
+  }
+
+  findManagerRoleById(id: number): Observable<IRole> {
+    return this.httpClient.get<IRole>(this.MANAGER_URL + "/roles/" + id);
   }
 
   deleteRoleById(id: number): Observable<string> {
-    return this.httpClient.delete<any>(SERVER_URL + "/roles/" + id).pipe(
+    return this.httpClient.delete<any>(this.MANAGER_URL + "/roles/" + id).pipe(
       tap(_ => console.log("delete role by id " + id)),
       map(value => value.message));
   }
@@ -50,7 +57,7 @@ export class RoleManagementService {
   }
 
   createRole(body: IRoleBody): Observable<IRole> {
-    return this.httpClient.post<IRole>(SERVER_URL + '/roles', body);
+    return this.httpClient.post<IRole>(this.MANAGER_URL + '/roles', body);
   }
 
   updateRole(id: number, body: IRoleBody): Observable<IRole> {

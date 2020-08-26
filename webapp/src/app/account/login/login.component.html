@@ -1,13 +1,13 @@
-<div class="row">
+<div class="row wrapper">
   <div id="login">
     <div class="border rounded shadow mt-3">
       <mdb-accordion [multiple]="false">
         <mdb-accordion-item [collapsed]="false">
-
           <mdb-accordion-item-head class="login-accordion" style="display: none;">
             <div class="small btn-link text-info" #loginBtn>Login</div>
           </mdb-accordion-item-head>
           <mdb-accordion-item-body id="accordion-body">
+            <div class="text-muted h2 text-center border-bottom py-2">Sign in</div>
 
             <form class="form needs-validation" role="form" (ngSubmit)="authenticate()" ngNativeValidate>
               <!--Body-->
