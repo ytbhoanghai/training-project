@@ -26,14 +26,11 @@ export class UserAddModalComponent implements OnInit {
   ngOnInit(): void {}
 
   handleSubmit(user: IUser): void {
-    this.userService.save(user).subscribe(addedUser => {
-      console.log('Saved addedUser', addedUser);
-      this.storeService.addStaffToStore(this.storeId, addedUser.id).subscribe(() => {
-        this.userService.userAddSubject.next(addedUser);
-        this.hideModal();
-        this.notiService.showSuccess('Added staff to store');
-      })
-    })
+    this.storeService.addStaffToStore(user).subscribe((addedUser) => {
+      this.userService.userAddSubject.next(addedUser);
+      this.hideModal();
+      this.notiService.showSuccess('Added staff to store');
+    });
   }
 
   hideModal(): void {

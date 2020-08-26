@@ -81,12 +81,20 @@ export class RoleTableComponent implements OnInit {
 
   findAllResources(): void {
     this.roleManagementService.findAllResources().subscribe((resources) => {
-      // Only activate on update
-      this.resources = this.checkGrantedPermmisonsOnUpdate(resources);
+      this.filterResourceForAdmin(resources);
+
+      // Only activate on update | prevent error on empty resource
+      this.resources = this.checkGrantedPermmisonsOnUpdate(this.resources || resources);
 
       // Define status of CHECK ALL button
       this.resources = this.checkIfCanCheckAll(this.resources);
     });
+  }
+
+  filterResourceForAdmin(resources: IResource[]): void {
+    if (!this.userService.isAdmin()) return;
+    const lockedResources = ['product', 'category', 'order'];
+    this.resources = resources.filter(r => !lockedResources.includes(r.name));
   }
 
   checkIfCanCheckAll(resources: IResource[]): IResource[] {
@@ -104,7 +112,7 @@ export class RoleTableComponent implements OnInit {
     // Check on granted permission and check on checkbox
     for (let i = 0; i < resources.length; i++) {
       for (let j = 0; j < resources[i].permissions.length; j++) {
-        let currentPermisson = resources[i].permissions[j];
+        const currentPermisson = resources[i].permissions[j];
         if (this.permissionIds.includes(currentPermisson.id)) {
           currentPermisson.choose = true;
         }
@@ -117,7 +125,7 @@ export class RoleTableComponent implements OnInit {
 
   hasAnyDisabledPermmissions(resource: IResource): boolean {
     // Check if each row has any permissons that are not grantable to others
-    for (let p of resource.permissions) {
+    for (const p of resource.permissions) {
       if (!this.canGrantPermission(p)) {
         return true;
       }
@@ -126,7 +134,7 @@ export class RoleTableComponent implements OnInit {
   }
 
   onChangeButtonCheckAllPermissions(resourceName: string): void {
-    let resource: IResource = this.getResourceByName(resourceName);
+    const resource: IResource = this.getResourceByName(resourceName);
     this.checkAllPermissions(
       resource.permissions,
       resource.isCheckAllPermissions
@@ -201,7 +209,7 @@ export class RoleTableComponent implements OnInit {
   }
 
   getPermissionsFromResource(resources: IResource[]): number[] {
-    let selectedRoles: number[] = [];
+    const selectedRoles: number[] = [];
     // Check if permission is selected then return ID
     this.resources.forEach((resource) => {
       resource.permissions.forEach((permission) => {

@@ -18,6 +18,8 @@
   border-radius: 0;
   margin: 0 16px;
   transition: .2s ease-in-out;
+  border: none;
+  cursor: pointer;
 }
 
 .nav-link:hover {

@@ -1,3 +1,5 @@
+import { HttpErrorResponse } from '@angular/common/http';
+import { IUser } from 'src/app/core/auth/user.service';
 import { FormType } from 'src/app/manager/user-management/user-add/user-form.component';
 import { NotificationService } from './../../../layouts/notification/notification.service';
 import { Component, OnInit } from '@angular/core';
@@ -24,10 +26,14 @@ export class UserAddComponent implements OnInit {
     this.location.back();
   }
 
-  handleSubmit(user): void {
-    this.userService.save(user).subscribe((user) => {
+  handleSubmit(user: IUser): void {
+    this.userService.saveFromAdmin(user).subscribe((addedUser) => {
       this.notiService.showSuccess('Added successfully!');
       this.back();
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 500) {
+        this.notiService.showError('Existed username');
+      }
     });
   }
 }

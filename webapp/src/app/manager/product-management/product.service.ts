@@ -25,15 +25,15 @@ export class ProductService {
   }
 
   save(body: IProductBody): Observable<IProduct> {
-    return this.http.post<IProduct>(this.REQUEST_URL, body);
+    return this.http.post<IProduct>(SERVER_URL + '/manager/products', body);
   }
 
   update(id: number, body: IProductBody): Observable<IProduct> {
-    return this.http.put<IProduct>(this.REQUEST_URL + id, body);
+    return this.http.put<IProduct>(SERVER_URL + `/manager/products/${id}`, body);
   }
 
   deleteById(id: number): Observable<any> {
-    return this.http.delete<any>(this.REQUEST_URL + id);
+    return this.http.delete<any>(SERVER_URL + `/manager/products/${id}`);
   }
 }
 

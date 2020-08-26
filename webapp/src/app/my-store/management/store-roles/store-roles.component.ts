@@ -31,6 +31,11 @@ export class StoreRolesComponent implements OnInit {
       }
     });
 
+    this.roleService.updateObservable$.subscribe((role: IRole) => {
+      const index = this.roles.findIndex(r => r.id === role.id);
+      this.roles[index] = role;
+    })
+
     this.currentUser = this.userService.getCurrentUser();
   }
 
@@ -45,7 +50,7 @@ export class StoreRolesComponent implements OnInit {
   }
 
   showUpdateModal(role: IRole): void {
-    this.roleService.findRoleById(role.id).subscribe((role) => {
+    this.roleService.findManagerRoleById(role.id).subscribe((role) => {
       this.roleModalService.showUpdateModal(role);
     });
   }

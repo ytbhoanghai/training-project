@@ -35,7 +35,7 @@ export class CategoryService {
   }
 
   deleteById(id: number): Observable<any> {
-    return this.http.delete<any>(this.REQUEST_URL + id);
+    return this.http.delete<any>(SERVER_URL + `/manager/categories/${id}`);
   }
 }
 

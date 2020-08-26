@@ -2,6 +2,10 @@
   width: 18rem;
 }
 
+.img-fluid {
+  min-height: 200px !important;
+}
+
 @media only screen and (max-width: 425px) {
   .one-card {
     width: unset;

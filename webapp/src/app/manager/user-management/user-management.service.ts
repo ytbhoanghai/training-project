@@ -17,11 +17,17 @@ export class UserManagementService {
   userAddObservable$ = this.userAddSubject.asObservable();
 
   private REQUEST_URL = `${SERVER_URL}/staffs/`;
+  private ADMIN_URL = `${SERVER_URL}/admin/staffs/`;
+  private MANAGER_URL = `${SERVER_URL}/manager/staffs/`;
 
   constructor(private http: HttpClient) {}
 
+  fetchAllFromAdmin(): Observable<IUser[]> {
+    return this.http.get<IUser[]>(SERVER_URL + '/admin/staffs');
+  }
+
   fetchAll(): Observable<IUser[]> {
-    return this.http.get<IUser[]>(this.REQUEST_URL);
+    return this.http.get<IUser[]>(this.MANAGER_URL);
   }
 
   fetchById(id: number): Observable<IUser> {
@@ -33,7 +39,7 @@ export class UserManagementService {
   }
 
   fetchAssignableStaffs(): Observable<IUser[]> {
-    return this.http.get<IUser[]>(this.REQUEST_URL, {
+    return this.http.get<IUser[]>(this.MANAGER_URL, {
       params: new HttpParams().set('option', 'NotInStore')
     });
   }
@@ -42,11 +48,20 @@ export class UserManagementService {
     return this.http.post<IUser>(this.REQUEST_URL, body);
   }
 
+  saveFromAdmin(body: IUser): Observable<IUser> {
+    return this.http.post<IUser>(this.ADMIN_URL, body);
+  }
+
   update(id: number, body: IUser): Observable<IUser> {
     return this.http.put<IUser>(this.REQUEST_URL + id, body);
   }
 
-  delete(id: number): Observable<any> {
-    return this.http.delete<any>(this.REQUEST_URL + id);
+  delete(id: number): Observable<unknown> {
+    return this.http.delete<unknown>(this.REQUEST_URL + id);
+  }
+
+  checkPermissionOnResources(body: Record<string, string[]>): Observable<unknown> {
+    console.log(body);
+    return null;
   }
 }

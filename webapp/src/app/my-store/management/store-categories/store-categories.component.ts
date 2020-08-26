@@ -45,7 +45,7 @@ export class StoreCategoriesComponent implements OnInit {
     // this.categoryService.fetchCategories().subscribe((categories) => {
     //   this.categories = categories;
     // });
-    this.storeService.fetchCategoriesByStoreId(this.storeId).subscribe(categories => {
+    this.storeService.fetchCategoriesByStoreId().subscribe(categories => {
       this.categories = categories;
     })
   }

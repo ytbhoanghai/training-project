@@ -32,7 +32,7 @@ import { StoreCategoriesComponent } from './store-categories/store-categories.co
         path: '',
         component: ManagementComponent,
         children: [
-          { path: '', pathMatch: 'full', redirectTo: 'products' },
+          // { path: '', pathMatch: 'full', redirectTo: 'products' },
           { path: 'products', component: StoreProductComponent },
           { path: 'categories', component: StoreCategoriesComponent },
           { path: 'staffs', component: StoreStaffsComponent },

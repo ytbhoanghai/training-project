@@ -1,5 +1,4 @@
-import { LoginComponent } from './account/login/login.component';
-import { ADMIN, MANAGER } from './core/constants/role.constants';
+import { ADMIN, MANAGER, CUSTOMER } from './core/constants/role.constants';
 import { CheckLoginGuard } from './config/guard/check-login.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -27,21 +26,25 @@ const routes: Routes = [
   },
   {
     path: 'my-store',
-    canActivate: [CheckLoginGuard, CheckAuthoritiesGuard],
+    canActivate: [CheckAuthoritiesGuard],
     loadChildren: () =>
       import('./my-store/my-store-routing.module').then(
         (m) => m.MyStoreRoutingModule
       ),
     data: {
-      role: [ADMIN, MANAGER],
+      role: [MANAGER],
     },
   },
   {
     path: 'shopping',
+    // canActivate: [CheckAuthoritiesGuard],
     loadChildren: () =>
       import('./shopping/shopping-routing.module').then(
         (m) => m.ShoppingRoutingModule
       ),
+    data: {
+      role: [CUSTOMER],
+    },
   },
   {
     path: 'account',

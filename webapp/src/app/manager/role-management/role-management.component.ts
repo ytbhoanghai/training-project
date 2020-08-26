@@ -42,7 +42,7 @@ export class RoleManagementComponent implements OnInit {
   }
 
   viewRoleDetails(role: IRole): void {
-    this.roleManagementService.findRoleById(role.id).subscribe((role) => {
+    this.roleManagementService.findAdminRoleById(role.id).subscribe((role) => {
       this.modalService.show(ViewRoleDetailsManagementComponent, {
         containerClass: 'fade',
         class: 'modal-dialog-centered modal-xl',
@@ -52,7 +52,7 @@ export class RoleManagementComponent implements OnInit {
   }
 
   openUpdateModal(role: IRole): void {
-    this.roleManagementService.findRoleById(role.id).subscribe((role) => {
+    this.roleManagementService.findAdminRoleById(role.id).subscribe((role) => {
       this.modalService.show(RoleUpdateModalComponent, {
         class: 'modal-xl',
         data: { role },

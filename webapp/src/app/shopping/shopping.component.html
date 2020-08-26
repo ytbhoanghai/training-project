@@ -2,7 +2,7 @@
   <div class="container">
     <nav class="nav-menu mobile-menu d-flex justify-content-between">
       <ul>
-        <li routerLink="/" [ngClass]="{active: isRouterActive()}"><a class="nav-title">Shop</a></li>
+        <li [ngClass]="{active: isRouterActive()}" (click)="backToHome()"><a class="nav-title">Shop</a></li>
       </ul>
       <ul>
         <li routerLinkActive="active" class="left-border hide-on-xs">

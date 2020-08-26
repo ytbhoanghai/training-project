@@ -42,8 +42,8 @@ export class StoreProductComponent implements OnInit {
       const index = this.addedProducts.findIndex((p) => p.id === id);
       // Add quantity
       const addedQuan =
-        this.addedProducts[index].storeProductQuantity + newQuan;
-      this.addedProducts[index].storeProductQuantity = addedQuan;
+        this.addedProducts[index].quantity + newQuan;
+      this.addedProducts[index].quantity = addedQuan;
     });
 
     this.storeService.addedObservable$.subscribe((product) => {
@@ -72,7 +72,7 @@ export class StoreProductComponent implements OnInit {
     //     this.resetSelected();
     //   });
     this.storeService
-      .fetchProductsByStoreId(this.storeId)
+      .fetchProducts()
       .subscribe((products) => {
         this.addedProducts = products;
       });

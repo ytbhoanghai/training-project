@@ -29,11 +29,15 @@ export class UserManagementComponent implements OnInit {
   }
 
   fetchUsers(): void {
-    this.userService.fetchAll().subscribe((users) => {
-      users.sort((a, b) => a?.storeName.localeCompare(b?.storeName));
-      users.reverse();
+    this.userService.fetchAllFromAdmin().subscribe((users) => {
+      // users.sort((a, b) => a?.storeName.localeCompare(b?.storeName));
+      // users.reverse();
       this.users = users;
     });
+  }
+
+  printRoles(user: IUser): string {
+    return user.roles.map(r => r.name).join(', ');
   }
 
   deleteUser(id: number): void {
