@@ -1,6 +1,5 @@
 import { StoreService } from './../../manager/store-management/store.service';
 import { ProductModalService } from './../../service/product-modal.service';
-import { ActivatedRoute } from '@angular/router';
 import {
   IProductBody,
   ProductService,
@@ -16,25 +15,20 @@ export class ProductAddModalComponent implements OnInit {
   storeId: number;
 
   constructor(
-    private route: ActivatedRoute,
     private productService: ProductService,
     private productModalService: ProductModalService,
     private storeService: StoreService
   ) {}
 
-  ngOnInit(): void {
-    console.log('this.storeid', this.storeId);
-  }
-
-  hideModal(): void {}
+  ngOnInit(): void {}
 
   handleSubmit(body: IProductBody): void {
     body.storeId = this.storeId;
-    this.productService.save(body).subscribe(product => {
-      console.log("Saved", product)
+    this.productService.save(body).subscribe((product) => {
+      console.log('Saved', product);
       this.storeService.addedSubject.next(product);
       this.handleCancel();
-    })
+    });
   }
 
   handleCancel(): void {

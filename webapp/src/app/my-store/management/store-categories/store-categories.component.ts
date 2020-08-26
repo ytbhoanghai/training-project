@@ -1,3 +1,4 @@
+import { StoreService } from './../../../manager/store-management/store.service';
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { ConfirmModalService } from './../../../service/confirm-modal.service';
 import { ActivatedRoute } from '@angular/router';
@@ -22,7 +23,8 @@ export class StoreCategoriesComponent implements OnInit {
     private categoryModalService: CategoryModalService,
     private categoryService: CategoryService,
     private confirmModalService: ConfirmModalService,
-    private notiService: NotificationService
+    private notiService: NotificationService,
+    private storeService: StoreService
   ) {}
 
   ngOnInit(): void {
@@ -40,9 +42,12 @@ export class StoreCategoriesComponent implements OnInit {
   }
 
   fetchCategories(): void {
-    this.categoryService.fetchCategories().subscribe((categories) => {
+    // this.categoryService.fetchCategories().subscribe((categories) => {
+    //   this.categories = categories;
+    // });
+    this.storeService.fetchCategoriesByStoreId(this.storeId).subscribe(categories => {
       this.categories = categories;
-    });
+    })
   }
 
   showAddModal(): void {

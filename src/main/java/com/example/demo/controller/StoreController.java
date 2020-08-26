@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
@@ -97,6 +98,11 @@ public class StoreController {
         return ResponseEntity.ok(
                 storeService.findProductsByStoreAndIsAdded(storeId, isAdded)
         );
+    }
+
+    @GetMapping(value = "{storeId}/categories")
+    public ResponseEntity<List<Category>> getAllCategoriesByStore(@PathVariable Integer storeId) {
+        return ResponseEntity.ok(storeService.findCategoriesByStore(storeId));
     }
 
     @PostMapping

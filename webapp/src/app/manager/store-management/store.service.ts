@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SERVER_URL } from '../../core/constants/api.constants';
 import { Observable } from 'rxjs';
+import { ICategory } from '../category-management/category.service';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +33,10 @@ export class StoreService {
 
   fetchProductsByStoreId(storeId: number): Observable<IProduct[]> {
     return this.http.get<IProduct[]>(this.REQUEST_URL + `${storeId}/products/all`);
+  }
+
+  fetchCategoriesByStoreId(storeId: number): Observable<ICategory[]> {
+    return this.http.get<ICategory[]>(this.REQUEST_URL + `${storeId}/categories`);
   }
 
   fetchStatusList(): Observable<string[]> {

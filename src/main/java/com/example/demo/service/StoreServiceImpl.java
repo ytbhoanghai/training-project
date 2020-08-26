@@ -5,6 +5,7 @@ import com.example.demo.exception.RoleNotFoundException;
 import com.example.demo.exception.StoreNotFoundException;
 import com.example.demo.form.StoreForm;
 import com.example.demo.form.StoreUpdateForm;
+import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.StoreRepository;
@@ -30,6 +31,7 @@ public class StoreServiceImpl implements StoreService {
     private StoreProductService storeProductService;
     private StaffService staffService;
     private SecurityUtil securityUtil;
+    private CategoryRepository categoryRepository;
 
     @Autowired
     public StoreServiceImpl(
@@ -38,7 +40,8 @@ public class StoreServiceImpl implements StoreService {
             RoleRepository roleRepository,
             StoreProductService storeProductService,
             StaffService staffService,
-            SecurityUtil securityUtil) {
+            SecurityUtil securityUtil,
+            CategoryRepository categoryRepository) {
 
         this.storeRepository = storeRepository;
         this.productRepository = productRepository;
@@ -46,6 +49,7 @@ public class StoreServiceImpl implements StoreService {
         this.storeProductService = storeProductService;
         this.staffService = staffService;
         this.securityUtil = securityUtil;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -62,6 +66,13 @@ public class StoreServiceImpl implements StoreService {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new StoreNotFoundException(storeId));
         return productRepository.findAllByStore(store);
+    }
+
+    @Override
+    public List<Category> findCategoriesByStore(Integer storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new StoreNotFoundException(storeId));
+        return categoryRepository.findAllByStore(store);
     }
 
     @Override
