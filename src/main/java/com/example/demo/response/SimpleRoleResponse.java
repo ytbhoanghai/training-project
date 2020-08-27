@@ -20,7 +20,7 @@ public class SimpleRoleResponse {
 
     private Date createdAt;
 
-    private Integer createdBy;
+    private String createdBy;
 
     private Boolean allowUpdate;
 
@@ -31,7 +31,7 @@ public class SimpleRoleResponse {
                 .id(role.getId())
                 .name(role.getName())
                 .createdAt(role.getCreatedAt())
-                .createdBy(role.getCreatedBy().getId())
+                .createdBy(role.getCreatedBy().getUsername())
                 .allowUpdate(allowUpdate)
                 .allowDelete(allowDelete).build();
     }

@@ -45,6 +45,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<Category> findAllByStore(Store store) {
+        return categoryRepository.findAllByStore(store);
+    }
+
+    @Override
     public Category findById(Integer id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
@@ -66,9 +71,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public String deleteById(Integer id) {
+    public Integer deleteById(Integer id) {
         categoryRepository.deleteById(id);
-        return String.valueOf(id);
+        return id;
     }
 
 }

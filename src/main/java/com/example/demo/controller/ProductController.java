@@ -23,6 +23,7 @@ import java.util.List;
 public class ProductController {
 
     private ProductService productService;
+
     @Autowired
     private ProductRepository productRepository;
 

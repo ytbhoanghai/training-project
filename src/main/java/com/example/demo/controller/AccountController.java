@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.List;
 
 @ControllerAdvice
 @RequestMapping(value = "/api/account")
@@ -44,11 +46,14 @@ public class AccountController {
         return ResponseEntity.ok(staffService.getPermissionIdsOfCurrentStaff(currentStaff));
     }
 
+    @PostMapping(value = "permissions")
+    public ResponseEntity<?> checkPermissionsOfCurrentStaff(@RequestBody Map<String, List<String>> permissions) {
+        return ResponseEntity.ok(staffService.checkPermissionsOfCurrentStaff(permissions));
+    }
+
     @PostMapping
     public ResponseEntity<Staff> createAccountForCustomer(@Valid @RequestBody StaffForm staffForm) {
-        Staff staff = StaffForm.buildStaff(staffForm, null, null, new HashSet<>(), 99);
-        staff.setType(Staff.Type.CUSTOMER);
-        staff.setPassword(new BCryptPasswordEncoder().encode(staffForm.getPassword()));
+        Staff staff = StaffForm.buildStaff(staffForm, null, null, new HashSet<>(), 99, Staff.Type.CUSTOMER);
         return ResponseEntity.ok(staffService.save(staff));
     }
 
