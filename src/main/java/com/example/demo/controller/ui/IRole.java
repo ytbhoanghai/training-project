@@ -16,6 +16,8 @@ public interface IRole {
 
     List<SimpleRoleResponse> findAllRoles();
 
+    Role updateRoleById(Integer id, @Valid RoleForm roleForm);
+
     Integer deleteRoleById(Integer id);
 
     SimpleRoleResponse createRole(@Valid RoleForm roleForm);

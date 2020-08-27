@@ -89,11 +89,15 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CartItemResponse addCartItem(Integer storeId, Integer productId, Integer quantity) throws JsonProcessingException {
         Cart cart = getCartByCurrentStaff();
-        Product product = getProductInStore(storeId, productId);
+        Product product = productService.findById(productId);
 
         Store store = storeService.findById(storeId);
         CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product)
                 .orElse(new CartItem(null, cart, product, store, 0, new Date()));
+
+        if (cartItem.getQuantity() + quantity > product.getQuantity()) {
+            throw new NotEnoughQuantityException("not enough quantity !!!");
+        }
 
         if (cart.getStore() == null) {
             cart.setStore(store);
@@ -102,11 +106,6 @@ public class CustomerServiceImpl implements CustomerService {
             if (!cart.getStore().getId().equals(storeId)) {
                 throw new ProductNotSameStoreException(Collections.singletonList(productId));
             }
-        }
-
-        StoreProduct storeProduct = storeProductService.findById(new StoreProduct.StoreProductID(storeId, productId));
-        if (cartItem.getQuantity() + quantity > storeProduct.getQuantity()) {
-            throw new NotEnoughQuantityException("not enough quantity !!!");
         }
 
         cartItem.setQuantity(cartItem.getQuantity() + quantity);
@@ -165,7 +164,7 @@ public class CustomerServiceImpl implements CustomerService {
                     : cartItem.getQuantity() + cartItemMergeForm.getQuantity();
 
             Product product = (cartItem == null)
-                    ? getProductInStore(cartItemMergeForm.getStoreId(), cartItemMergeForm.getProductId())
+                    ? storeService.getProductById(cartItemMergeForm.getStoreId(), cartItemMergeForm.getProductId())
                     : cartItem.getProduct();
 
             if (cartItem == null) {
@@ -174,12 +173,8 @@ public class CustomerServiceImpl implements CustomerService {
                 cartItems.add(cartItem);
             }
 
-            StoreProduct.StoreProductID id = new StoreProduct.StoreProductID(cartItemMergeForm.getStoreId(), cartItemMergeForm.getProductId());
-            StoreProduct storeProduct = storeProductService.findById(id);
-
-            if (storeProduct.getQuantity() < quantity) {
+            if (product.getQuantity() < quantity) {
                 invalid.add(cartItemMergeForm.getProductId());
-                cartItem.setQuantity(storeProduct.getQuantity());
             } else {
                 cartItem.setQuantity(quantity);
             }
@@ -212,66 +207,25 @@ public class CustomerServiceImpl implements CustomerService {
             Integer storeId, Integer categoryId, Pageable pageable, String keyword) {
         Store store = storeService.findById(storeId);
 
-        List<StoreProduct> storeProductList = storeProductService.findAllByStore(store);
+        PageableProductResponse response = null;
+        if (categoryId == -1) {
+            response =
+                    productService.findAllByStoreAndNameMatches(store, keyword, pageable);
+        } else {
+            Category category = categoryService.findById(categoryId);
+            response =
+                    productService.findAllByStoreAndCategoriesIsContainingAndNameMatchesRegex(store, category, keyword, pageable);
+        }
 
-        Supplier<Stream<ProductResponse>> streamSupplier = () -> storeProductList.stream()
-                .filter(storeProduct -> storeProduct.getProduct().getName().matches("(?i).*" + keyword + ".*"))
-                .filter(storeProduct -> {
-                    if (categoryId != -1) {
-                        return storeProduct.getProduct().getCategories().stream()
-                                .anyMatch(category -> category.getId().equals(categoryId));
-                    }
-                    return true;
-                })
-                .map(storeProduct -> ProductResponse.build(storeProduct, store.getName()));
-
-        double totalElements = streamSupplier.get().count();
-
-        List<ProductResponse> productResponses = streamSupplier.get()
-                .skip(pageable.getPageNumber() * pageable.getPageSize())
-                .limit(pageable.getPageSize())
-                .collect(Collectors.toList());
-
-        return PageableProductResponse.builder()
-                .currentPage(pageable.getPageNumber() + 1)
-                .totalPages((int) Math.ceil(totalElements / pageable.getPageSize()))
-                .totalElements((int) totalElements)
-                .size(productResponses.size())
-                .products(productResponses)
-                .build();
+        return response;
     }
 
     @Override
     public PageableProductResponse findProductsByStoreAndCategory(Integer storeId, Integer categoryId, Pageable pageable) {
         Store store = storeService.findById(storeId);
+        Category category = categoryService.findById(categoryId);
 
-        List<StoreProduct> storeProductList = storeProductService.findAllByStore(store);
-
-        Supplier<Stream<ProductResponse>> streamSupplier = () -> storeProductList.stream()
-                .filter(storeProduct -> {
-                    System.out.println(storeProduct.getProduct().getName());
-                    if (categoryId != -1) {
-                        return storeProduct.getProduct().getCategories().stream()
-                                .anyMatch(category -> category.getId().equals(categoryId));
-                    }
-                    return true;
-                })
-                .map(storeProduct -> ProductResponse.build(storeProduct, store.getName()));
-
-        double totalElements = streamSupplier.get().count();
-
-        List<ProductResponse> productResponses = streamSupplier.get()
-                .skip(pageable.getPageNumber() * pageable.getPageSize())
-                .limit(pageable.getPageSize())
-                .collect(Collectors.toList());
-
-        return PageableProductResponse.builder()
-                .currentPage(pageable.getPageNumber() + 1)
-                .totalPages((int) Math.ceil(totalElements / pageable.getPageSize()))
-                .totalElements((int) totalElements)
-                .size(productResponses.size())
-                .products(productResponses)
-                .build();
+        return productService.findAllByStoreAndCategoriesIsContaining(store, category, pageable);
     }
 
     @Override
@@ -297,7 +251,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .map(cartItem -> OrderItem.build(cartItem, order))
                 .collect(Collectors.toList());
 
-        updateStoreProductQuantity(cartItems);
+        updateProductQuantity(cartItems);
 
         cartItemRepository.deleteAll(cartItems);
 
@@ -327,24 +281,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
         order.setStatus(orderUpdateForm.getStatus());
         return orderRepository.save(order);
-    }
-
-    private int getQuantityFromCartItemUpdateForms(List<CartItemUpdateForm> itemUpdateForms, CartItem cartItem) {
-        int temp = -1;
-        Optional<CartItemUpdateForm> optionalCartItemUpdateForm = itemUpdateForms.stream()
-                .filter(e -> {
-                    boolean flag1 = e.getIdCartItem().equals(cartItem.getId());
-                    boolean flag2 = !e.getQuantity().equals(cartItem.getQuantity());
-
-                    return flag1 && flag2;
-                })
-                .findFirst();
-        if (optionalCartItemUpdateForm.isPresent()) {
-            CartItemUpdateForm itemUpdateForm = optionalCartItemUpdateForm.get();
-            temp = itemUpdateForm.getQuantity();
-        }
-
-        return temp;
     }
 
     private CartItem getCartItemInCart(CartItemMergeForm cartItemMergeForm, List<CartItem> cartItems) {
@@ -381,42 +317,37 @@ public class CustomerServiceImpl implements CustomerService {
         List<Integer> invalid = new ArrayList<>();
 
         Cart cart = getCartByCurrentStaff();
+
         List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
 
-        cartItems.forEach(cartItem -> {
-            int temp = getQuantityFromCartItemUpdateForms(cartItemUpdateForms, cartItem);
-            if (temp != -1) { // is exists
-                Product product = cartItem.getProduct();
-                if (temp > product.getQuantity()) {
-                    invalid.add(cartItem.getId());
-                } else {
-                    cartItem.setQuantity(temp);
-                }
+        for (CartItemUpdateForm cartItemUpdateForm : cartItemUpdateForms) {
+            CartItem cartItem = cartItems.stream()
+                    .filter(c -> c.getId().equals(cartItemUpdateForm.getIdCartItem()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (cartItem == null) { continue; }
+
+            Product product = cartItem.getProduct();
+            if (cartItemUpdateForm.getQuantity() > product.getQuantity()) {
+                invalid.add(cartItem.getId());
+            } else {
+                cartItem.setQuantity(cartItemUpdateForm.getQuantity());
             }
-        });
+        }
 
         cartItemRepository.saveAll(cartItems);
         return invalid;
     }
 
-    private void updateStoreProductQuantity(List<CartItem> cartItems) {
+    private void updateProductQuantity(List<CartItem> cartItems) {
         cartItems.forEach(cartItem -> {
-            StoreProduct.StoreProductID id = new StoreProduct.StoreProductID(cartItem.getStore().getId(), cartItem.getProduct().getId());
-            StoreProduct storeProduct = storeProductService.findById(id);
-            if (storeProduct.getQuantity() == 0) {
-                throw new NotEnoughQuantityException("product not enough quantity");
-            }
-            storeProduct.setQuantity(storeProduct.getQuantity() - cartItem.getQuantity());
-            storeProductService.save(storeProduct);
-        });
-    }
+            Product product = cartItem.getProduct();
+            Integer _quantity = product.getQuantity();
 
-    private Product getProductInStore(Integer storeId, Integer productId) {
-        Product product = storeService.getProductById(storeId, productId);
-        if (product == null) {
-            throw new ProductNotExistsInStoreException(new StoreProduct.StoreProductID(storeId, productId));
-        }
-        return product;
+            product.setQuantity(_quantity - cartItem.getQuantity());
+            productService.save(product);
+        });
     }
 
 }

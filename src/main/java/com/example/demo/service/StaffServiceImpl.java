@@ -239,45 +239,19 @@ public class StaffServiceImpl implements StaffService {
         return false;
     }
 
-    private Boolean isAllowedUpdate(Staff staff, Staff currentStaff) {
-        if (currentStaff.hasPermission(StaffPermission.UPDATE)) {
-            if (currentStaff.isAdmin() || currentStaff.equals(staff)) {
-                return true;
-            } else if (staff.getStore() == null && currentStaff.getLevel() < staff.getLevel()) {
-                return true;
-            } else return staff.getStore() != null
-                    && currentStaff.getLevel() < staff.getLevel()
-                    && currentStaff.getStore() == staff.getStore();
-        }
-        return false;
+    @Override
+    public Boolean isAllowedUpdate(Staff staff, Staff currentStaff) {
+        return currentStaff.getType() == staff.getType() && currentStaff.hasPermission(StaffPermission.UPDATE);
     }
 
-    private Boolean isAllowedUpdateRole(Staff staff, Staff currentStaff) {
-        if (currentStaff.hasPermission(StaffPermission.UPDATE)) {
-            if (currentStaff.isAdmin()) {
-                return true;
-            } else if (staff.getStore() == null && currentStaff.getLevel() < staff.getLevel()) {
-                return true;
-            } else return staff.getStore() != null
-                    && currentStaff.getLevel() < staff.getLevel()
-                    && currentStaff.getStore() == staff.getStore();
-        }
-        return false;
+    @Override
+    public Boolean isAllowedUpdateRole(Staff staff, Staff currentStaff) {
+        return currentStaff.getType() == staff.getType() && currentStaff.hasPermission(StaffPermission.UPDATE);
     }
 
-    private Boolean isAllowedDelete(Staff staff, Staff currentStaff) {
-        if (currentStaff.hasPermission(StaffPermission.DELETE)) {
-            if (staff.getLevel() != 0) {
-                if (currentStaff.isAdmin()) {
-                    return true;
-                } else if (staff.getStore() == null && currentStaff.getLevel() < staff.getLevel()) {
-                    return true;
-                } else return staff.getStore() != null
-                        && currentStaff.getLevel() < staff.getLevel()
-                        && currentStaff.getStore() == staff.getStore();
-            }
-        }
-        return false;
+    @Override
+    public Boolean isAllowedDelete(Staff staff, Staff currentStaff) {
+        return currentStaff.getType() == staff.getType() && currentStaff.hasPermission(StaffPermission.DELETE);
     }
 
     @Override

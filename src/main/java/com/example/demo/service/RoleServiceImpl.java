@@ -130,20 +130,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Boolean isAllowedUpdate(Role role, Staff currentStaff) {
-        if (currentStaff.hasPermission(RolePermission.UPDATE)) {
-            return currentStaff.getLevel() < role.getLevel()
-                    || role.getCreatedBy().equals(currentStaff);
-        }
-        return false;
+        return currentStaff.hasPermission(RolePermission.UPDATE);
     }
 
     @Override
     public Boolean isAllowedDelete(Role role, Staff currentStaff) {
-        if (!currentStaff.hasPermission(RolePermission.DELETE) || !role.getGrantable()) {
-            return false;
-        }
-        return currentStaff.getLevel() < role.getLevel()
-                || role.getCreatedBy().equals(currentStaff);
+        return currentStaff.hasPermission(RolePermission.DELETE);
     }
 
     @Override

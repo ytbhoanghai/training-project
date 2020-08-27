@@ -45,5 +45,11 @@ public interface StaffService {
 
     Map<String, List<String>> checkPermissionsOfCurrentStaff(Map<String, List<String>> permissions);
 
+    Boolean isAllowedUpdate(Staff staff, Staff currentStaff);
+
+    Boolean isAllowedUpdateRole(Staff staff, Staff currentStaff);
+
+    Boolean isAllowedDelete(Staff staff, Staff currentStaff);
+
     Staff createAccountManagerForStore(Staff createdBy, Store store, StoreForm storeForm);
 }

@@ -17,6 +17,7 @@ import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -69,18 +70,18 @@ public class CustomerController {
         return ResponseEntity.ok(new MessageResponse("remove cart item success by id " + idCartItem));
     }
 
-    @GetMapping(value = "stores/{storeId}/categories/{categoryId}/products/search")
-    public ResponseEntity<PageableProductResponse> searchProducts(
-            @PathVariable Integer storeId, @PathVariable Integer categoryId,
-            @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
-            @RequestParam(name = "size", required = false, defaultValue = "6") Integer size,
-            @RequestParam(name = "search", required = false, defaultValue = "") String keyword) {
-
-//        Page starts from 0
-        Pageable pageable = PageRequest.of(page - 1, size);
-        PageableProductResponse responses = customerService.searchProducts(storeId, categoryId, pageable, keyword);
-        return ResponseEntity.ok(responses);
-    }
+//    @GetMapping(value = "stores/{storeId}/categories/{categoryId}/products/search")
+//    public ResponseEntity<PageableProductResponse> searchProducts(
+//            @PathVariable Integer storeId, @PathVariable Integer categoryId,
+//            @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
+//            @RequestParam(name = "size", required = false, defaultValue = "6") Integer size,
+//            @RequestParam(name = "search", required = false, defaultValue = "") String keyword) {
+//
+////        Page starts from 0
+//        Pageable pageable = PageRequest.of(page - 1, size);
+//        PageableProductResponse responses = customerService.searchProducts(storeId, categoryId, pageable, keyword);
+//        return ResponseEntity.ok(responses);
+//    }
 
     @GetMapping(value = "stores/{storeId}/categories/{categoryId}/products")
     public ResponseEntity<PageableProductResponse> findProductsByStoreAndCategory(
@@ -90,7 +91,9 @@ public class CustomerController {
             @RequestParam(name = "search", required = false, defaultValue = "") String keyword
     ) {
         /* Page starts from 0 */
-        Pageable pageable = PageRequest.of(page - 1, size);
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+
         PageableProductResponse responses =
                 customerService.searchProducts(storeId, categoryId, pageable, keyword.trim());
         /* customerService.findProductsByStoreAndCategory(storeId, categoryId, pageable); */

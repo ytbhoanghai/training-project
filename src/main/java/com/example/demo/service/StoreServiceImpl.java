@@ -16,6 +16,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,7 +51,9 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<Store> findAll() { return storeRepository.findAll(); }
+    public List<Store> findAll() {
+        return storeRepository.findAll();
+    }
 
     @Override
     public Store findById(Integer id) {
@@ -142,11 +145,8 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Product getProductById(Integer storeId, Integer productId) {
         Store store = findById(storeId);
-        return store.getStoreProductList().stream()
-                .filter(storeProduct -> storeProduct.getProduct().getId().equals(productId))
-                .findFirst()
-                .map(StoreProduct::getProduct)
-                .orElse(null);
+        return productRepository.findByIdAndStore(productId, store)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
     }
 
     @Override

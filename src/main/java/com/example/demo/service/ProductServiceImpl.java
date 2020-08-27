@@ -12,6 +12,7 @@ import com.example.demo.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,6 +48,27 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findAllByStore(Store store) {
         return productRepository.findAllByStore(store);
+    }
+
+    @Override
+    public PageableProductResponse findAllByStoreAndNameMatches(Store store, String term, Pageable pageable) {
+        Page<Product> products =
+                productRepository.findAllByStoreAndNameContains(store, term, pageable);
+        return PageableProductResponse.build(products);
+    }
+
+    @Override
+    public PageableProductResponse findAllByStoreAndCategoriesIsContainingAndNameMatchesRegex(Store store, Category category, String term, Pageable pageable) {
+        Page<Product> products =
+                productRepository.findAllByStoreAndCategoriesIsContainingAndNameContains(store, category, term, pageable);
+        return PageableProductResponse.build(products);
+    }
+
+    @Override
+    public PageableProductResponse findAllByStoreAndCategoriesIsContaining(Store store, Category category, Pageable pageable) {
+        Page<Product> products =
+                productRepository.findAllByStoreAndCategoriesIsContaining(store, category, pageable);
+        return PageableProductResponse.build(products);
     }
 
     @Override
