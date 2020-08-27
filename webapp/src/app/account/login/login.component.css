@@ -44,3 +44,9 @@
 #or::after {
   right: 0;
 }
+
+@media only screen and (max-width: 500px) {
+  .wrapper {
+    padding: 0 8px;
+  }
+}

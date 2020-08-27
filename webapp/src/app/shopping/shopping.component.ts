@@ -33,6 +33,13 @@ export class ShoppingComponent implements OnInit {
       this.user = user;
       this.username = user?.name;
     });
+    this.kickoutMangerAndAdmin();
+  }
+
+  kickoutMangerAndAdmin(): void {
+    if (this.userService.isManager() || this.userService.isAdmin()) {
+      this.authService.logoutUser().subscribe();
+    }
   }
 
   login(): void {

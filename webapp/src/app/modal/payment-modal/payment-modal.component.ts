@@ -63,7 +63,9 @@ export class PaymentModalComponent implements OnInit {
         this.hideModal();
         this.notiService.showSuccess('Checkout successfully!');
         this.cartService.clearCart(this.cartService.getCart().id);
-        this.router.navigate(['/shopping']);
+        this.router.navigate(['/shopping']).then(() => {
+          location.reload();
+        });
       },
       (err: HttpErrorResponse) => {
         if (err.status === 406) {

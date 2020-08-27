@@ -47,7 +47,7 @@
     </thead>
     <tbody>
     <tr class="d-flex" *ngFor="let resource of resources">
-      <td class="col-md-6 pl-md-2">{{resource.name}}</td>
+      <td class="col-md-6 pl-md-2">{{ resource.name | titlecase }} Management</td>
       <td class="text-center col-sm-2 col-md-1" *ngFor="let permission of resource.permissions">
         <input
           type="checkbox"
