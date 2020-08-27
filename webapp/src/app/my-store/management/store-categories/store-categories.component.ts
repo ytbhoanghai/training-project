@@ -32,7 +32,7 @@ export class StoreCategoriesComponent implements OnInit {
     this.fetchCategories();
 
     this.categoryService.addedObservable$.subscribe((category: ICategory) => {
-      this.categories.push(category);
+      this.categories.unshift(category);
     });
 
     this.categoryService.updateObservable$.subscribe((category: ICategory) => {

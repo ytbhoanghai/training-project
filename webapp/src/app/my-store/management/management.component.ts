@@ -31,7 +31,7 @@ export class ManagementComponent implements OnInit {
   fetchCurrentStore(): void {
     this.route.params.subscribe((params) => {
       this.storeId = params.id;
-      this.storeService.fetchById(this.storeId).subscribe((store) => {
+      this.storeService.fetchByIdFromManager(this.storeId).subscribe((store) => {
         this.store = store;
       });
     });
@@ -58,12 +58,15 @@ export class ManagementComponent implements OnInit {
       if (this.canShow('role')) {
         return this.router.navigate(['roles'], { relativeTo: this.route });
       }
+      if (this.canShow('order')) {
+        return this.router.navigate(['orders'], { relativeTo: this.route });
+      }
     });
   }
 
-  canShow(role: string): boolean {
+  canShow(resource: string): boolean {
     if (!this.grantedPermissions) return false;
-    return !!this.grantedPermissions[role]?.includes('read');
+    return !!this.grantedPermissions[resource]?.includes('read');
   }
 
   isClosed(): boolean {

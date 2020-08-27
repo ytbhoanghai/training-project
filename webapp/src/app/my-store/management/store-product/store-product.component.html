@@ -94,6 +94,9 @@
           </button>
         </td>
       </tr>
+      <tr *ngIf="!addedProducts.length">
+        <td colspan="6" class="text-center text-danger font-italic">Sorry! Nothing to show</td>
+      </tr>
     </tbody>
   </table>
 </div>

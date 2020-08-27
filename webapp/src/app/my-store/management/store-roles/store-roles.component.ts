@@ -27,14 +27,14 @@ export class StoreRolesComponent implements OnInit {
     this.fetchRoles();
     this.roleService.roleAddObservable$.subscribe((role) => {
       if (role) {
-        this.roles.push(role);
+        this.roles.unshift(role);
       }
     });
 
     this.roleService.updateObservable$.subscribe((role: IRole) => {
-      const index = this.roles.findIndex(r => r.id === role.id);
-      this.roles[index] = role;
-    })
+      const index = this.roles.findIndex((r) => r.id === role.id);
+      this.roles[index] = { ...this.roles[index], ...role };
+    });
 
     this.currentUser = this.userService.getCurrentUser();
   }

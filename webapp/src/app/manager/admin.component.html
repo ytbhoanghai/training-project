@@ -13,6 +13,7 @@
       <hr />
       <div class="sidebar-items">
         <div
+          *ngIf="canShow('store')"
           class="management-item"
           routerLinkActive="active"
           routerLink="store-management"
@@ -25,6 +26,7 @@
           </div>
         </div>
         <div
+          *ngIf="canShow('staff')"
           class="management-item"
           routerLinkActive="active"
           routerLink="user-management"
@@ -33,6 +35,7 @@
           Staff Management
         </div>
         <div
+          *ngIf="canShow('role')"
           class="management-item"
           routerLinkActive="active"
           routerLink="role-management"

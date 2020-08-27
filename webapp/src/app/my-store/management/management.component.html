@@ -23,7 +23,7 @@
       <ul class="nav nav-pills mb-3">
         <li class="nav-item">
           <a
-            *ngIf="canShow('product') || true"
+            *ngIf="canShow('product')"
             class="nav-link"
             routerLink="products"
             routerLinkActive="active"
@@ -61,6 +61,7 @@
         <li class="nav-item">
           <!-- *ngIf="canShow('order')" -->
           <a
+            *ngIf="canShow('order')"
             class="nav-link"
             routerLink="orders"
             routerLinkActive="active"

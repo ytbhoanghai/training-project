@@ -11,6 +11,7 @@ import { ICategory } from '../category-management/category.service';
   providedIn: 'root',
 })
 export class StoreService {
+  private REQUEST_URL: string = SERVER_URL + '/stores/';
   private ADMIN_URL: string = SERVER_URL + '/admin/stores/';
   private MANAGER_URL: string = SERVER_URL + '/manager/stores/';
 
@@ -26,11 +27,18 @@ export class StoreService {
   constructor(private http: HttpClient) {}
 
   fetchStores(): Observable<IStore[]> {
-    return this.http.get<IStore[]>(this.ADMIN_URL.slice(0, -1));
+    if (location.pathname.startsWith('/admin'))
+      return this.http.get<IStore[]>(this.ADMIN_URL.slice(0, -1));
+    else
+      return this.http.get<IStore[]>(this.REQUEST_URL.slice(0, -1));
   }
 
   fetchById(id: number): Observable<IStore> {
     return this.http.get<IStore>(this.ADMIN_URL + id);
+  }
+
+  fetchByIdFromManager(id: number): Observable<IStore> {
+    return this.http.get<IStore>(this.MANAGER_URL + id);
   }
 
   fetchProducts(): Observable<IProduct[]> {

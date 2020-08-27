@@ -53,7 +53,12 @@ export class UserManagementService {
   }
 
   update(id: number, body: IUser): Observable<IUser> {
-    return this.http.put<IUser>(this.REQUEST_URL + id, body);
+    if (location.pathname.startsWith('/my-store'))
+      return this.http.put<IUser>(this.MANAGER_URL + id, body);
+    else if (location.pathname.startsWith('/admin'))
+      return this.http.put<IUser>(this.ADMIN_URL + id, body);
+    else
+      return this.http.put<IUser>(this.REQUEST_URL + id, body);
   }
 
   delete(id: number): Observable<unknown> {

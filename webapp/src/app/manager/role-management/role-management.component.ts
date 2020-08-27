@@ -6,7 +6,7 @@ import { RoleManagementService } from '../../service/role-management.service';
 import { MDBModalService } from 'ng-uikit-pro-standard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ViewRoleDetailsManagementComponent } from '../../modal/view-role-details-management/view-role-details-management.component';
-import {IUser, UserService} from "../../core/auth/user.service";
+import { IUser, UserService } from '../../core/auth/user.service';
 
 @Component({
   selector: 'app-role-management',
@@ -23,20 +23,20 @@ export class RoleManagementComponent implements OnInit {
     private ngbService: NgbModal,
     private notiSerive: NotificationService,
     private confirmService: ConfirmModalService,
-    private userService: UserService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
     this.fetchRoles();
     this.roleManagementService.updateObservable$.subscribe((role: IRole) => {
       const index: number = this.roles.findIndex((r) => r.id === role.id);
-      this.roles[index] = role;
+      this.roles[index] = { ...this.roles[index], ...role };
     });
     this.currentUser = this.userService.getCurrentUser();
   }
 
   fetchRoles(): void {
-    this.roleManagementService.findAllRoles().subscribe((roles) => {
+    this.roleManagementService.findAllAdminRoles().subscribe((roles) => {
       this.roles = roles;
     });
   }
@@ -62,7 +62,7 @@ export class RoleManagementComponent implements OnInit {
 
   deleteRole(role: IRole): void {
     this.confirmService.show().onYes(() => {
-      this.roleManagementService.deleteRoleById(role.id).subscribe(() => {
+      this.roleManagementService.deleteAdminRoleById(role.id).subscribe(() => {
         // delete role in view
         const index = this.roles.indexOf(role);
         this.roles.splice(index, 1);

@@ -61,15 +61,16 @@ export class AuthService {
 
   navigateUser(user: IUser): void {
     switch (user.type) {
+      case UserType[UserType.CUSTOMER]:
+        this.router.navigate(['/shopping']);
+        return;
+      case UserType[UserType.OTHER]:
+        this.router.navigate(['/my-store']);
+        this.notiService.showSuccess('Logged in as Store Manager!');
+        return;
       case UserType[UserType.ADMIN]:
         this.router.navigate(['/admin']);
         this.notiService.showSuccess('Logged in as Admin!');
-        return;
-      case UserType[UserType.OTHER]:
-        if (user.isManager) {
-          this.router.navigate(['/my-store']);
-          this.notiService.showSuccess('Logged in as Store Manager!');
-        }
         return;
     }
   }

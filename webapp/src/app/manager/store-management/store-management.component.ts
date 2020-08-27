@@ -1,5 +1,4 @@
 import { NotificationService } from './../../layouts/notification/notification.service';
-import { ConfirmModalComponent } from './../../modal/confirm-modal/confirm-modal.component';
 import { MDBModalRef } from 'ng-uikit-pro-standard';
 import { ConfirmModalService } from './../../service/confirm-modal.service';
 import { StoreModalService } from './../../service/store-modal.service';

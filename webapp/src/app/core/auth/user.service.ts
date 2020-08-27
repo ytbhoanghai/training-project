@@ -96,11 +96,23 @@ export class UserService {
   }
 
   checkPermissionOnResources(): Observable<IGrantedPermisson> {
+    const fullPermissions = ['read', 'create', 'update', 'delete'];
     const body: IGrantedPermisson = {
-      product: ['read'],
-      staff: ['read'],
-      category: ['read'],
-      role: ['read'],
+      product: fullPermissions,
+      staff: fullPermissions,
+      category: fullPermissions,
+      role: fullPermissions,
+      order: fullPermissions
+    };
+    return this.http.post<IGrantedPermisson>(this.REQUEST_URL + 'permissions', body);
+  }
+
+  checkAdminPemissonOnResources(): Observable<IGrantedPermisson> {
+    const fullPermissions = ['read', 'create', 'update', 'delete'];
+    const body: IGrantedPermisson = {
+      staff: fullPermissions,
+      role: fullPermissions,
+      store: fullPermissions,
     };
     return this.http.post<IGrantedPermisson>(this.REQUEST_URL + 'permissions', body);
   }
@@ -117,4 +129,5 @@ export interface IGrantedPermisson {
   staff?: string[];
   role?: string[];
   order?: string[];
+  store?: string[];
 }

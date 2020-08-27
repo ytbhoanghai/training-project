@@ -35,6 +35,11 @@ export class ShoppingComponent implements OnInit {
     });
   }
 
+  login(): void {
+    if (this.userService.isLogin()) return;
+    this.router.navigate(['/account/login']);
+  }
+
   loadSearchQuery(): void {
     this.searchKeyword = this.route.snapshot.queryParams.search;
   }

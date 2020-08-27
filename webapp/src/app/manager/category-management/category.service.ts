@@ -15,27 +15,35 @@ export class CategoryService {
   updateObservable$ = this.updateSubject.asObservable();
 
   private REQUEST_URL = SERVER_URL + '/categories/';
+  private MANAGER_URL = SERVER_URL + '/manager/categories/';
 
   constructor(private http: HttpClient) { }
 
   fetchCategories(): Observable<ICategory[]> {
-    return this.http.get<ICategory[]>(this.REQUEST_URL.slice(0, -1));
+    if (location.pathname.startsWith('/my-store'))
+      return this.http.get<ICategory[]>(this.MANAGER_URL.slice(0, -1));
+    else
+      return this.http.get<ICategory[]>(this.REQUEST_URL.slice(0, -1));
+  }
+
+  fetchCategoriesFromManager(): Observable<ICategory[]> {
+    return this.http.get<ICategory[]>(this.MANAGER_URL.slice(0, -1));
   }
 
   fetchCategoryById(id: number): Observable<ICategory> {
-    return this.http.get<ICategory>(this.REQUEST_URL + id);
+    return this.http.get<ICategory>(this.MANAGER_URL + id);
   }
 
   save(body: ICategoryBody): Observable<ICategory> {
-    return this.http.post<ICategory>(this.REQUEST_URL, body);
+    return this.http.post<ICategory>(this.MANAGER_URL, body);
   }
 
   update(id: number, body: ICategoryBody): Observable<ICategory> {
-    return this.http.put<ICategory>(this.REQUEST_URL + id, body);
+    return this.http.put<ICategory>(this.MANAGER_URL + id, body);
   }
 
-  deleteById(id: number): Observable<any> {
-    return this.http.delete<any>(SERVER_URL + `/manager/categories/${id}`);
+  deleteById(id: number): Observable<unknown> {
+    return this.http.delete<unknown>(this.MANAGER_URL + id);
   }
 }
 

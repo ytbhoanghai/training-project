@@ -39,7 +39,7 @@ export class StoreStaffsComponent implements OnInit, OnDestroy {
     this.listeners.add(
       this.staffService.userAddObservable$.subscribe((user) => {
         if (user) {
-          this.addedStaffs.push(user);
+          this.addedStaffs.unshift(user);
         }
       })
     );

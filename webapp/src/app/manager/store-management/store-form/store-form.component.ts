@@ -44,7 +44,7 @@ export class StoreFormComponent implements OnInit {
   ngOnInit(): void {
     this.fillDataToForm();
     this.fetchStoreStatus();
-    this.fetchManagerList();
+    // this.fetchManagerList();
   }
 
   fetchStoreStatus(): void {

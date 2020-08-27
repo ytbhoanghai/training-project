@@ -47,7 +47,7 @@ export class StoreProductComponent implements OnInit {
     });
 
     this.storeService.addedObservable$.subscribe((product) => {
-      this.addedProducts.push(product);
+      this.addedProducts.unshift(product);
     });
 
     this.productService.updateObservable$.subscribe((product: IProduct) => {

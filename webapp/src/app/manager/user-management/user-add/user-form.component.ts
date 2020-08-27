@@ -47,7 +47,7 @@ export class UserFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchStores();
+    // this.fetchStores();
     this.fetchRoles();
     this.fillUserToForm();
   }
