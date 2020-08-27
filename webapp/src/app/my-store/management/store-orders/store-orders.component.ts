@@ -29,7 +29,7 @@ export class StoreOrdersComponent implements OnInit {
 
   fetchOrders(): void {
     this.customerService
-      .fetchOrdersByStore(this.storeId)
+      .fetchOrdersByStore()
       .subscribe((orders) => {
         this.orders = orders;
       });

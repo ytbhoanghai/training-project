@@ -1,10 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.*;
-import com.example.demo.exception.RoleNotFoundException;
+import com.example.demo.exception.ProductNotFoundException;
 import com.example.demo.exception.StoreNotFoundException;
 import com.example.demo.form.StoreForm;
-import com.example.demo.form.StoreUpdateForm;
+import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.StoreRepository;
@@ -16,6 +16,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,10 +27,10 @@ public class StoreServiceImpl implements StoreService {
 
     private StoreRepository storeRepository;
     private ProductRepository productRepository;
-    private RoleRepository roleRepository;
     private StoreProductService storeProductService;
     private StaffService staffService;
     private SecurityUtil securityUtil;
+    private CategoryRepository categoryRepository;
 
     @Autowired
     public StoreServiceImpl(
@@ -38,23 +39,40 @@ public class StoreServiceImpl implements StoreService {
             RoleRepository roleRepository,
             StoreProductService storeProductService,
             StaffService staffService,
-            SecurityUtil securityUtil) {
+            SecurityUtil securityUtil,
+            CategoryRepository categoryRepository) {
 
         this.storeRepository = storeRepository;
         this.productRepository = productRepository;
-        this.roleRepository = roleRepository;
         this.storeProductService = storeProductService;
         this.staffService = staffService;
         this.securityUtil = securityUtil;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
-    public List<Store> findAll() { return storeRepository.findAll(); }
+    public List<Store> findAll() {
+        return storeRepository.findAll();
+    }
 
     @Override
     public Store findById(Integer id) {
         return storeRepository.findById(id)
                 .orElseThrow(() -> new StoreNotFoundException(id));
+    }
+
+    @Override
+    public List<Product> findAllProductsByStoreId(Integer storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new StoreNotFoundException(storeId));
+        return productRepository.findAllByStore(store);
+    }
+
+    @Override
+    public List<Category> findCategoriesByStore(Integer storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new StoreNotFoundException(storeId));
+        return categoryRepository.findAllByStore(store);
     }
 
     @Override
@@ -100,7 +118,7 @@ public class StoreServiceImpl implements StoreService {
     public void removeStaffFromStore(Integer storeId, Integer staffId) {
         Store store = findById(storeId);
 
-        if (checkPermissionAddAndRemoveStaffFromStore(store)) {
+        if (checkPermission(store)) {
             throw new AccessDeniedException("Access Denied !!!");
         }
 
@@ -114,7 +132,7 @@ public class StoreServiceImpl implements StoreService {
     public void addStaffToStore(Integer storeId, Integer staffId) {
         Store store = findById(storeId);
 
-        if(checkPermissionAddAndRemoveStaffFromStore(store)) {
+        if(checkPermission(store)) {
             throw new AccessDeniedException("Access Denied!");
         }
 
@@ -127,45 +145,36 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Product getProductById(Integer storeId, Integer productId) {
         Store store = findById(storeId);
-        return store.getStoreProductList().stream()
-                .filter(storeProduct -> storeProduct.getProduct().getId().equals(productId))
-                .findFirst()
-                .map(StoreProduct::getProduct)
-                .orElse(null);
+        return productRepository.findByIdAndStore(productId, store)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
     }
 
     @Override
     public void updateQuantityOfProductInStore(Integer storeId, Integer productId, Integer quantity) {
-        storeProductService.updateQuantityOfProductInStore(storeId, productId, quantity);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+
+        Integer _quantity = product.getQuantity();
+        product.setQuantity(_quantity + quantity);
+
+        productRepository.save(product);
+//        storeProductService.updateQuantityOfProductInStore(storeId, productId, quantity);
     }
 
     @Override
-    public Store update(Integer id, StoreUpdateForm storeUpdateForm) {
-        Staff currentStaff = securityUtil.getCurrentStaff();
+    public Store update(Integer id, StoreForm storeForm) {
         Store store = findById(id);
+        store.setName(storeForm.getName());
+        store.setAddress(storeForm.getAddress());
+        store.setPhone(storeForm.getPhone());
+        store.setStatus(storeForm.getStatus());
 
-        List<Staff> storeManagerList = staffService.findAllByStoreAndIsManager(store, true);
-        List<Staff> newStoreManagerList = staffService.findAllByIdIsIn(storeUpdateForm.getIdManagers());
-
-        if (!currentStaff.isAdmin()) {
-            Set<Integer> idStoreManagerList = storeManagerList.stream()
-                    .map(Staff::getId)
-                    .collect(Collectors.toSet());
-            if (!idStoreManagerList.equals(storeUpdateForm.getIdManagers())) {
-                throw new AccessDeniedException("you don't have permission to update manager list of this store");
-            }
-        }
-
-        setAndSaveIsManagerForListStaff(storeManagerList, false, null); // disable all is manager of store
-        setAndSaveIsManagerForListStaff(newStoreManagerList, true, store); // set new manager for store
-
-
-        return storeRepository.save(Store.updateData(store, storeUpdateForm));
+        return storeRepository.save(store);
     }
 
     @Override
     @Transactional
-    public String deleteById(Integer id) {
+    public Integer deleteById(Integer id) {
         Store store = findById(id);
         // remove store in staff
         List<Staff> staffListAfterRemoveStore = staffService.findAllByStore(store).stream()
@@ -182,7 +191,7 @@ public class StoreServiceImpl implements StoreService {
         // delete store
         storeRepository.deleteById(id);
 
-        return String.valueOf(id);
+        return id;
     }
 
     @Override
@@ -261,25 +270,7 @@ public class StoreServiceImpl implements StoreService {
         staffService.saveAll(staffList);
     }
 
-    private void setAndSaveIsManagerForListStaff(List<Staff> staffList, Boolean isManager, Store store) {
-        // get role store_manager
-        Role role = roleRepository.findById(2)
-                .orElseThrow(() -> new RoleNotFoundException(1));
-
-        staffList.forEach(staff -> {
-            staff.setIsManager(isManager);
-            if (isManager) { // if isManager is true then add role store_manager for staffs
-                staff.getRoles().add(role);
-                staff.setStore(store);
-            } else {
-                staff.getRoles().remove(role);
-            }
-        });
-        // save all
-        staffService.saveAll(staffList);
-    }
-
-    private boolean checkPermissionAddAndRemoveStaffFromStore(Store store) {
+    private boolean checkPermission(Store store) { //???
         Staff currentStaff = securityUtil.getCurrentStaff();
         return !currentStaff.isAdmin() &&
                 !(currentStaff.getIsManager() && currentStaff.getStore().equals(store));

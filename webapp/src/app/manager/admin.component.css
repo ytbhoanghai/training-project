@@ -14,12 +14,21 @@
   color: #fff;
 }
 
+.sidebar-items {
+  margin-top: 16px;
+  /* border: 1px solid #fff;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly; */
+}
+
 .content-wrapper {
   /* margin-left: 100px; */
 }
 
 .management-item {
-  padding: 8px 0;
+  padding: 16px 0;
   width: 100%;
   /* height: 80px; */
   font-size: 0.7rem;

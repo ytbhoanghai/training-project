@@ -3,17 +3,21 @@ package com.example.demo.service;
 import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
 import com.example.demo.form.StaffForm;
+import com.example.demo.form.StoreForm;
 import com.example.demo.form.UpdatePasswordForm;
 import com.example.demo.response.StaffResponse;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface StaffService {
 
-    List<StaffResponse> findAll();
+    List<StaffResponse> findAllAndConventToResponse();
 
     List<Staff> findAllByStore(Store store);
+
+    List<Staff> findAllAndType(Staff.Type type);
 
     List<Staff> findAllByStoreAndIsManager(Store store, Boolean isManager);
 
@@ -23,7 +27,7 @@ public interface StaffService {
 
     Staff findByUsername(String username);
 
-    Staff findById(Integer id);
+    Staff findByIdAndType(Integer id, Staff.Type type);
 
     Staff save(StaffForm staffForm);
 
@@ -31,10 +35,21 @@ public interface StaffService {
 
     Staff update(Integer id, StaffForm staffForm);
 
-    String deleteById(Integer id);
+    Integer deleteById(Integer id);
 
     List<Integer> getPermissionIdsOfCurrentStaff(Staff currentStaff);
 
+    Staff findById(Integer id);
+
     List<Staff> findAllByStoreIsNull();
 
+    Map<String, List<String>> checkPermissionsOfCurrentStaff(Map<String, List<String>> permissions);
+
+    Boolean isAllowedUpdate(Staff staff, Staff currentStaff);
+
+    Boolean isAllowedUpdateRole(Staff staff, Staff currentStaff);
+
+    Boolean isAllowedDelete(Staff staff, Staff currentStaff);
+
+    Staff createAccountManagerForStore(Staff createdBy, Store store, StoreForm storeForm);
 }

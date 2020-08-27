@@ -1,10 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'src/app/core/auth/user.service';
 import { Router } from '@angular/router';
 import { NotificationService } from './../../../layouts/notification/notification.service';
-import {
-  ICustomerBody,
-  CustomerService,
-} from './../../../service/customer.service';
+import { ICustomerBody } from './../../../service/customer.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
@@ -30,7 +28,6 @@ export class RegisterFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private customerService: CustomerService,
     private userService: UserService,
     private notiService: NotificationService,
     private router: Router
@@ -44,6 +41,11 @@ export class RegisterFormComponent implements OnInit {
     this.userService.createAccount(body).subscribe(() => {
       this.notiService.showSuccess('Account created!');
       this.router.navigate(['']);
+      this.registerForm.reset();
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 500) {
+        this.notiService.showError('Existed username');
+      }
     });
   }
 

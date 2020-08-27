@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.Permission;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.Staff;
+import com.example.demo.entity.Store;
 import com.example.demo.exception.PermissionInvalidException;
 import com.example.demo.exception.RoleNotFoundException;
 import com.example.demo.form.RoleForm;
@@ -59,6 +60,21 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public List<Role> findAllByStore(Store store) { return roleRepository.findAllByStore(store); }
+
+    @Override
+    public Role findByIdAndStoreIsNotNull(Integer id) {
+        return roleRepository.findByIdAndStoreIsNotNull(id)
+                .orElseThrow(() -> new RoleNotFoundException(id));
+    }
+
+    @Override
+    public Role findByIdAndStoreIsNull(Integer id) {
+        return roleRepository.findByIdAndStoreIsNull(id)
+                .orElseThrow(() -> new RoleNotFoundException(id));
+    }
+
+    @Override
     public RoleResponse findById(Integer id) {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new RoleNotFoundException(id));
@@ -93,7 +109,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public Integer delete(Integer id) {
         Staff currentStaff = securityUtil.getCurrentStaff();
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new RoleNotFoundException(id));
@@ -103,22 +119,28 @@ public class RoleServiceImpl implements RoleService {
         }
 
         roleRepository.deleteById(role.getId());
+
+        return id;
     }
 
-    private Boolean isAllowedUpdate(Role role, Staff currentStaff) {
-        if (currentStaff.hasPermission(RolePermission.UPDATE)) {
-            return currentStaff.getLevel() < role.getLevel()
-                    || role.getCreatedBy().equals(currentStaff);
-        }
-        return false;
+    @Override
+    public Set<Role> findAllByIdIsIn(Set<Integer> roleIds) {
+        return roleRepository.findAllByIdIsIn(roleIds);
     }
 
-    private Boolean isAllowedDelete(Role role, Staff currentStaff) {
-        if (!currentStaff.hasPermission(RolePermission.DELETE) || !role.getGrantable()) {
-            return false;
-        }
-        return currentStaff.getLevel() < role.getLevel()
-                || role.getCreatedBy().equals(currentStaff);
+    @Override
+    public Boolean isAllowedUpdate(Role role, Staff currentStaff) {
+        return currentStaff.hasPermission(RolePermission.UPDATE);
+    }
+
+    @Override
+    public Boolean isAllowedDelete(Role role, Staff currentStaff) {
+        return currentStaff.hasPermission(RolePermission.DELETE);
+    }
+
+    @Override
+    public List<Role> findByStoreIsNull() {
+        return roleRepository.findAllByStoreIsNull();
     }
 
     private void handlePermissionsIsValid(Staff currentStaff, Set<Integer> permissions) {

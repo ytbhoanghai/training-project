@@ -35,7 +35,7 @@ public class StaffController {
         List<StaffResponse> staffs = null;
         switch (option) {
             case "All":
-                staffs = staffService.findAll();
+                staffs = staffService.findAllAndConventToResponse();
                 break;
             case "NotInStore":
                 staffs = staffService.findAllByStoreIsNull().stream()
@@ -70,7 +70,7 @@ public class StaffController {
     @DeleteMapping("{staffId}")
     @PreAuthorize("hasAuthority(\"" + StaffPermission.DELETE + "\")")
     public ResponseEntity<?> deleteById(@PathVariable Integer staffId) {
-        String deletedId = staffService.deleteById(staffId);
+        Integer deletedId = staffService.deleteById(staffId);
         return new ResponseEntity<>(new MessageResponse("Deleted successfully Staff ID: " + deletedId), HttpStatus.OK);
     }
 }

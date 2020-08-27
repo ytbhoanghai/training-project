@@ -92,6 +92,7 @@ export class CartService {
       }
       this.localCartService.clear();
     });
+    this.localCartService.clear();
   }
 
   doAfterMerge(): void {
@@ -246,7 +247,6 @@ export class CartService {
   doPostClearCart(): void {
     this.cart.items = [];
     this.changeEvent.next(this.cart);
-    this.notiService.showQuickSuccess('Clear cart successfully!');
   }
 
   clearLocalCart(): void {

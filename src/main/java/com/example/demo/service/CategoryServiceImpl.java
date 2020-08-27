@@ -2,9 +2,12 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Staff;
+import com.example.demo.entity.Store;
 import com.example.demo.exception.CategoryNotFoundException;
+import com.example.demo.exception.StoreNotFoundException;
 import com.example.demo.form.CategoryForm;
 import com.example.demo.repository.CategoryRepository;
+import com.example.demo.repository.StoreRepository;
 import com.example.demo.response.SimpleCategoryResponse;
 import com.example.demo.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +22,18 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
     private StaffServiceImpl staffService;
     private SecurityUtil securityUtil;
+    private StoreRepository storeRepository;
 
     @Autowired
     public CategoryServiceImpl(
             CategoryRepository categoryRepository,
             StaffServiceImpl staffService,
-            SecurityUtil securityUtil) {
+            SecurityUtil securityUtil,
+            StoreRepository storeRepository) {
         this.categoryRepository = categoryRepository;
         this.securityUtil = securityUtil;
         this.staffService = staffService;
+        this.storeRepository = storeRepository;
     }
 
     @Override
@@ -39,6 +45,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<Category> findAllByStore(Store store) {
+        return categoryRepository.findAllByStore(store);
+    }
+
+    @Override
     public Category findById(Integer id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
@@ -47,7 +58,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category save(CategoryForm categoryForm) {
         Staff createByStaff = securityUtil.getCurrentStaff();
-        Category category = CategoryForm.buildCategory(categoryForm, createByStaff);
+        Store store = storeRepository.findById(categoryForm.getStoreId())
+                .orElseThrow(() -> new StoreNotFoundException(categoryForm.getStoreId()));
+        Category category = CategoryForm.buildCategory(categoryForm, store, createByStaff);
         return categoryRepository.save(category);
     }
 
@@ -58,9 +71,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public String deleteById(Integer id) {
+    public Integer deleteById(Integer id) {
         categoryRepository.deleteById(id);
-        return String.valueOf(id);
+        return id;
     }
 
 }

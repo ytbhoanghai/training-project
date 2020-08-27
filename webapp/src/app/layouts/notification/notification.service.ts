@@ -22,7 +22,7 @@ export class NotificationService {
   showSuccess(message?: string): void {
     this.toastService.success(
       message || 'Operation perform successfully!',
-      '200 OK',
+      'Success',
       this.options
     );
   }
@@ -54,7 +54,7 @@ export class NotificationService {
   showError401(message?: string): void {
     this.toastService.error(
       message || "You don't have permissions to do this action",
-      '401 Unauthorized',
+      'Unauthorized',
       this.options
     );
   }

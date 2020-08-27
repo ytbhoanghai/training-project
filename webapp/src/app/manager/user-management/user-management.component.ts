@@ -23,17 +23,21 @@ export class UserManagementComponent implements OnInit {
   ngOnInit(): void {
     this.fetchUsers();
     this.userService.updateObservable$.subscribe((user: IUser) => {
-      const index: number = this.users.findIndex((u) => u.id === user.id);
+      const index = this.users.findIndex((u) => u.id === user.id);
       this.users[index] = { ...this.users[index], ...user };
     });
   }
 
   fetchUsers(): void {
-    this.userService.fetchAll().subscribe((users) => {
-      users.sort((a, b) => a?.storeName.localeCompare(b?.storeName));
-      users.reverse();
+    this.userService.fetchAllFromAdmin().subscribe((users) => {
+      // users.sort((a, b) => a?.storeName.localeCompare(b?.storeName));
+      // users.reverse();
       this.users = users;
     });
+  }
+
+  printRoles(user: IUser): string {
+    return user.roles.map(r => r.name).join(', ');
   }
 
   deleteUser(id: number): void {

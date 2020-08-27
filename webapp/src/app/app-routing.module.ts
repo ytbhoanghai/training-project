@@ -1,17 +1,17 @@
-import { ADMIN, MANAGER } from './core/constants/role.constants';
+import { ADMIN, MANAGER, CUSTOMER } from './core/constants/role.constants';
 import { CheckLoginGuard } from './config/guard/check-login.guard';
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
-import {CheckAuthoritiesGuard} from './config/guard/check-authorities.guard';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { CheckAuthoritiesGuard } from './config/guard/check-authorities.guard';
 
-import {errorRoute} from './layouts/error/error.route';
+import { errorRoute } from './layouts/error/error.route';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     // loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
-    redirectTo: 'shopping'
+    redirectTo: 'account/login',
   },
   {
     path: 'admin',
@@ -21,34 +21,38 @@ const routes: Routes = [
         (m) => m.ManagerRoutingModule
       ),
     data: {
-      role: ADMIN
-    }
+      role: [ADMIN, MANAGER],
+    },
   },
   {
     path: 'my-store',
-    canActivate: [CheckLoginGuard, CheckAuthoritiesGuard],
+    canActivate: [CheckAuthoritiesGuard],
     loadChildren: () =>
       import('./my-store/my-store-routing.module').then(
         (m) => m.MyStoreRoutingModule
       ),
     data: {
-      role: MANAGER
-    }
+      role: [MANAGER],
+    },
   },
   {
     path: 'shopping',
+    // canActivate: [CheckAuthoritiesGuard],
     loadChildren: () =>
       import('./shopping/shopping-routing.module').then(
-        m => m.ShoppingRoutingModule
-      )
+        (m) => m.ShoppingRoutingModule
+      ),
+    data: {
+      role: [CUSTOMER],
+    },
   },
   {
     path: 'account',
-    canActivate: [CheckLoginGuard],
+    // canActivate: [CheckLoginGuard],
     loadChildren: () =>
       import('./account/account-routing.module').then(
-        m => m.AccountRoutingModule
-      )
+        (m) => m.AccountRoutingModule
+      ),
   },
   ...errorRoute,
 ];
@@ -57,5 +61,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}

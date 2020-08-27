@@ -23,7 +23,6 @@ export class RoleUpdateModalComponent implements OnInit {
   }
 
   handleSubmit(roleId: number, body): void {
-    console.log(roleId, body);
     this.roleService.updateRole(roleId, body).subscribe((role) => {
       this.notiSerive.showSuccess('Updated successfully!');
       this.hide();

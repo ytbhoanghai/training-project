@@ -1,10 +1,10 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.Staff;
 import com.example.demo.entity.Store;
 import com.example.demo.form.StoreForm;
-import com.example.demo.form.StoreUpdateForm;
 import com.example.demo.response.StoreProductResponse;
 
 import java.util.List;
@@ -16,18 +16,21 @@ public interface StoreService {
 
     Store findById(Integer id);
 
+    List<Product> findAllProductsByStoreId(Integer id);
+
+    List<Category> findCategoriesByStore(Integer storeId);
+
     Store save(StoreForm storeForm);
 
     void addProductToStore(Integer storeId, Integer productId, Integer quantity);
 
-    Store update(Integer id, StoreUpdateForm storeUpdateForm);
-
-    String deleteById(Integer id);
+    Integer deleteById(Integer id);
 
     void addStaffListToStore(Integer storeId, Set<Integer> idStaff);
 
     List<Staff> findStaffsByStoreAndIsManager(Integer storeId, Boolean isManager);
 
+    @Deprecated
     List<StoreProductResponse> findProductsByStoreAndIsAdded(Integer storeId, Boolean isAdded);
 
     void deleteProductFromStore(Integer storeId, Integer productId);
@@ -43,4 +46,6 @@ public interface StoreService {
     Product getProductById(Integer storeId, Integer productId);
 
     void updateQuantityOfProductInStore(Integer storeId, Integer productId, Integer quantity);
+
+    Store update(Integer id, StoreForm storeForm);
 }

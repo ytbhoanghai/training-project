@@ -2,10 +2,12 @@
   <h2 class="font-weight-bold">
     Welcome, {{ user?.name || "anonymous" }}!
   </h2>
+  <div class="text-muted h6">Logged in as {{ user.type }}</div>
   <div class="row">
     <div class="col-lg-4">
+      <!-- src="assets/img/store-green.png" -->
       <img
-        src="assets/img/store-green.png"
+        src="assets/img/admin.png"
         class="img-fluid float-left text-center"
       />
     </div>

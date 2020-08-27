@@ -23,6 +23,7 @@
       <ul class="nav nav-pills mb-3">
         <li class="nav-item">
           <a
+            *ngIf="canShow('product')"
             class="nav-link"
             routerLink="products"
             routerLinkActive="active"
@@ -31,6 +32,16 @@
         </li>
         <li class="nav-item">
           <a
+            *ngIf="canShow('category')"
+            class="nav-link"
+            routerLink="categories"
+            routerLinkActive="active"
+            ><i class="fas fa-tag"></i> Categories</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            *ngIf="canShow('staff')"
             class="nav-link"
             routerLink="staffs"
             routerLinkActive="active"
@@ -39,6 +50,7 @@
         </li>
         <li class="nav-item">
           <a
+            *ngIf="canShow('role')"
             class="nav-link"
             routerLink="roles"
             routerLinkActive="active"
@@ -47,7 +59,9 @@
           >
         </li>
         <li class="nav-item">
+          <!-- *ngIf="canShow('order')" -->
           <a
+            *ngIf="canShow('order')"
             class="nav-link"
             routerLink="orders"
             routerLinkActive="active"

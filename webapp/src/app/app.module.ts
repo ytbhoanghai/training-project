@@ -64,6 +64,9 @@ import { LoadingComponent } from './layouts/loading/loading.component';
 import { ShoppingDetailsComponent } from './modal/shopping-details/shopping-details.component';
 import { RoleAddModalComponent } from './modal/role-add-modal/role-add-modal.component';
 import { ProductImportModalComponent } from './modal/product-import-modal/product-import-modal.component';
+import { LoginComponent } from './account/login/login.component';
+import { ProductAddModalComponent } from './modal/product-add-modal/product-add-modal.component';
+import { CategoryAddModalComponent } from './modal/category-add-modal/category-add-modal.component';
 
 @NgModule({
   declarations: [
@@ -114,7 +117,10 @@ import { ProductImportModalComponent } from './modal/product-import-modal/produc
     AdminDashboardComponent,
     ProductImportModalComponent,
     UserAddModalComponent,
-    RoleAddModalComponent
+    RoleAddModalComponent,
+    LoginComponent,
+    ProductAddModalComponent,
+    CategoryAddModalComponent,
   ],
   imports: [
     BrowserModule,

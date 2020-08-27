@@ -33,6 +33,18 @@ export class ShoppingComponent implements OnInit {
       this.user = user;
       this.username = user?.name;
     });
+    this.kickoutMangerAndAdmin();
+  }
+
+  kickoutMangerAndAdmin(): void {
+    if (this.userService.isManager() || this.userService.isAdmin()) {
+      this.authService.logoutUser().subscribe();
+    }
+  }
+
+  login(): void {
+    if (this.userService.isLogin()) return;
+    this.router.navigate(['/account/login']);
   }
 
   loadSearchQuery(): void {
@@ -66,7 +78,11 @@ export class ShoppingComponent implements OnInit {
   }
 
   isManager(): boolean {
-    return this.user.type === 'OTHER';
+    return this.user.type === 'OTHER' && this.user.isManager;
+  }
+
+  isStaff(): boolean {
+    return this.user.type === 'OTHER' && !this.user.isManager;
   }
 
   isRouterActive(): boolean {
@@ -75,5 +91,10 @@ export class ShoppingComponent implements OnInit {
 
   logout(): void {
     this.authService.logoutUser().subscribe(() => (this.username = null));
+  }
+
+  backToHome(): void {
+    if (location.pathname.startsWith('/shopping/store')) return;
+    this.router.navigate(['/shopping']);
   }
 }

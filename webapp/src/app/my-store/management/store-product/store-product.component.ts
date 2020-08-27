@@ -1,9 +1,11 @@
+import { Subscription } from 'rxjs';
+import { ProductModalService } from './../../../service/product-modal.service';
 import { ProductImportModalService } from './../../../service/product-import-modal.service';
 import { ConfirmModalService } from './../../../service/confirm-modal.service';
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { StoreService } from './../../../manager/store-management/store.service';
 import { ActivatedRoute } from '@angular/router';
-import { IProduct } from './../../../manager/product-management/product.service';
+import { IProduct, ProductService } from './../../../manager/product-management/product.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -13,6 +15,8 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./store-product.component.css'],
 })
 export class StoreProductComponent implements OnInit {
+  listeners: Subscription;
+
   addedProducts: IProduct[] = [];
   remainedProducts: IProduct[] = [];
 
@@ -25,34 +29,52 @@ export class StoreProductComponent implements OnInit {
     private route: ActivatedRoute,
     private notiService: NotificationService,
     private confirmService: ConfirmModalService,
-    private productImportModalService: ProductImportModalService
+    private productImportModalService: ProductImportModalService,
+    private productModalService: ProductModalService,
+    private productService: ProductService
   ) {}
 
   ngOnInit(): void {
     this.storeId = this.route.parent.snapshot.params.id;
     this.fetchProducts();
+
     this.storeService.importedObservable$.subscribe(({ id, newQuan }) => {
       const index = this.addedProducts.findIndex((p) => p.id === id);
       // Add quantity
-      const addedQuan = this.addedProducts[index].storeProductQuantity + newQuan;
-      this.addedProducts[index].storeProductQuantity = addedQuan;
+      const addedQuan =
+        this.addedProducts[index].quantity + newQuan;
+      this.addedProducts[index].quantity = addedQuan;
     });
+
+    this.storeService.addedObservable$.subscribe((product) => {
+      this.addedProducts.unshift(product);
+    });
+
+    this.productService.updateObservable$.subscribe((product: IProduct) => {
+      const index: number = this.addedProducts.findIndex(p => p.id === product.id);
+      this.addedProducts[index] = product;
+    })
   }
 
   fetchProducts(): void {
-    // Fetch added products
+    // // Fetch added products
+    // this.storeService
+    //   .fetchProductByStoreAndIsAdded(this.storeId, true)
+    //   .subscribe((products) => {
+    //     this.addedProducts = products;
+    //   });
+
+    // // Fetch can add products
+    // this.storeService
+    //   .fetchProductByStoreAndIsAdded(this.storeId, false)
+    //   .subscribe((products) => {
+    //     this.remainedProducts = products;
+    //     this.resetSelected();
+    //   });
     this.storeService
-      .fetchProductByStoreAndIsAdded(this.storeId, true)
+      .fetchProducts()
       .subscribe((products) => {
         this.addedProducts = products;
-      });
-
-    // Fetch can add products
-    this.storeService
-      .fetchProductByStoreAndIsAdded(this.storeId, false)
-      .subscribe((products) => {
-        this.remainedProducts = products;
-        this.resetSelected();
       });
   }
 
@@ -97,13 +119,14 @@ export class StoreProductComponent implements OnInit {
 
   removeProduct(product: IProduct): void {
     this.confirmService.show().onYes(() => {
-      this.remainedProducts.push(product);
-      this.addedProducts = this.addedProducts.filter((p) => p !== product);
-      this.resetSelected();
-
       // Remove from API
-      this.storeService.removeProduct(this.storeId, product.id).subscribe(
-        () => this.notiService.showSuccess(),
+      this.productService.deleteById(product.id).subscribe(
+        () => {
+          this.remainedProducts.push(product);
+          this.addedProducts = this.addedProducts.filter((p) => p !== product);
+          this.resetSelected();
+          this.notiService.showSuccess();
+        },
         (err: HttpErrorResponse) => this.notiService.showError401(err.message)
       );
     });
@@ -121,5 +144,13 @@ export class StoreProductComponent implements OnInit {
   showImportModal(product: IProduct): void {
     product.storeId = this.storeId;
     this.productImportModalService.show(product);
+  }
+
+  showAddModal(): void {
+    this.productModalService.showAddModal(this.storeId);
+  }
+
+  showUpdateModal(product: IProduct): void {
+    this.productModalService.showUpdateModal(product);
   }
 }

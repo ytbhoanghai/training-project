@@ -15,8 +15,8 @@ import { UserManagementService } from '../../../manager/user-management/user-man
   styleUrls: ['./store-staffs.component.css'],
 })
 export class StoreStaffsComponent implements OnInit, OnDestroy {
-  staffs: ISimpleStaff[] = [];
-  addedStaffs: ISimpleStaff[] = [];
+  staffs: IUser[] = [];
+  addedStaffs: IUser[] = [];
 
   storeId: number;
   selectStaffId = 0;
@@ -39,14 +39,13 @@ export class StoreStaffsComponent implements OnInit, OnDestroy {
     this.listeners.add(
       this.staffService.userAddObservable$.subscribe((user) => {
         if (user) {
-          this.addedStaffs.push(user);
+          this.addedStaffs.unshift(user);
         }
       })
     );
 
     this.listeners.add(
       this.staffService.updateObservable$.subscribe((user: IUser) => {
-        console.log('Listen', user);
         const index = this.addedStaffs.findIndex((u) => u.id === user.id);
         this.addedStaffs[index] = { ...this.addedStaffs[index], ...user };
       })
@@ -64,14 +63,18 @@ export class StoreStaffsComponent implements OnInit, OnDestroy {
         this.addedStaffs = staffs;
       });
 
-    this.staffService.fetchAssignableStaffs().subscribe((staffs) => {
-      this.staffs = staffs;
-      this.resetSelected();
-    });
+    // this.staffService.fetchAssignableStaffs().subscribe((staffs) => {
+    //   this.staffs = staffs;
+    //   this.resetSelected();
+    // });
+  }
+
+  printStaffRoles(staff: ISimpleStaff): string {
+    return staff.roles.map(r => r.name).join(', ');
   }
 
   addStaff(): void {
-    const staff: ISimpleStaff = this.staffs.find(
+    const staff: IUser = this.staffs.find(
       (s) => s.id === this.selectStaffId
     );
     if (!staff) {
@@ -79,7 +82,7 @@ export class StoreStaffsComponent implements OnInit, OnDestroy {
     }
 
     this.storeService
-      .addStaffToStore(this.storeId, this.selectStaffId)
+      .addStaffToStore(null)
       .subscribe(
         () => {
           this.addedStaffs.push(staff);
@@ -99,7 +102,7 @@ export class StoreStaffsComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteStaff(staff: ISimpleStaff): void {
+  deleteStaff(staff: IUser): void {
     this.confirmService.show().onYes(() => {
       this.storeService.deleteStaffFromStore(this.storeId, staff.id).subscribe(
         () => {

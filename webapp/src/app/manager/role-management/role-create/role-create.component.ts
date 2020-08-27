@@ -23,7 +23,7 @@ export class RoleCreateComponent implements OnInit {
   }
 
   handleSubmit(body: IRoleBody): void {
-    this.roleManagementService.createRole(body).subscribe((role) => {
+    this.roleManagementService.createAdminRole(body).subscribe((role) => {
       this.notiSerive.showSuccess('Role created successfully!');
       this.back();
     });

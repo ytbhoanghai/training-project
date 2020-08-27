@@ -10,6 +10,7 @@ import { ICategory } from '../category-management/category.service';
 })
 export class ProductService {
   private REQUEST_URL = SERVER_URL + '/products/';
+  private MANAGER_URL = SERVER_URL + '/manager/products/';
 
   public updateSubject = new Subject();
   public updateObservable$ = this.updateSubject.asObservable();
@@ -25,15 +26,15 @@ export class ProductService {
   }
 
   save(body: IProductBody): Observable<IProduct> {
-    return this.http.post<IProduct>(this.REQUEST_URL, body);
+    return this.http.post<IProduct>(this.MANAGER_URL, body);
   }
 
   update(id: number, body: IProductBody): Observable<IProduct> {
-    return this.http.put<IProduct>(this.REQUEST_URL + id, body);
+    return this.http.put<IProduct>(this.MANAGER_URL + id, body);
   }
 
   deleteById(id: number): Observable<any> {
-    return this.http.delete<any>(this.REQUEST_URL + id);
+    return this.http.delete<any>(this.MANAGER_URL + id);
   }
 }
 
@@ -58,5 +59,7 @@ export interface IProduct {
 export interface IProductBody {
   name: string;
   price: number;
+  quantity?: number;
+  storeId?: number;
   categories: number[]
 }

@@ -47,13 +47,13 @@
     </select>
   </div>
 
-  <div class="form-group">
+  <!-- <div class="form-group">
     <label>Select store:</label>
     <select class="custom-select" formControlName="storeId" [attr.disabled]="this?.storeId || this.user?.idStore">
       <option>-- Select a store --</option>
       <option *ngFor="let store of stores" [value]="store.id">{{ store.name }}</option>
     </select>
-  </div>
+  </div> -->
 
   <div class="text-right">
     <button class="btn btn-primary mr-2" type="submit"><i class="fas fa-save"></i>Save</button>
