@@ -1,11 +1,9 @@
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
-import {
-  CategoryService,
-  ICategory,
-} from './../../category-management/category.service';
-import { IProduct } from './../product.service';
+import { CategoryService } from '../../category-management/category.service';
+import { IProduct } from 'src/app/core/models';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ICategory } from 'src/app/core/models';
 
 @Component({
   selector: 'app-product-form',
@@ -47,7 +45,7 @@ export class ProductFormComponent implements OnInit {
     if (!this.product) return;
     this.productForm.patchValue({
       ...this.product,
-      categories: this.product.categories.map(c => c.id),
+      categories: this.product.categories.map((c) => c.id),
     });
   }
 

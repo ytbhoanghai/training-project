@@ -2,8 +2,9 @@ import { NotificationService } from './../../layouts/notification/notification.s
 import { MDBModalRef } from 'ng-uikit-pro-standard';
 import { ConfirmModalService } from './../../service/confirm-modal.service';
 import { StoreModalService } from './../../service/store-modal.service';
-import { StoreService, IStore } from './store.service';
+import { StoreService } from './store.service';
 import { Component, OnInit } from '@angular/core';
+import { IStore } from 'src/app/core/models';
 
 @Component({
   selector: 'app-store-management',

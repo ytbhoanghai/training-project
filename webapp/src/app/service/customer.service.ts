@@ -1,10 +1,10 @@
-import { IProduct } from './../manager/product-management/product.service';
-import { ICategory } from './../manager/category-management/category.service';
+import { IProduct } from 'src/app/core/models';
 import { Observable } from 'rxjs';
 import { SERVER_URL } from './../core/constants/api.constants';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IPaymentInfo } from './payment-modal.service';
+import { ICategory } from '../core/models';
 
 @Injectable({
   providedIn: 'root',

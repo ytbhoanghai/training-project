@@ -2,7 +2,7 @@ import { StoreUpdateModalComponent } from './../modal/store-update-modal/store-u
 import { StoreDetailsModalComponent } from './../modal/store-details-modal/store-details-modal.component';
 import { Injectable } from '@angular/core';
 import { MDBModalService, MDBModalRef } from 'ng-uikit-pro-standard';
-import { IStore } from '../manager/store-management/store.service';
+import { IStore } from 'src/app/core/models';
 
 @Injectable({
   providedIn: 'root',

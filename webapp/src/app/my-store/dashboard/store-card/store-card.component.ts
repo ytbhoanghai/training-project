@@ -1,10 +1,7 @@
 import { StoreModalService } from './../../../service/store-modal.service';
 import { StoreService } from './../../../manager/store-management/store.service';
-import {
-  IStore,
-  StatusType,
-} from 'src/app/manager/store-management/store.service';
 import { Component, OnInit, Input } from '@angular/core';
+import { IStore, StatusType } from 'src/app/core/models';
 
 @Component({
   selector: 'app-store-card',
@@ -26,8 +23,8 @@ export class StoreCardComponent implements OnInit {
   }
 
   showDetailsModal(id: number): void {
-    this.storeService.fetchById(id).subscribe(store => {
+    this.storeService.fetchById(id).subscribe((store) => {
       this.storeModalService.showDetailsModal(store);
-    })
+    });
   }
 }

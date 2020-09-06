@@ -1,12 +1,12 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
-import {ICategory} from "../category.service";
-import {NotificationService} from "../../../layouts/notification/notification.service";
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { NotificationService } from '../../../layouts/notification/notification.service';
+import { ICategory } from 'src/app/core/models';
 
 @Component({
   selector: 'app-category-form',
   templateUrl: './category-form.component.html',
-  styleUrls: ['./category-form.component.css']
+  styleUrls: ['./category-form.component.css'],
 })
 export class CategoryFormComponent implements OnInit {
   @Input() category: ICategory;
@@ -15,13 +15,13 @@ export class CategoryFormComponent implements OnInit {
 
   categoryForm = this.formBuilder.group({
     name: [null, [Validators.required, Validators.minLength(4)]],
-    description: ['']
-  })
+    description: [''],
+  });
 
   constructor(
     private formBuilder: FormBuilder,
     private notiService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.fillDataOnUpdate();
@@ -39,5 +39,4 @@ export class CategoryFormComponent implements OnInit {
     }
     this.notiService.showWaring('Invalid form. Please check again');
   }
-
 }

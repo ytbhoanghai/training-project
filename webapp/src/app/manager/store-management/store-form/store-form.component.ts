@@ -1,6 +1,6 @@
 import { StoreService } from './../store.service';
 import { NotificationService } from './../../../layouts/notification/notification.service';
-import { IStore } from 'src/app/manager/store-management/store.service';
+import { IStore } from 'src/app/core/models';
 import { Validators } from '@angular/forms';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';

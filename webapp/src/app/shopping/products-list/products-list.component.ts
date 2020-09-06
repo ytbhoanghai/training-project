@@ -1,4 +1,4 @@
-import { IStore } from 'src/app/manager/store-management/store.service';
+import { IStore } from 'src/app/core/models';
 import { NotificationService } from './../../layouts/notification/notification.service';
 import { StoreService } from './../../manager/store-management/store.service';
 import { map, last, debounceTime } from 'rxjs/operators';
@@ -8,7 +8,7 @@ import {
   IPageableProduct,
   IProductFilter,
 } from './../../service/customer.service';
-import { IProduct } from './../../manager/product-management/product.service';
+import { IProduct } from 'src/app/core/models';
 import { Component, OnInit } from '@angular/core';
 import { combineLatest } from 'rxjs';
 

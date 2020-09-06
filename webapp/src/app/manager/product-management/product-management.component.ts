@@ -1,8 +1,9 @@
 import { ConfirmModalService } from './../../service/confirm-modal.service';
 import { ProductModalService } from './../../service/product-modal.service';
 import { NotificationService } from './../../layouts/notification/notification.service';
-import { IProduct, ProductService } from './product.service';
+import { ProductService } from './product.service';
 import { Component, OnInit } from '@angular/core';
+import { IProduct } from 'src/app/core/models';
 
 @Component({
   selector: 'app-product-management',

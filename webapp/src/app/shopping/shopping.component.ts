@@ -1,7 +1,7 @@
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { LoginModalService } from './../service/login-modal.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { IStore } from 'src/app/manager/store-management/store.service';
+import { IStore } from 'src/app/core/models';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../core/auth/user.service';
 import { Subscription } from 'rxjs';

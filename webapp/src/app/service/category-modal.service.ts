@@ -1,9 +1,9 @@
 import { CategoryAddModalComponent } from './../modal/category-add-modal/category-add-modal.component';
 import { CategoryUpdateComponent } from './../modal/category-update/category-update.component';
 import { CategoryDetailsComponent } from './../modal/category-details/category-details.component';
-import { ICategory } from './../manager/category-management/category.service';
 import { MDBModalRef, MDBModalService } from 'ng-uikit-pro-standard';
 import { Injectable } from '@angular/core';
+import { ICategory } from '../core/models';
 
 @Injectable({
   providedIn: 'root',

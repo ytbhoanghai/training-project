@@ -1,6 +1,6 @@
 import { StoreModalService } from './../../service/store-modal.service';
 import { Component, OnInit } from '@angular/core';
-import { IStore } from 'src/app/manager/store-management/store.service';
+import { IStore } from 'src/app/core/models';
 
 @Component({
   selector: 'app-store-details-modal',

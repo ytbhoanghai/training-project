@@ -1,7 +1,7 @@
 import { ProductAddModalComponent } from './../modal/product-add-modal/product-add-modal.component';
 import { ProductUpdateComponent } from './../modal/product-update/product-update.component';
 import { ProductDetailsComponent } from './../modal/product-details/product-details.component';
-import { IProduct } from './../manager/product-management/product.service';
+import { IProduct } from 'src/app/core/models';
 import { MDBModalService, MDBModalRef } from 'ng-uikit-pro-standard';
 import { Injectable } from '@angular/core';
 

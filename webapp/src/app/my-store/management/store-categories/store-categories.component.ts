@@ -3,11 +3,9 @@ import { NotificationService } from 'src/app/layouts/notification/notification.s
 import { ConfirmModalService } from './../../../service/confirm-modal.service';
 import { ActivatedRoute } from '@angular/router';
 import { CategoryModalService } from './../../../service/category-modal.service';
-import {
-  ICategory,
-  CategoryService,
-} from './../../../manager/category-management/category.service';
+import { CategoryService } from '../../../manager/category-management/category.service';
 import { Component, OnInit } from '@angular/core';
+import { ICategory } from 'src/app/core/models';
 
 @Component({
   selector: 'app-store-categories',
@@ -45,9 +43,9 @@ export class StoreCategoriesComponent implements OnInit {
     // this.categoryService.fetchCategories().subscribe((categories) => {
     //   this.categories = categories;
     // });
-    this.storeService.fetchCategoriesByStoreId().subscribe(categories => {
+    this.storeService.fetchCategoriesByStoreId().subscribe((categories) => {
       this.categories = categories;
-    })
+    });
   }
 
   showAddModal(): void {

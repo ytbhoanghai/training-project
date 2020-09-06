@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { SERVER_URL } from './../../core/constants/api.constants';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ICategory } from '../category-management/category.service';
+import { IProduct, IProductBody, IMessageResponse } from 'src/app/core/models';
 
 @Injectable({
   providedIn: 'root'
@@ -33,33 +33,7 @@ export class ProductService {
     return this.http.put<IProduct>(this.MANAGER_URL + id, body);
   }
 
-  deleteById(id: number): Observable<any> {
-    return this.http.delete<any>(this.MANAGER_URL + id);
+  deleteById(id: number): Observable<IMessageResponse> {
+    return this.http.delete<IMessageResponse>(this.MANAGER_URL + id);
   }
-}
-
-export interface IProduct {
-  id: number;
-  name: string;
-  price: number;
-  // Quantity in warehouser
-  quantity: number;
-  // Quantity in store
-  storeName?: string;
-  storeProductQuantity?: number;
-  createdAt?: number;
-  categories?: ICategory[],
-  categoryNames?: string[],
-  imgUrl?: string;
-  productId?: number;
-  cartItemId?: number;
-  storeId?: number;
-}
-
-export interface IProductBody {
-  name: string;
-  price: number;
-  quantity?: number;
-  storeId?: number;
-  categories: number[]
 }

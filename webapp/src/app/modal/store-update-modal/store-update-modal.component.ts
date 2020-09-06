@@ -1,6 +1,6 @@
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { StoreService } from './../../manager/store-management/store.service';
-import { IStore } from 'src/app/manager/store-management/store.service';
+import { IStore } from 'src/app/core/models';
 import { StoreModalService } from './../../service/store-modal.service';
 import { Component, OnInit } from '@angular/core';
 

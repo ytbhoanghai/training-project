@@ -1,11 +1,11 @@
-import { IProduct } from './../product-management/product.service';
+import { IProduct, IStore } from 'src/app/core/models';
 import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SERVER_URL } from '../../core/constants/api.constants';
 import { Observable } from 'rxjs';
-import { ICategory } from '../category-management/category.service';
 import { IUser } from 'src/app/core/models/user.model';
+import { ICategory } from 'src/app/core/models';
 
 @Injectable({
   providedIn: 'root',
@@ -137,35 +137,4 @@ export class StoreService {
   deleteById(id: number): Observable<unknown> {
     return this.http.delete<unknown>(this.ADMIN_URL + id);
   }
-}
-
-export type ISimpleStaff = {
-  id: number;
-  name: string;
-  email: string;
-  isManager?: boolean;
-  roles?: [
-    {
-      id: number;
-      name: string;
-      grantable: boolean;
-      level: number;
-      craetedAt: number;
-    }
-  ];
-};
-
-export type IStore = {
-  id: number;
-  name: string;
-  address: string;
-  email: string;
-  phone: string;
-  status: StatusType;
-  createdAt: number;
-};
-
-export enum StatusType {
-  Closed,
-  Open,
 }

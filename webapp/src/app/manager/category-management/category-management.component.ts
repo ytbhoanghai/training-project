@@ -1,14 +1,14 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import {CategoryService, ICategory} from "./category.service";
-import {CategoryModalService} from "../../service/category-modal.service";
-import {NotificationService} from "../../layouts/notification/notification.service";
-import {ConfirmModalService} from "../../service/confirm-modal.service";
+import { CategoryService } from './category.service';
+import { CategoryModalService } from '../../service/category-modal.service';
+import { NotificationService } from '../../layouts/notification/notification.service';
+import { ConfirmModalService } from '../../service/confirm-modal.service';
+import { ICategory } from 'src/app/core/models';
 
 @Component({
   selector: 'app-category-management',
   templateUrl: './category-management.component.html',
-  styleUrls: ['./category-management.component.css']
+  styleUrls: ['./category-management.component.css'],
 })
 export class CategoryManagementComponent implements OnInit {
   categories: ICategory[] = [];
@@ -18,43 +18,45 @@ export class CategoryManagementComponent implements OnInit {
     private categoryModalService: CategoryModalService,
     private notiService: NotificationService,
     private confirmService: ConfirmModalService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.fetchCategories();
     this.categoryService.updateObservable$.subscribe((category: ICategory) => {
-      const index = this.categories.findIndex(c => c.id === category.id);
+      const index = this.categories.findIndex((c) => c.id === category.id);
       this.categories[index] = category;
-    })
+    });
   }
 
   fetchCategories(): void {
-    this.categoryService.fetchCategories().subscribe(categories => {
+    this.categoryService.fetchCategories().subscribe((categories) => {
       this.categories = categories;
-    })
+    });
   }
 
   showDetailsModal(id: number): void {
-    this.categoryService.fetchCategoryById(id).subscribe(category => {
+    this.categoryService.fetchCategoryById(id).subscribe((category) => {
       this.categoryModalService.showDetailsModal(category);
-    })
+    });
   }
 
   showUpdateModal(id: number): void {
-    this.categoryService.fetchCategoryById(id).subscribe(category => {
+    this.categoryService.fetchCategoryById(id).subscribe((category) => {
       this.categoryModalService.showUpdateModal(category);
-    })
+    });
   }
 
   deleteCategory(id: number): void {
     this.confirmService.show().onYes(() => {
-      this.categoryService.deleteById(id).subscribe(() => {
-        this.categories = this.categories.filter(c => c.id !== id);
-        this.notiService.showSuccess('Deleted successfully!');
-      }, (err: HttpErrorResponse) => {
-        this.notiService.showError('Category is not empty!');
-      })
+      this.categoryService.deleteById(id).subscribe(
+        () => {
+          this.categories = this.categories.filter((c) => c.id !== id);
+          this.notiService.showSuccess('Deleted successfully!');
+        },
+        () => {
+          this.notiService.showError('Category is not empty!');
+        }
+      );
     });
   }
-
 }

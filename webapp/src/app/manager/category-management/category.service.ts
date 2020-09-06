@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SERVER_URL } from './../../core/constants/api.constants';
 import { Injectable } from '@angular/core';
+import { ICategory, ICategoryBody } from 'src/app/core/models';
 
 @Injectable({
   providedIn: 'root'
@@ -45,17 +46,4 @@ export class CategoryService {
   deleteById(id: number): Observable<unknown> {
     return this.http.delete<unknown>(this.MANAGER_URL + id);
   }
-}
-
-export interface ICategory {
-  id: number;
-  name: string;
-  description?: string;
-  storeId?: number;
-  createdAt: number;
-  isActive?: boolean;
-}
-
-export interface ICategoryBody {
-  name: string
 }

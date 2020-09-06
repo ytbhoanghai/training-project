@@ -10,10 +10,7 @@ import { map } from 'rxjs/operators';
 
 import { SERVER_URL } from '../constants/api.constants';
 import { IUser, UserType } from '../models/user.model';
-
-type JwtToken = {
-  id_token: string;
-};
+import { JwtToken } from '../models';
 
 @Injectable({
   providedIn: 'root',

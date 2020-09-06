@@ -1,7 +1,8 @@
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
-import { IProductBody, ProductService } from './../product.service';
+import { ProductService } from './../product.service';
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { IProductBody } from 'src/app/core/models';
 
 @Component({
   selector: 'app-product-add',
@@ -18,7 +19,7 @@ export class ProductAddComponent implements OnInit {
   ngOnInit(): void {}
 
   handleSubmit(body: IProductBody): void {
-    this.productService.save(body).subscribe(product => {
+    this.productService.save(body).subscribe(() => {
       this.notiService.showSuccess();
       this.back();
     });

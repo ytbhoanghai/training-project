@@ -1,4 +1,4 @@
-import { IProduct } from 'src/app/manager/product-management/product.service';
+import { IProduct } from 'src/app/core/models';
 import { ProductImportModalComponent } from './../modal/product-import-modal/product-import-modal.component';
 import { MDBModalRef, MDBModalService } from 'ng-uikit-pro-standard';
 import { Injectable } from '@angular/core';

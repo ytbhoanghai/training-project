@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SERVER_URL } from '../../core/constants/api.constants';
 import { IUser } from 'src/app/core/models/user.model';
+import { IMessageResponse } from 'src/app/core/models';
 
 @Injectable({
   providedIn: 'root',
@@ -61,11 +62,11 @@ export class UserManagementService {
       return this.http.put<IUser>(this.REQUEST_URL + id, body);
   }
 
-  delete(id: number): Observable<unknown> {
-    return this.http.delete<unknown>(this.REQUEST_URL + id);
+  delete(id: number): Observable<IMessageResponse> {
+    return this.http.delete<IMessageResponse>(this.REQUEST_URL + id);
   }
 
-  checkPermissionOnResources(body: Record<string, string[]>): Observable<unknown> {
+  checkPermissionOnResources(body: Record<string, string[]>): Observable<IMessageResponse> {
     console.log(body);
     return null;
   }

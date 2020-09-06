@@ -1,5 +1,5 @@
 import { ShoppingDetailsComponent } from './../modal/shopping-details/shopping-details.component';
-import { IProduct } from './../manager/product-management/product.service';
+import { IProduct } from 'src/app/core/models';
 import { MDBModalRef, MDBModalService } from 'ng-uikit-pro-standard';
 import { Injectable } from '@angular/core';
 

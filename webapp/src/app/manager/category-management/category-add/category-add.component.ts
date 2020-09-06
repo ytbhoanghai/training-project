@@ -1,7 +1,8 @@
 import { NotificationService } from './../../../layouts/notification/notification.service';
-import { ICategory, CategoryService } from './../category.service';
+import { CategoryService } from './../category.service';
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { ICategory } from 'src/app/core/models';
 
 @Component({
   selector: 'app-category-add',

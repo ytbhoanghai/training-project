@@ -1,10 +1,7 @@
 import { UserService } from 'src/app/core/auth/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  StoreService,
-  StatusType,
-} from './../../manager/store-management/store.service';
-import { IStore } from 'src/app/manager/store-management/store.service';
+import { StoreService } from '../../manager/store-management/store.service';
+import { IStore, StatusType } from 'src/app/core/models';
 import { Component, OnInit } from '@angular/core';
 import { IGrantedPermisson } from 'src/app/core/models';
 
@@ -14,7 +11,8 @@ import { IGrantedPermisson } from 'src/app/core/models';
   styleUrls: ['./management.component.css'],
 })
 export class ManagementComponent implements OnInit {
-  store: IStore; storeId: number;
+  store: IStore;
+  storeId: number;
   grantedPermissions: IGrantedPermisson;
 
   constructor(
@@ -32,9 +30,11 @@ export class ManagementComponent implements OnInit {
   fetchCurrentStore(): void {
     this.route.params.subscribe((params) => {
       this.storeId = params.id;
-      this.storeService.fetchByIdFromManager(this.storeId).subscribe((store) => {
-        this.store = store;
-      });
+      this.storeService
+        .fetchByIdFromManager(this.storeId)
+        .subscribe((store) => {
+          this.store = store;
+        });
     });
   }
 

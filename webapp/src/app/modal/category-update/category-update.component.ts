@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {CategoryModalService} from "../../service/category-modal.service";
-import {CategoryService, ICategory} from "../../manager/category-management/category.service";
-import {NotificationService} from "../../layouts/notification/notification.service";
+import { CategoryModalService } from '../../service/category-modal.service';
+import { CategoryService } from '../../manager/category-management/category.service';
+import { NotificationService } from '../../layouts/notification/notification.service';
+import { ICategory } from 'src/app/core/models';
 
 @Component({
   selector: 'app-category-update',
   templateUrl: './category-update.component.html',
-  styleUrls: ['./category-update.component.css']
+  styleUrls: ['./category-update.component.css'],
 })
 export class CategoryUpdateComponent implements OnInit {
   category: ICategory;
@@ -15,20 +16,19 @@ export class CategoryUpdateComponent implements OnInit {
     private categoryModalService: CategoryModalService,
     private categoryService: CategoryService,
     private notiService: NotificationService
-  ) { }
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   hideModal(): void {
     this.categoryModalService.hideUpdateModal();
   }
 
   handleSubmit(id: number, body: ICategory): void {
-    this.categoryService.update(id, body).subscribe(category => {
+    this.categoryService.update(id, body).subscribe((category) => {
       this.notiService.showSuccess();
       this.hideModal();
       this.categoryService.updateSubject.next(category);
-    })
+    });
   }
 }

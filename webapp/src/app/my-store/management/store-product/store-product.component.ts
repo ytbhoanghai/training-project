@@ -1,13 +1,14 @@
 import { Subscription } from 'rxjs';
-import { ProductModalService } from './../../../service/product-modal.service';
-import { ProductImportModalService } from './../../../service/product-import-modal.service';
-import { ConfirmModalService } from './../../../service/confirm-modal.service';
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
-import { StoreService } from './../../../manager/store-management/store.service';
 import { ActivatedRoute } from '@angular/router';
-import { IProduct, ProductService } from './../../../manager/product-management/product.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { IProduct } from 'src/app/core/models';
+import { StoreService } from 'src/app/manager/store-management/store.service';
+import { ConfirmModalService } from 'src/app/service/confirm-modal.service';
+import { ProductImportModalService } from 'src/app/service/product-import-modal.service';
+import { ProductModalService } from 'src/app/service/product-modal.service';
+import { ProductService } from 'src/app/manager/product-management/product.service';
 
 @Component({
   selector: 'app-store-product',

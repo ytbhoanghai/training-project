@@ -1,6 +1,6 @@
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { IProduct } from './../manager/product-management/product.service';
+import { IProduct } from 'src/app/core/models';
 import { BehaviorSubject } from 'rxjs';
 import { UserService } from './../core/auth/user.service';
 import {

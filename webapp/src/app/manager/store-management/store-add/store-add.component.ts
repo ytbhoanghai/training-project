@@ -1,5 +1,5 @@
 import { StoreService } from './../store.service';
-import { IStore } from 'src/app/manager/store-management/store.service';
+import { IStore } from 'src/app/core/models';
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NotificationService } from 'src/app/layouts/notification/notification.service';

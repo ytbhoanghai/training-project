@@ -1,5 +1,5 @@
 import { ProductModalService } from './../../service/product-modal.service';
-import { IProduct } from './../../manager/product-management/product.service';
+import { IProduct } from 'src/app/core/models';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

@@ -1,4 +1,4 @@
-import { IStore } from 'src/app/manager/store-management/store.service';
+import { IStore } from 'src/app/core/models';
 import { StoreService } from './../../manager/store-management/store.service';
 import { Component, OnInit } from '@angular/core';
 

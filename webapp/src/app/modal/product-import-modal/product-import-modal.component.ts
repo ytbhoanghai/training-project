@@ -1,7 +1,7 @@
 import { NotificationService } from './../../layouts/notification/notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { StoreService } from './../../manager/store-management/store.service';
-import { IProduct } from 'src/app/manager/product-management/product.service';
+import { IProduct } from 'src/app/core/models';
 import { ProductImportModalService } from './../../service/product-import-modal.service';
 import { Component, OnInit } from '@angular/core';
 
