@@ -6,7 +6,8 @@ import { RoleManagementService } from '../../service/role-management.service';
 import { MDBModalService } from 'ng-uikit-pro-standard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ViewRoleDetailsManagementComponent } from '../../modal/view-role-details-management/view-role-details-management.component';
-import { IUser, UserService } from '../../core/auth/user.service';
+import { UserService } from '../../core/auth/user.service';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-role-management',

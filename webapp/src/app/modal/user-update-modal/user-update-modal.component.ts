@@ -1,9 +1,9 @@
 import { NotificationService } from './../../layouts/notification/notification.service';
 import { Component, OnInit } from '@angular/core';
-import { IUser } from '../../core/auth/user.service';
 import { UserManagementService } from '../../manager/user-management/user-management.service';
 import { UserModalService } from '../../service/user-modal.service';
 import { FormType } from 'src/app/manager/user-management/user-add/user-form.component';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-user-update-modal',

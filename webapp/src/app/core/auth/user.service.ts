@@ -4,29 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { SERVER_URL } from '../constants/api.constants';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-
-export type IUser = {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  address: string;
-  roles: [{ id: string; name: string; createdAt: number }];
-  type: string;
-  idStore?: number;
-  createdAt: number;
-  createdBy: number;
-  allowDelete: boolean;
-  allowUpdate: boolean;
-  isManager?: boolean;
-  storeName: string;
-};
-
-export enum UserType {
-  CUSTOMER,
-  ADMIN,
-  OTHER,
-}
+import { IGrantedPermisson, IUser, IUpdatePass, UserType } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -48,7 +26,7 @@ export class UserService {
         this.currentUserSubject.next(user);
         return user;
       }),
-      catchError((err) => {
+      catchError(() => {
         return of(null);
       })
     );
@@ -102,9 +80,12 @@ export class UserService {
       staff: fullPermissions,
       category: fullPermissions,
       role: fullPermissions,
-      order: fullPermissions
+      order: fullPermissions,
     };
-    return this.http.post<IGrantedPermisson>(this.REQUEST_URL + 'permissions', body);
+    return this.http.post<IGrantedPermisson>(
+      this.REQUEST_URL + 'permissions',
+      body
+    );
   }
 
   checkAdminPemissonOnResources(): Observable<IGrantedPermisson> {
@@ -114,20 +95,9 @@ export class UserService {
       role: fullPermissions,
       store: fullPermissions,
     };
-    return this.http.post<IGrantedPermisson>(this.REQUEST_URL + 'permissions', body);
+    return this.http.post<IGrantedPermisson>(
+      this.REQUEST_URL + 'permissions',
+      body
+    );
   }
-}
-
-export interface IUpdatePass {
-  oldPass: string;
-  newPass: string;
-}
-
-export interface IGrantedPermisson {
-  product?: string[];
-  category?: string[];
-  staff?: string[];
-  role?: string[];
-  order?: string[];
-  store?: string[];
 }

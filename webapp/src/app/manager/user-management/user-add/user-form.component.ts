@@ -3,8 +3,8 @@ import { RoleManagementService } from './../../../service/role-management.servic
 import { NotificationService } from './../../../layouts/notification/notification.service';
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { IUser } from '../../../core/auth/user.service';
 import { IStore, StoreService } from '../../store-management/store.service';
+import { IUser } from 'src/app/core/models/user.model';
 
 export enum FormType {
   CREATE,

@@ -1,5 +1,6 @@
-import { UserService, IUser } from './../../../core/auth/user.service';
+import { UserService } from './../../../core/auth/user.service';
 import { Component, OnInit } from '@angular/core';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-user-checkout-form',

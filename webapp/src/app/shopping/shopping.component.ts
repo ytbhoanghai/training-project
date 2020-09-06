@@ -3,8 +3,9 @@ import { LoginModalService } from './../service/login-modal.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IStore } from 'src/app/manager/store-management/store.service';
 import { Component, OnInit } from '@angular/core';
-import { UserService, IUser } from '../core/auth/user.service';
+import { UserService } from '../core/auth/user.service';
 import { Subscription } from 'rxjs';
+import { IUser } from '../core/models/user.model';
 
 @Component({
   selector: 'app-shopping',

@@ -1,9 +1,9 @@
 import { ConfirmModalService } from './../../service/confirm-modal.service';
 import { Component, OnInit } from '@angular/core';
 import { UserManagementService } from './user-management.service';
-import { IUser } from '../../core/auth/user.service';
 import { UserModalService } from '../../service/user-modal.service';
 import { NotificationService } from '../../layouts/notification/notification.service';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-user-management',

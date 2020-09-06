@@ -1,7 +1,7 @@
 import { UserAddModalComponent } from './modal/user-add-modal/user-add-modal.component';
 import { AdminDashboardComponent } from './manager/dashboard/dashboard.component';
 import { AdminComponent } from './manager/admin.component';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from './shared/shared.module';
 import { SettingsComponent } from './account/settings/settings.component';
 import { ShoppingStoreComponent } from './shopping/products-list/shopping-store/shopping-store.component';
 import { ProductCardComponent } from './shopping/products-list/product-card/product-card.component';

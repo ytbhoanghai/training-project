@@ -1,10 +1,11 @@
-import { UserService, IUser } from 'src/app/core/auth/user.service';
+import { UserService } from 'src/app/core/auth/user.service';
 import { NotificationService } from './../../../layouts/notification/notification.service';
 import { ConfirmModalService } from './../../../service/confirm-modal.service';
 import { RoleModalService } from './../../../service/role-modal.service';
 import { IRole } from './../../../manager/role-management/role-management.component';
 import { RoleManagementService } from './../../../service/role-management.service';
 import { Component, OnInit } from '@angular/core';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-store-roles',

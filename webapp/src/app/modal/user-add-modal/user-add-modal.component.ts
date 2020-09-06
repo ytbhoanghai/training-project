@@ -4,7 +4,7 @@ import { UserManagementService } from './../../manager/user-management/user-mana
 import { UserModalService } from './../../service/user-modal.service';
 import { FormType } from '../../manager/user-management/user-add/user-form.component';
 import { Component, OnInit } from '@angular/core';
-import { IUser } from '../../core/auth/user.service';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-user-add-modal',

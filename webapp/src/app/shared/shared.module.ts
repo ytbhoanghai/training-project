@@ -1,4 +1,4 @@
-import { UsdPipe } from './../app/core/pipes/usd.pipe';
+import { UsdPipe } from './pipes/usd.pipe';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 

@@ -1,5 +1,5 @@
+import { IUser } from './../../../core/models/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { IUser } from 'src/app/core/auth/user.service';
 import { FormType } from 'src/app/manager/user-management/user-add/user-form.component';
 import { NotificationService } from './../../../layouts/notification/notification.service';
 import { Component, OnInit } from '@angular/core';

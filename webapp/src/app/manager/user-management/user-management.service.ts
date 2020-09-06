@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IUser } from '../../core/auth/user.service';
 import { SERVER_URL } from '../../core/constants/api.constants';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Injectable({
   providedIn: 'root',

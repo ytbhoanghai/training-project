@@ -1,4 +1,4 @@
-import { UserService, IGrantedPermisson } from 'src/app/core/auth/user.service';
+import { UserService } from 'src/app/core/auth/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   StoreService,
@@ -6,6 +6,7 @@ import {
 } from './../../manager/store-management/store.service';
 import { IStore } from 'src/app/manager/store-management/store.service';
 import { Component, OnInit } from '@angular/core';
+import { IGrantedPermisson } from 'src/app/core/models';
 
 @Component({
   selector: 'app-management',

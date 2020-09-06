@@ -1,6 +1,7 @@
 import { LoginModalService } from '../../service/login-modal.service';
 import { Component, OnInit } from '@angular/core';
-import { IUser, UserService } from '../../core/auth/user.service';
+import { UserService } from '../../core/auth/user.service';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-admin-info',

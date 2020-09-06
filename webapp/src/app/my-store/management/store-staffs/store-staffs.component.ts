@@ -1,5 +1,4 @@
 import { Subscription } from 'rxjs';
-import { UserService, IUser } from './../../../core/auth/user.service';
 import { ConfirmModalService } from './../../../service/confirm-modal.service';
 import { UserModalService } from './../../../service/user-modal.service';
 import { NotificationService } from '../../../layouts/notification/notification.service';
@@ -8,6 +7,7 @@ import { StoreService } from '../../../manager/store-management/store.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISimpleStaff } from 'src/app/manager/store-management/store.service';
 import { UserManagementService } from '../../../manager/user-management/user-management.service';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-store-staffs',

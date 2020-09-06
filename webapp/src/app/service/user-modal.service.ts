@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { UserDetailsModalComponent } from '../modal/user-details-modal/user-details-modal.component';
 import { UserUpdateModalComponent } from '../modal/user-update-modal/user-update-modal.component';
 import { MDBModalRef, MDBModalService } from 'ng-uikit-pro-standard';
-import { IUser } from '../core/auth/user.service';
+import { IUser } from '../core/models/user.model';
 
 @Injectable({
   providedIn: 'root',

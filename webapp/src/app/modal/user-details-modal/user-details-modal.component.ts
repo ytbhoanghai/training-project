@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MDBModalRef } from 'ng-uikit-pro-standard';
+import { Component, OnInit } from '@angular/core';
 import { UserModalService } from '../../service/user-modal.service';
-import { IUser } from '../../core/auth/user.service';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-user-details-modal',

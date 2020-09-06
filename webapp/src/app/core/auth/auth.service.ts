@@ -1,3 +1,4 @@
+import { UserService } from './user.service';
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { CartService } from './../../service/cart.service';
 import { Injectable } from '@angular/core';
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { SERVER_URL } from '../constants/api.constants';
-import { UserService, UserType, IUser } from './user.service';
+import { IUser, UserType } from '../models/user.model';
 
 type JwtToken = {
   id_token: string;
@@ -28,7 +29,7 @@ export class AuthService {
     private notiService: NotificationService
   ) {}
 
-  loginUser(username: string, password: string): Observable<any> {
+  loginUser(username: string, password: string): Observable<unknown> {
     return this.http
       .post<JwtToken>(`${SERVER_URL}/authenticate`, {
         username,
@@ -38,7 +39,7 @@ export class AuthService {
   }
 
   // Convert logout to Observable
-  logoutUser(): Observable<any> {
+  logoutUser(): Observable<unknown> {
     return new Observable((observer) => {
       localStorage.removeItem(this.jwtLocalStorageName);
       this.router.navigate(['/account/login']);

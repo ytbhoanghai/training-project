@@ -1,4 +1,3 @@
-import { IUser } from 'src/app/core/auth/user.service';
 import { IProduct } from './../product-management/product.service';
 import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
@@ -6,6 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { SERVER_URL } from '../../core/constants/api.constants';
 import { Observable } from 'rxjs';
 import { ICategory } from '../category-management/category.service';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Injectable({
   providedIn: 'root',

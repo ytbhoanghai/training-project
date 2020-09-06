@@ -1,7 +1,7 @@
-import { IGrantedPermisson } from 'src/app/core/auth/user.service';
 import { LoginModalService } from '../service/login-modal.service';
 import { Component, OnInit } from '@angular/core';
-import { IUser, UserService } from '../core/auth/user.service';
+import { UserService } from '../core/auth/user.service';
+import { IUser, IGrantedPermisson } from '../core/models/user.model';
 
 @Component({
   selector: 'app-home',

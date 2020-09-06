@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "npm": "npm --prefix webapp",
     "ng": "cd webapp && ng",
-    "start": "npm start --prefix webapp"
+    "start": "npm start --prefix webapp",
+    "dev": "npm run dev --prefix webapp"
   },
   "repository": {
     "type": "git",

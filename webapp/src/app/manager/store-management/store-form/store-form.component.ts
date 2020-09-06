@@ -4,7 +4,7 @@ import { IStore } from 'src/app/manager/store-management/store.service';
 import { Validators } from '@angular/forms';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { IUser } from 'src/app/core/auth/user.service';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-store-form',

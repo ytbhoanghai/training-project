@@ -2,9 +2,10 @@ import { AuthService } from 'src/app/core/auth/auth.service';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { NotificationService } from './../../layouts/notification/notification.service';
-import { UserService, IUser } from './../../core/auth/user.service';
+import { UserService } from './../../core/auth/user.service';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { IUser } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-settings',
