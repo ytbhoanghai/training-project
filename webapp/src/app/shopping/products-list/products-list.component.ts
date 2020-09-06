@@ -1,16 +1,13 @@
 import { IStore } from 'src/app/core/models';
 import { NotificationService } from './../../layouts/notification/notification.service';
 import { StoreService } from './../../manager/store-management/store.service';
-import { map, last, debounceTime } from 'rxjs/operators';
+import { map, debounceTime } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  CustomerService,
-  IPageableProduct,
-  IProductFilter,
-} from './../../service/customer.service';
+import { IPageableProduct, IProductFilter } from 'src/app/core/models';
 import { IProduct } from 'src/app/core/models';
 import { Component, OnInit } from '@angular/core';
 import { combineLatest } from 'rxjs';
+import { CustomerService } from 'src/app/service/customer.service';
 
 @Component({
   selector: 'app-products-list',

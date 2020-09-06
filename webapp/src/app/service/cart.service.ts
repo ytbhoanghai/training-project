@@ -4,15 +4,15 @@ import { IProduct } from 'src/app/core/models';
 import { BehaviorSubject } from 'rxjs';
 import { UserService } from './../core/auth/user.service';
 import {
-  CustomerService,
   ICart,
   ICartItem,
   ICartItemBody,
   IMergeCartBody,
-} from './customer.service';
+} from 'src/app/core/models';
 import { LocalCartService } from './local-cart.service';
 import { Injectable } from '@angular/core';
 import { take } from 'rxjs/operators';
+import { CustomerService } from './customer.service';
 
 @Injectable({
   providedIn: 'root',
@@ -70,28 +70,39 @@ export class CartService {
     console.log('START MERGING CART');
     const body: IMergeCartBody[] = this.localCartService
       .getItems()
-      .map((item) => ({ productId: item.id, quantity: item.quantity, storeId: item.storeId }));
+      .map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+        storeId: item.storeId,
+      }));
 
-    this.customerService.mergeCart(body).subscribe((failedIds: number[]) => {
-      if (!failedIds.length) {
-        this.notiService.showQuickSuccess('Merged');
-        this.doAfterMerge();
-      } else {
-        console.log(failedIds);
-        this.showMergeFailedMessage(failedIds);
-        this.doAfterMerge();
+    this.customerService.mergeCart(body).subscribe(
+      (failedIds: number[]) => {
+        if (!failedIds.length) {
+          this.notiService.showQuickSuccess('Merged');
+          this.doAfterMerge();
+        } else {
+          console.log(failedIds);
+          this.showMergeFailedMessage(failedIds);
+          this.doAfterMerge();
+        }
+      },
+      (err: HttpErrorResponse) => {
+        if (err.status === 409) {
+          const failedId: number[] = JSON.parse(err.error.message);
+          failedId.forEach((id) => {
+            const cartItem = this.getCart().items.find(
+              (i) => i.productId === id
+            );
+            this.notiService.showWaring(
+              `${cartItem.name} is not in same store`
+            );
+          });
+          this.fetchRemoteCart();
+        }
+        this.localCartService.clear();
       }
-    }, (err: HttpErrorResponse) => {
-      if (err.status === 409) {
-        const failedId: number[] = JSON.parse(err.error.message);
-        failedId.forEach(id => {
-          const cartItem = this.getCart().items.find(i => i.productId === id);
-          this.notiService.showWaring(`${cartItem.name} is not in same store`);
-        })
-        this.fetchRemoteCart();
-      }
-      this.localCartService.clear();
-    });
+    );
     this.localCartService.clear();
   }
 
@@ -150,14 +161,18 @@ export class CartService {
     const isSameStore =
       !storeNameList.length || storeNameList.includes(product.storeName);
     if (!isSameStore) {
-      this.notiService.showWaring(`Your order must be in the same ${storeNameList[0]} store!`);
+      this.notiService.showWaring(
+        `Your order must be in the same ${storeNameList[0]} store!`
+      );
       return false;
     }
 
     // CHECK QUANTITY
-    const cartItem = this.cart.items.find(i => i.productId === product.id);
+    const cartItem = this.cart.items.find((i) => i.productId === product.id);
     if (cartItem && cartItem.quantity >= product.quantity) {
-      this.notiService.showWaring( `Reach maximum quantity. This product is out of stock`);
+      this.notiService.showWaring(
+        `Reach maximum quantity. This product is out of stock`
+      );
       this.outStockEvent.next(product.productId);
       return false;
     }
@@ -224,7 +239,7 @@ export class CartService {
 
   doPostRemoved(id: number): void {
     // Remove out of stock label
-    const cartItem = this.cart.items.find(i => i.id === id);
+    const cartItem = this.cart.items.find((i) => i.id === id);
     this.outStockEvent.next(-cartItem.productId);
 
     this.cart.items = this.cart.items.filter((item) => item.id !== id);

@@ -1,4 +1,4 @@
-import { ICustomerBody } from './../../service/customer.service';
+import { ICustomerBody } from 'src/app/core/models';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { SERVER_URL } from '../constants/api.constants';

@@ -1,10 +1,17 @@
-import { IProduct } from 'src/app/core/models';
+import {
+  IPageableProduct,
+  ICart,
+  ICartItem,
+  ICartItemBody,
+  IMergeCartBody,
+  IOrder,
+  IMessageResponse,
+} from 'src/app/core/models';
 import { Observable } from 'rxjs';
-import { SERVER_URL } from './../core/constants/api.constants';
+import { SERVER_URL } from '../core/constants/api.constants';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IPaymentInfo } from './payment-modal.service';
-import { ICategory } from '../core/models';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +26,7 @@ export class CustomerService {
     categoryId = -1,
     page = 1,
     size = 9,
-    search = ""
+    search = ''
   ): Observable<IPageableProduct> {
     if (page < 1) page = 1;
     return this.http.get<IPageableProduct>(
@@ -57,19 +64,19 @@ export class CustomerService {
     );
   }
 
-  removeCartItem(cartItemId: number): Observable<any> {
-    return this.http.delete<any>(
+  removeCartItem(cartItemId: number): Observable<IMessageResponse> {
+    return this.http.delete<IMessageResponse>(
       this.REQUEST_URL + `cart/cart-items/${cartItemId}`
     );
   }
 
-  clearCart(cartId: number): Observable<any> {
-    return this.http.delete<any>(this.REQUEST_URL + `cart/${cartId}`);
+  clearCart(cartId: number): Observable<IMessageResponse> {
+    return this.http.delete<IMessageResponse>(this.REQUEST_URL + `cart/${cartId}`);
   }
 
   // PAYMENT
-  checkoutPayment(body: IPaymentInfo): Observable<any> {
-    return this.http.post<any>(this.REQUEST_URL + 'payment', body);
+  checkoutPayment(body: IPaymentInfo): Observable<IMessageResponse> {
+    return this.http.post<IMessageResponse>(this.REQUEST_URL + 'payment', body);
   }
 
   // ORDERS
@@ -87,82 +94,4 @@ export class CustomerService {
       body
     );
   }
-}
-
-export interface IPageableProduct {
-  currentPage: number;
-  totalPages: number;
-  totalElements: number;
-  size: number;
-  products: IProduct[];
-}
-
-export interface IShoppingProduct {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  storeName: string;
-  categoryNames: string[];
-}
-
-export interface ICart {
-  id?: number;
-  createdAt?: number;
-  totalPrice?: number;
-  items: ICartItem[];
-}
-
-export interface ICartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  storeProductQuantity?: number;
-  createdAt?: number;
-  categories?: ICategory[];
-  productId?: number;
-  storeId?: number;
-  storeName?: string;
-}
-
-export interface ICartItemBody {
-  idCartItem: number;
-  quantity: number;
-}
-
-export interface IMergeCartBody {
-  productId: number;
-  quantity: number;
-  storeId: number;
-}
-
-export interface IOrder {
-  id: number;
-  totalPrice: number;
-  createdAt: number;
-  phone: string;
-  shipAddress: string;
-  transactionId: string;
-  status: string;
-}
-
-export interface IProductFilter {
-  params: {
-    storeId: number;
-    categoryId: number;
-  };
-  query?: {
-    page: number;
-    size?: number;
-    search?: string;
-  };
-}
-
-export interface ICustomerBody {
-  name: string;
-  email: string;
-  address: string;
-  username: string;
-  password: string;
 }

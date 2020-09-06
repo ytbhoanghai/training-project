@@ -1,6 +1,6 @@
+import { IProductBody } from 'src/app/core/models';
 import {
   ProductService,
-  IProductBody,
 } from './../../manager/product-management/product.service';
 import { CategoryService } from './../../manager/category-management/category.service';
 import { HttpClient } from '@angular/common/http';

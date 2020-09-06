@@ -1,4 +1,4 @@
-import { ICart } from './../../service/customer.service';
+import { ICart } from 'src/app/core/models';
 import { CartService } from './../../service/cart.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';

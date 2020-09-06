@@ -1,13 +1,13 @@
 import { Subscription } from 'rxjs';
-import { ConfirmModalService } from './../../../service/confirm-modal.service';
-import { UserModalService } from './../../../service/user-modal.service';
-import { NotificationService } from '../../../layouts/notification/notification.service';
 import { ActivatedRoute } from '@angular/router';
-import { StoreService } from '../../../manager/store-management/store.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ISimpleStaff } from 'src/app/manager/store-management/store.service';
-import { UserManagementService } from '../../../manager/user-management/user-management.service';
 import { IUser } from 'src/app/core/models/user.model';
+import { ISimpleStaff } from 'src/app/core/models';
+import { UserManagementService } from 'src/app/manager/user-management/user-management.service';
+import { StoreService } from 'src/app/manager/store-management/store.service';
+import { NotificationService } from 'src/app/layouts/notification/notification.service';
+import { UserModalService } from 'src/app/service/user-modal.service';
+import { ConfirmModalService } from 'src/app/service/confirm-modal.service';
 
 @Component({
   selector: 'app-store-staffs',

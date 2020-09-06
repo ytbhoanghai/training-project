@@ -1,6 +1,5 @@
-import { IProduct } from 'src/app/core/models';
+import { IProduct, ICart, ICartItem, ICartItemBody } from 'src/app/core/models';
 import { Injectable } from '@angular/core';
-import { ICart, ICartItem, ICartItemBody } from './customer.service';
 
 @Injectable({
   providedIn: 'root',

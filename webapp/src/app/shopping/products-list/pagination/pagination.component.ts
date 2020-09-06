@@ -1,7 +1,7 @@
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { IPageableProduct } from 'src/app/service/customer.service';
+import { IPageableProduct } from 'src/app/core/models';
 
 @Component({
   selector: 'app-pagination',

@@ -1,9 +1,7 @@
 import { CategoryModalService } from './../../service/category-modal.service';
-import {
-  ICategory,
-  CategoryService,
-} from './../../manager/category-management/category.service';
+import { CategoryService } from '../../manager/category-management/category.service';
 import { Component, OnInit } from '@angular/core';
+import { ICategory } from 'src/app/core/models';
 
 @Component({
   selector: 'app-category-add-modal',
@@ -22,10 +20,10 @@ export class CategoryAddModalComponent implements OnInit {
 
   handleSubmit(body: ICategory): void {
     body.storeId = this.storeId;
-    this.categoryService.save(body).subscribe(category => {
+    this.categoryService.save(body).subscribe((category) => {
       this.categoryService.addedSubject.next(category);
       this.hideModal();
-    })
+    });
   }
 
   hideModal(): void {

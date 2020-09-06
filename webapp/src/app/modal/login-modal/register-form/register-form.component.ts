@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'src/app/core/auth/user.service';
 import { Router } from '@angular/router';
 import { NotificationService } from './../../../layouts/notification/notification.service';
-import { ICustomerBody } from './../../../service/customer.service';
+import { ICustomerBody } from 'src/app/core/models';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 

@@ -2,7 +2,7 @@ import { PaymentModalService } from './../../service/payment-modal.service';
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { Subscription } from 'rxjs';
 import { UserCheckoutFormComponent } from './user-checkout-form/user-checkout-form.component';
-import { ICart } from './../../service/customer.service';
+import { ICart } from 'src/app/core/models';
 import { CartService } from './../../service/cart.service';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 

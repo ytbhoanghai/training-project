@@ -4,3 +4,14 @@ export { ICategory, ICategoryBody } from './category.model';
 export { IProduct, IProductBody } from './product.model';
 export { IStore, ISimpleStaff, StatusType } from './store.model';
 export { JwtToken } from './jwt.model';
+export {
+  ICart,
+  ICartItem,
+  ICartItemBody,
+  ICustomerBody,
+  IMergeCartBody,
+  IOrder,
+  IPageableProduct,
+  IProductFilter,
+  IShoppingProduct,
+} from './customer.model';

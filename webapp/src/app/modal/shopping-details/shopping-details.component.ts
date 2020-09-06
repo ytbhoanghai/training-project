@@ -1,4 +1,4 @@
-import { ICartItem } from './../../service/customer.service';
+import { ICartItem } from 'src/app/core/models';
 import { Router } from '@angular/router';
 import { CartService } from './../../service/cart.service';
 import { ShoppingModalService } from './../../service/shopping-modal.service';

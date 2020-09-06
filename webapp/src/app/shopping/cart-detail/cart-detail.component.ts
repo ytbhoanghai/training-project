@@ -3,7 +3,7 @@ import {
   ICart,
   ICartItem,
   ICartItemBody,
-} from './../../service/customer.service';
+} from 'src/app/core/models';
 import { Component, OnInit } from '@angular/core';
 import { CartService } from '../../service/cart.service';
 

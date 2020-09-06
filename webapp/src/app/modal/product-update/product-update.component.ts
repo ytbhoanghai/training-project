@@ -1,11 +1,8 @@
 import { NotificationService } from 'src/app/layouts/notification/notification.service';
 import { ProductModalService } from './../../service/product-modal.service';
-import {
-  IProduct,
-  IProductBody,
-  ProductService,
-} from './../../manager/product-management/product.service';
+import { ProductService } from '../../manager/product-management/product.service';
 import { Component, OnInit, Input } from '@angular/core';
+import { IProduct, IProductBody } from 'src/app/core/models';
 
 @Component({
   selector: 'app-product-update',
@@ -24,11 +21,11 @@ export class ProductUpdateComponent implements OnInit {
   ngOnInit(): void {}
 
   handleSubmit(id: number, body: IProductBody): void {
-    this.productService.update(id, body).subscribe(product => {
+    this.productService.update(id, body).subscribe((product) => {
       this.notiService.showSuccess();
       this.productModalService.hideUpdateModal();
       this.productService.updateSubject.next(product);
-    })
+    });
   }
 
   hideModal(): void {
